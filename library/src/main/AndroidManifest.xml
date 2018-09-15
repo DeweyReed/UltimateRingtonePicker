@@ -1,1 +1,5 @@
-<manifest package="xyz.aprildown.ringtone" />
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="xyz.aprildown.ringtone">
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+</manifest>

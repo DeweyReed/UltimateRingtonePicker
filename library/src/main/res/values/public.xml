@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <public name="slide_in_left" type="anim" />
+    <public name="slide_in_right" type="anim" />
+    <public name="slide_out_left" type="anim" />
+    <public name="slide_out_right" type="anim" />
+
+    <public name="default_ringtone" type="raw" />
+
+    <public name="ic_ringtone_active" type="drawable" />
+</resources>

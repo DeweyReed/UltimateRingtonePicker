@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/ic_ringtone_active_static">
+    <target
+        android:name="ic_ringtone_active_outlines_0"
+        android:animation="@animator/ic_ringtone_active_outlines_0_animation" />
+    <target
+        android:name="ic_ringtone_active_outlines_1"
+        android:animation="@animator/ic_ringtone_active_outlines_1_animation" />
+    <target
+        android:name="ic_ringtone_active_outlines_2"
+        android:animation="@animator/ic_ringtone_active_outlines_2_animation" />
+</animated-vector>

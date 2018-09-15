@@ -19,5 +19,10 @@ android {
 }
 
 dependencies {
+    implementation libs.kotlin_stdlib_jdk7
+
     implementation libs.support_appcompat_v7
+    implementation libs.support_recyclerview
+
+    implementation libs.arch_extensions
 }

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="add_new_sound">新增</string>
+    <string name="silent_ringtone_title">静音</string>
+    <string name="unknown_ringtone_title">未知</string>
+    <string name="your_sounds">您的提示音</string>
+    <string name="device_sounds">设备提示音</string>
+    <string name="remove_sound">移除</string>
+    <string name="default_ringtone_title">默认提示音</string>
+
+    <string name="music_type_ringtone">铃声</string>
+    <string name="music_type_notification">通知</string>
+    <string name="music_type_alarm">闹钟</string>
+
+    <string name="no_music_found">找不到音乐</string>
+
+    <string name="select_ringtone">选择</string>
+    <!--Permission related-->
+    <string name="permission_external_rational">需要读取储存的权限来选择自定义音乐文件</string>
+</resources>
