@@ -10,6 +10,7 @@ android {
         targetSdkVersion versions.target_sdk
         versionCode versions.version_code
         versionName versions.version_name
+        vectorDrawables.useSupportLibrary true
     }
 
     compileOptions {
