@@ -6,13 +6,12 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.support.v4.app.ActivityCompat
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
+import android.support.v7.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import xyz.aprildown.ringtone.MUSIC_SILENT
 import xyz.aprildown.ringtone.MusicPickerListener
 import xyz.aprildown.ringtone.MusicPickerSetting
@@ -99,23 +98,27 @@ class MusicPickerFragment : Fragment(), View.OnClickListener {
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (permissions.size == 1 && permissions[0] == Manifest.permission.READ_EXTERNAL_STORAGE
                 && grantResults.size == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             launchCustom()
-        }
+        } else super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
     @SuppressLint("InlinedApi")
     internal fun toCustom() {
-        val context = requireActivity()
+        val context = requireContext()
         val permission = Manifest.permission.READ_EXTERNAL_STORAGE
         if (ContextCompat.checkSelfPermission(context, permission)
                 != PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(context, permission)) {
-                Toast.makeText(context, R.string.permission_external_rational, Toast.LENGTH_LONG).show()
+            if (shouldShowRequestPermissionRationale(permission)) {
+                AlertDialog.Builder(context)
+                        .setMessage(R.string.permission_external_rational)
+                        .setPositiveButton(android.R.string.ok) { _, _ ->
+                            requestPermissions(arrayOf(permission), 0)
+                        }
+                        .show()
             } else {
-                ActivityCompat.requestPermissions(context, arrayOf(permission), 0)
+                requestPermissions(arrayOf(permission), 0)
             }
         } else {
             launchCustom()
