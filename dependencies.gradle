@@ -21,25 +21,21 @@ ext {
             leak_cannary  : '1.6.1',
     ]
     libs = [
-            support_appcompat_v7     : "com.android.support:appcompat-v7:${versions.support}",
-            support_annotation       : "com.android.support:support-annotations:${versions.support}",
-            support_design           : "com.android.support:design:${versions.support}",
-            support_card             : "com.android.support:cardview-v7:${versions.support}",
-            support_recyclerview     : "com.android.support:recyclerview-v7:${versions.support}",
-            support_constraint_layout: 'com.android.support.constraint:constraint-layout:1.1.3',
+            support_appcompat_v7: "com.android.support:appcompat-v7:${versions.support}",
+            support_design      : "com.android.support:design:${versions.support}",
+            support_recyclerview: "com.android.support:recyclerview-v7:${versions.support}",
 
-            kotlin_stdlib_jdk7       : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version",
-            kotlin_anko_common       : "org.jetbrains.anko:anko-commons:${versions.kotlin_anko}",
+            kotlin_stdlib_jdk7  : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version",
+            kotlin_anko_common  : "org.jetbrains.anko:anko-commons:${versions.kotlin_anko}",
 
-            junit                    : "junit:junit:${versions.junit}",
-            test_runner              : "com.android.support.test:runner:${versions.support_test}",
-            test_espresso            : "com.android.support.test.espresso:espresso-core:${versions.espresso}",
+            junit               : "junit:junit:${versions.junit}",
+            test_runner         : "com.android.support.test:runner:${versions.support_test}",
+            test_espresso       : "com.android.support.test.espresso:espresso-core:${versions.espresso}",
 
-            arch_extensions          : "android.arch.lifecycle:extensions:${versions.arch_lifecycle}",
+            arch_extensions     : "android.arch.lifecycle:extensions:${versions.arch_lifecycle}",
 
-            leak_cannary             : "com.squareup.leakcanary:leakcanary-android:${versions.leak_cannary}",
-            leak_cannary_no_op       : "com.squareup.leakcanary:leakcanary-android-no-op:${versions.leak_cannary}",
-
-            permission               : "pub.devrel:easypermissions:1.3.0",
+            leak_cannary        : "com.squareup.leakcanary:leakcanary-android:${versions.leak_cannary}",
+            leak_cannary_no_op  : "com.squareup.leakcanary:leakcanary-android-no-op:${versions.leak_cannary}",
+            leak_cannary_support: "com.squareup.leakcanary:leakcanary-support-fragment:${versions.leak_cannary}",
     ]
 }

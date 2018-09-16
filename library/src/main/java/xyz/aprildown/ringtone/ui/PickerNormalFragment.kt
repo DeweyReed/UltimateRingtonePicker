@@ -14,7 +14,6 @@ import xyz.aprildown.ringtone.R
 import xyz.aprildown.ringtone.UltimateMusicPicker
 import xyz.aprildown.ringtone.data.CustomMusic
 import xyz.aprildown.ringtone.data.MusicModel
-import xyz.aprildown.ringtone.music.RingtonePreviewKlaxon
 
 internal class PickerNormalFragment : PickerBaseFragment() {
 
@@ -44,7 +43,7 @@ internal class PickerNormalFragment : PickerBaseFragment() {
                 viewModel.selectedUri = toSelect.uri
                 toSelect.notifyItemChanged(true)
             } else {
-                RingtonePreviewKlaxon.stop(localContext)
+                parent.musicPlayer.stop()
                 viewModel.selectedUri = null
                 viewModel.isPreviewPlaying = false
             }

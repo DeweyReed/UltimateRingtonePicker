@@ -17,7 +17,7 @@ import xyz.aprildown.ringtone.MusicPickerListener
 import xyz.aprildown.ringtone.MusicPickerSetting
 import xyz.aprildown.ringtone.R
 import xyz.aprildown.ringtone.UltimateMusicPicker.Companion.EXTRA_SETTING_BUNDLE
-import xyz.aprildown.ringtone.music.RingtonePreviewKlaxon
+import xyz.aprildown.ringtone.music.AsyncRingtonePlayer
 
 /**
  * Created on 2018/6/7.
@@ -43,6 +43,8 @@ class MusicPickerFragment : Fragment(), View.OnClickListener {
     private lateinit var localContext: Context
     private lateinit var musicPickerListener: MusicPickerListener
 
+    internal lateinit var musicPlayer: AsyncRingtonePlayer
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         viewModel = ViewModelProviders.of(this).get(PickerViewModel::class.java)
         if (savedInstanceState == null) {
@@ -53,6 +55,7 @@ class MusicPickerFragment : Fragment(), View.OnClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         localContext = view.context
+        musicPlayer = AsyncRingtonePlayer(localContext)
         activity?.volumeControlStream = viewModel.setting.streamType
 
         view.findViewById<View>(R.id.btnRingtoneCancel).setOnClickListener(this)
@@ -67,7 +70,7 @@ class MusicPickerFragment : Fragment(), View.OnClickListener {
 
     override fun onStop() {
         super.onStop()
-        RingtonePreviewKlaxon.stop(localContext)
+        musicPlayer.stop()
     }
 
     override fun onClick(v: View?) {
@@ -158,8 +161,7 @@ class MusicPickerFragment : Fragment(), View.OnClickListener {
 
     internal fun startPlayingMusic(item: SoundItem) {
         if (!item.isPlaying && item.uri != MUSIC_SILENT) {
-            RingtonePreviewKlaxon.start(localContext, item.uri,
-                    0, true, viewModel.setting.streamType)
+            musicPlayer.play(item.uri, true, viewModel.setting.streamType)
             item.isPlaying = true
             viewModel.isPreviewPlaying = true
         }
@@ -172,7 +174,7 @@ class MusicPickerFragment : Fragment(), View.OnClickListener {
     internal fun stopPlayingMusic(item: SoundItem?, deselect: Boolean) {
         if (item != null) {
             if (item.isPlaying) {
-                RingtonePreviewKlaxon.stop(localContext)
+                musicPlayer.stop()
                 item.isPlaying = false
                 viewModel.isPreviewPlaying = false
             }
