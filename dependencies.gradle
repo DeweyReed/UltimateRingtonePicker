@@ -28,10 +28,6 @@ ext {
             kotlin_stdlib_jdk7  : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version",
             kotlin_anko_common  : "org.jetbrains.anko:anko-commons:${versions.kotlin_anko}",
 
-            junit               : "junit:junit:${versions.junit}",
-            test_runner         : "com.android.support.test:runner:${versions.support_test}",
-            test_espresso       : "com.android.support.test.espresso:espresso-core:${versions.espresso}",
-
             arch_extensions     : "android.arch.lifecycle:extensions:${versions.arch_lifecycle}",
 
             leak_cannary        : "com.squareup.leakcanary:leakcanary-android:${versions.leak_cannary}",

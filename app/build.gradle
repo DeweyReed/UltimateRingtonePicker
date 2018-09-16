@@ -12,7 +12,6 @@ android {
         targetSdkVersion versions.target_sdk
         versionCode versions.version_code
         versionName versions.version_name
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary true
     }
 
@@ -32,10 +31,6 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':library')
-
-    testImplementation libs.junit
-    androidTestImplementation libs.test_runner
-    androidTestImplementation libs.test_espresso
 
     implementation libs.kotlin_stdlib_jdk7
     implementation libs.kotlin_anko_common
