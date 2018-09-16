@@ -39,6 +39,7 @@
         <Switch
             android:id="@+id/switchUseDefault"
             style="@style/SwitchStyle"
+            android:checked="true"
             android:text="Add Default Ringtone" />
 
         <android.support.design.widget.TextInputLayout
@@ -69,11 +70,13 @@
         <Switch
             android:id="@+id/switchPreSelect"
             style="@style/SwitchStyle"
+            android:checked="true"
             android:text="Pre Select" />
 
         <Switch
             android:id="@+id/switchAddAdditional"
             style="@style/SwitchStyle"
+            android:checked="true"
             android:text="Add Additional Uris" />
 
         <Spinner
@@ -98,11 +101,13 @@
         <Switch
             android:id="@+id/switchAddAlarm"
             style="@style/SwitchStyle"
+            android:checked="true"
             android:text="Show Alarm Sounds" />
 
         <Switch
             android:id="@+id/switchAddMusic"
             style="@style/SwitchStyle"
+            android:checked="true"
             android:text="Show External Files" />
 
         <Switch
