@@ -101,7 +101,7 @@ class MainActivity : AppCompatActivity(),
                 if (switchAddMusic.isChecked) picker.music()
 
                 if (switchShowDialog.isChecked) {
-                    picker.goWithDialog(supportFragmentManager, this)
+                    picker.goWithDialog(supportFragmentManager)
                 } else {
                     picker.goWithActivity(this, 0, MusicPickerActivity::class.java)
                 }

@@ -28,12 +28,9 @@ class MusicPickerFragment : Fragment(), View.OnClickListener {
     companion object {
         private const val TAG_FRAGMENT = "tag_fragment"
 
-        internal fun newInstance(
-                setting: MusicPickerSetting?,
-                listener: MusicPickerListener): MusicPickerFragment {
+        internal fun newInstance(setting: MusicPickerSetting?): MusicPickerFragment {
             return MusicPickerFragment().apply {
                 arguments = Bundle().apply { putParcelable(EXTRA_SETTING_BUNDLE, setting) }
-                musicPickerListener = listener
             }
         }
     }
@@ -44,6 +41,16 @@ class MusicPickerFragment : Fragment(), View.OnClickListener {
     private lateinit var musicPickerListener: MusicPickerListener
 
     internal lateinit var musicPlayer: AsyncRingtonePlayer
+
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        musicPickerListener = when {
+            parentFragment is MusicPickerListener -> parentFragment as MusicPickerListener
+            context is MusicPickerListener -> context
+            activity is MusicPickerListener -> activity as MusicPickerListener
+            else -> throw IllegalStateException("MusicPickerListener should used in a MusicPickerListener")
+        }
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         viewModel = ViewModelProviders.of(this).get(PickerViewModel::class.java)

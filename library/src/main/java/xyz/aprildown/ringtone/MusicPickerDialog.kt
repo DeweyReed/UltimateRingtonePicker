@@ -1,5 +1,6 @@
 package xyz.aprildown.ringtone
 
+import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
@@ -30,11 +31,20 @@ class MusicPickerDialog : DialogFragment(), MusicPickerListener {
         }
     }
 
-    internal lateinit var musicPickerListener: MusicPickerListener
+    private lateinit var musicPickerListener: MusicPickerListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NORMAL, R.style.UMP_Theme)
+    }
+
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        musicPickerListener = when {
+            context is MusicPickerListener -> context
+            activity is MusicPickerListener -> activity as MusicPickerListener
+            else -> throw IllegalStateException("MusicPickerDialog requires a MusicPickerListener")
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -48,8 +58,7 @@ class MusicPickerDialog : DialogFragment(), MusicPickerListener {
         if (savedInstanceState == null) {
             childFragmentManager.beginTransaction()
                     .replace(R.id.layoutDialogMusicPicker, MusicPickerFragment.newInstance(
-                            arguments?.getParcelable(EXTRA_SETTING_BUNDLE),
-                            this@MusicPickerDialog))
+                            arguments?.getParcelable(EXTRA_SETTING_BUNDLE)))
                     .commit()
         }
         return view

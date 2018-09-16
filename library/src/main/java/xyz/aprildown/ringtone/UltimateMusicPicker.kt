@@ -36,9 +36,9 @@ class UltimateMusicPicker {
         /**
          * Useful when customize how to start activity. Check [MusicPickerActivity.onCreate].
          */
-        fun createFragmentFromIntent(intent: Intent, listener: MusicPickerListener): Fragment =
+        fun createFragmentFromIntent(intent: Intent): Fragment =
                 MusicPickerFragment.newInstance(
-                        intent.getParcelableExtra(EXTRA_SETTING_BUNDLE), listener)
+                        intent.getParcelableExtra(EXTRA_SETTING_BUNDLE))
     }
 
     private var windowTitle: String = ""
@@ -176,12 +176,11 @@ class UltimateMusicPicker {
 
     /**
      * Start music picking dialog.
+     * Please implement [MusicPickerListener] for the class who calls this method
      * @param fm Current fragment
-     * @param listener To get picked music result
      */
-    fun goWithDialog(fm: FragmentManager, listener: MusicPickerListener) {
+    fun goWithDialog(fm: FragmentManager) {
         val dialog = MusicPickerDialog.newInstance(buildParcelable(), windowTitle)
-        dialog.musicPickerListener = listener
         dialog.show(fm, "music_picker")
     }
 }

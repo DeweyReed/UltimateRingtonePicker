@@ -27,7 +27,7 @@ class CustomActivity : AppCompatActivity(), MusicPickerListener {
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                     .add(R.id.fragment,
-                            UltimateMusicPicker.createFragmentFromIntent(intent, this))
+                            UltimateMusicPicker.createFragmentFromIntent(intent))
                     .commit()
         }
     }
