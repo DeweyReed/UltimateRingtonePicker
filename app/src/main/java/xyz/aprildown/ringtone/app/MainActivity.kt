@@ -48,11 +48,19 @@ class MainActivity : AppCompatActivity(),
             setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         }
 
+        btnCustom.setOnClickListener(this)
         btnLaunch.setOnClickListener(this)
     }
 
     override fun onClick(v: View?) {
         when (v?.id) {
+            R.id.btnCustom -> {
+                UltimateMusicPicker()
+                        .windowTitle("CustomCustomCustom")
+                        .streamType(AudioManager.STREAM_MUSIC)
+                        .alarm().music()
+                        .goWithActivity(this, 0, CustomActivity::class.java)
+            }
             R.id.btnLaunch -> {
                 val picker = UltimateMusicPicker()
                         .windowTitle(inputWindowTitle.editText?.text.toString())

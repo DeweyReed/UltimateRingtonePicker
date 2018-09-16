@@ -13,6 +13,7 @@ android {
         versionCode versions.version_code
         versionName versions.version_name
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        vectorDrawables.useSupportLibrary true
     }
 
     buildTypes {
@@ -41,5 +42,4 @@ dependencies {
 
     implementation libs.support_appcompat_v7
     implementation libs.support_design
-    implementation libs.support_constraint_layout
 }

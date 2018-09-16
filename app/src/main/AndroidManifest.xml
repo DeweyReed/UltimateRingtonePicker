@@ -21,6 +21,7 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".CustomActivity" />
         <activity android:name="xyz.aprildown.ringtone.MusicPickerActivity" />
     </application>
 
