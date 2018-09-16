@@ -24,7 +24,14 @@ internal class MusicPickerSetting(
             source.readParcelable<Uri>(Uri::class.java.classLoader) ?: NO_MUSIC_URI,
             1 == source.readInt(),
             source.readParcelable<Uri>(Uri::class.java.classLoader),
-            ArrayList<Pair<String, Uri>>().apply { source.readList(this, Pair::class.java.classLoader) },
+
+            mutableListOf<Pair<String, Uri>>().apply {
+                for (i in 0 until source.readInt()) {
+                    add(source.readString() to
+                            (source.readParcelable(Uri::class.java.classLoader) ?: NO_MUSIC_URI))
+                }
+            },
+
             source.readInt(),
             source.createIntArray() ?: intArrayOf()
     )
@@ -37,7 +44,14 @@ internal class MusicPickerSetting(
         writeParcelable(defaultUri, 0)
         writeInt((if (hasSilent) 1 else 0))
         writeParcelable(selectedUri, 0)
-        writeList(additional)
+
+        val size = additional.size
+        writeInt(size)
+        for (i in 0 until size) {
+            writeString(additional[i].first)
+            writeParcelable(additional[i].second, 0)
+        }
+
         writeInt(streamType)
         writeIntArray(musicTypes)
     }
