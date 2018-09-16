@@ -37,7 +37,9 @@ dependencies {
     androidTestImplementation libs.test_espresso
 
     implementation libs.kotlin_stdlib_jdk7
+    implementation libs.kotlin_anko_common
 
     implementation libs.support_appcompat_v7
+    implementation libs.support_design
     implementation libs.support_constraint_layout
 }

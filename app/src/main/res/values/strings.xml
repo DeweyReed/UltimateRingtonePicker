@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">UltimateMusicPicker</string>
+
+    <string-array name="stream_types">
+        <item>default</item>
+        <item>alarm</item>
+        <item>music</item>
+        <item>notification</item>
+        <item>ring</item>
+    </string-array>
 </resources>

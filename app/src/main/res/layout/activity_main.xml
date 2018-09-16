@@ -1,18 +1,124 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:animateLayoutChanges="true"
+    tools:context=".MainActivity"
+    tools:ignore="HardcodedText">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:orientation="vertical">
 
-</android.support.constraint.ConstraintLayout>
+        <Switch
+            android:id="@+id/switchNightTheme"
+            style="@style/SwitchStyle"
+            android:text="Enable Night Theme" />
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/inputWindowTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Window Title"
+            android:paddingEnd="?listPreferredItemPaddingRight"
+            android:paddingLeft="?listPreferredItemPaddingLeft"
+            android:paddingRight="?listPreferredItemPaddingRight"
+            android:paddingStart="?listPreferredItemPaddingLeft"
+            app:hintEnabled="true">
+
+            <android.support.design.widget.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="UltimateMusicPicker" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <Switch
+            android:id="@+id/switchUseDefault"
+            style="@style/SwitchStyle"
+            android:text="Add Default Ringtone" />
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/inputDefaultTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Default Title"
+            android:paddingEnd="?listPreferredItemPaddingRight"
+            android:paddingLeft="?listPreferredItemPaddingLeft"
+            android:paddingRight="?listPreferredItemPaddingRight"
+            android:paddingStart="?listPreferredItemPaddingLeft"
+            android:visibility="gone"
+            app:hintEnabled="true"
+            tools:visibility="visible">
+
+            <android.support.design.widget.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="DefaultDefaultDefault" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <Switch
+            android:id="@+id/switchRemoveSilent"
+            style="@style/SwitchStyle"
+            android:text="Remove Silent" />
+
+        <Switch
+            android:id="@+id/switchPreSelect"
+            style="@style/SwitchStyle"
+            android:text="Pre Select" />
+
+        <Switch
+            android:id="@+id/switchAddAdditional"
+            style="@style/SwitchStyle"
+            android:text="Add Additional Uris" />
+
+        <Spinner
+            android:id="@+id/spinnerStreamTypes"
+            android:layout_width="match_parent"
+            android:layout_height="?listPreferredItemHeightSmall"
+            android:paddingEnd="?listPreferredItemPaddingRight"
+            android:paddingLeft="?listPreferredItemPaddingLeft"
+            android:paddingRight="?listPreferredItemPaddingRight"
+            android:paddingStart="?listPreferredItemPaddingLeft" />
+
+        <Switch
+            android:id="@+id/switchAddRingtone"
+            style="@style/SwitchStyle"
+            android:text="Show Ringtone Sounds" />
+
+        <Switch
+            android:id="@+id/switchAddNotification"
+            style="@style/SwitchStyle"
+            android:text="Show Notification Sounds" />
+
+        <Switch
+            android:id="@+id/switchAddAlarm"
+            style="@style/SwitchStyle"
+            android:text="Show Alarm Sounds" />
+
+        <Switch
+            android:id="@+id/switchAddMusic"
+            style="@style/SwitchStyle"
+            android:text="Show External Files" />
+
+        <Switch
+            android:id="@+id/switchShowDialog"
+            style="@style/SwitchStyle"
+            android:text="Show Picker Dialog" />
+
+        <Button
+            android:id="@+id/btnLaunch"
+            style="?buttonBarPositiveButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:background="?selectableItemBackgroundBorderless"
+            android:text="Launch" />
+
+    </LinearLayout>
+
+</ScrollView>

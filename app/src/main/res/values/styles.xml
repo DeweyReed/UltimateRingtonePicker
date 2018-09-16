@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.DayNight.DarkActionBar">
@@ -8,4 +8,13 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="SwitchStyle" tools:ignore="NewApi">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">?listPreferredItemHeightSmall</item>
+        <item name="android:paddingLeft">?listPreferredItemPaddingLeft</item>
+        <item name="android:paddingRight">?listPreferredItemPaddingRight</item>
+        <item name="android:paddingStart">?listPreferredItemPaddingLeft</item>
+        <item name="android:paddingEnd">?listPreferredItemPaddingRight</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Menu</item>
+    </style>
 </resources>
