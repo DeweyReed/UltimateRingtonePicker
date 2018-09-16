@@ -8,19 +8,22 @@ import android.support.v4.content.AsyncTaskLoader
 import android.support.v4.content.Loader
 import android.support.v4.util.ArrayMap
 import android.support.v7.widget.RecyclerView
+import android.view.ContextMenu
 import android.view.MenuItem
+import android.view.View
 import xyz.aprildown.ringtone.MUSIC_SILENT
 import xyz.aprildown.ringtone.R
 import xyz.aprildown.ringtone.UltimateMusicPicker
 import xyz.aprildown.ringtone.data.CustomMusic
 import xyz.aprildown.ringtone.data.MusicModel
 
-internal class PickerNormalFragment : PickerBaseFragment() {
+internal class PickerNormalFragment : PickerBaseFragment(), View.OnCreateContextMenuListener {
 
     private var indexOfMusicToRemove = RecyclerView.NO_POSITION
 
     override fun init() {
         registerForContextMenu(recyclerView)
+        recyclerView.setOnCreateContextMenuListener(this)
     }
 
     override fun shouldShowContextMenu(): Boolean = true
@@ -65,6 +68,17 @@ internal class PickerNormalFragment : PickerBaseFragment() {
             removeCustomMusic(toRemove.uri)
         }
         return true
+    }
+
+    override fun onCreateContextMenu(menu: ContextMenu?, v: View?, menuInfo: ContextMenu.ContextMenuInfo?) {
+        val listener = MenuItem.OnMenuItemClickListener { item ->
+            onContextItemSelected(item)
+            true
+        }
+
+        for (i in 0 until (menu?.size() ?: 0)) {
+            menu?.getItem(i)?.setOnMenuItemClickListener(listener)
+        }
     }
 
     override fun onItemClicked(viewHolder: RecyclerView.ViewHolder, id: Int) {
