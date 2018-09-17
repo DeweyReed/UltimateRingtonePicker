@@ -3,10 +3,6 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
-apply plugin: 'com.github.dcendents.android-maven'
-
-group='com.github.DeweyReed'
-
 android {
     compileSdkVersion versions.compile_sdk
 
