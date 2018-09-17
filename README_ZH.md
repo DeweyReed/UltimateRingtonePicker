@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://github.com/DeweyReed/UltimateMusicPicker/blob/master/art/ic_launcher-web.png?raw=true" height="128" />
+  <img src="https://github.com/DeweyReed/UltimateMusicPicker/blob/master/art/ic_launcher-web.webp?raw=true" height="128" />
 </div>
 
 <h1 align="center">UltimateMusicPicker</h1>
