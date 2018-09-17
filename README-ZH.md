@@ -15,10 +15,6 @@
     <a href="https://jitpack.io/#DeweyReed/UltimateMusicPicker">
         <img src="https://jitpack.io/v/DeweyReed/UltimateMusicPicker.svg"/>
     </a>
-    </br>
-    <a href="https://github.com/DeweyReed/UltimateMusicPicker/blob/master/README_ZH.md">
-        <img src="https://img.shields.io/badge/Translation-%E4%B8%AD%E6%96%87-red.svg">
-    </a>
 </div>
 </br>
 
