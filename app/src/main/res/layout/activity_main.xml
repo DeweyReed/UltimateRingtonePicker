@@ -39,7 +39,6 @@
         <Switch
             android:id="@+id/switchUseDefault"
             style="@style/SwitchStyle"
-            android:checked="true"
             android:text="Add Default Ringtone" />
 
         <android.support.design.widget.TextInputLayout
