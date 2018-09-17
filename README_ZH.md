@@ -20,9 +20,9 @@
 
 ## 截图
 
-|||
-|:-:|:-:|
-|![Activity](https://github.com/DeweyReed/UltimateMusicPicker/blob/master/art/activity.png?raw=true)|![对话框](https://github.com/DeweyReed/UltimateMusicPicker/blob/master/art/png.png?raw=true)|
+||||
+|:-:|:-:|:-:|
+|![Activity](https://github.com/DeweyReed/UltimateMusicPicker/blob/master/art/activity.webp?raw=true)|![对话框](https://github.com/DeweyReed/UltimateMusicPicker/blob/master/art/dialog.webp?raw=true)|![暗色对话框](https://github.com/DeweyReed/UltimateMusicPicker/blob/master/art/dark.webp?raw=true)|
 
 # 目录
 

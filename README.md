@@ -24,9 +24,9 @@
 
 ## Screenshot
 
-|||
-|:-:|:-:|
-|![Activity](https://github.com/DeweyReed/UltimateMusicPicker/blob/master/art/activity.png?raw=true)|![Dialog](https://github.com/DeweyReed/UltimateMusicPicker/blob/master/art/png.png?raw=true)|
+||||
+|:-:|:-:|:-:|
+|![Activity](https://github.com/DeweyReed/UltimateMusicPicker/blob/master/art/activity.webp?raw=true)|![Dialog](https://github.com/DeweyReed/UltimateMusicPicker/blob/master/art/dialog.webp?raw=true)|![Dark](https://github.com/DeweyReed/UltimateMusicPicker/blob/master/art/dark.webp?raw=true)|
 
 # Table of Contents
 
