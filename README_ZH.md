@@ -9,11 +9,17 @@
 </div>
 </br>
 <div align="center">
+    <a href="https://android-arsenal.com/details/1/7141">
+        <img src="https://img.shields.io/badge/Android%20Arsenal-UltimateMusicPicker-green.svg?style=flat"/>
+    </a>
     <a href="https://travis-ci.org/DeweyReed/UltimateMusicPicker">
         <img src="https://travis-ci.org/DeweyReed/UltimateMusicPicker.svg?branch=master"/>
     </a>
     <a href="https://jitpack.io/#DeweyReed/UltimateMusicPicker">
         <img src="https://jitpack.io/v/DeweyReed/UltimateMusicPicker.svg"/>
+    </a>
+    <a href="https://android-arsenal.com/api?level=14">
+        <img src="https://img.shields.io/badge/API-14%2B-brightgreen.svg?style=flat" border="0" alt="API">
     </a>
 </div>
 </br>
@@ -154,6 +160,7 @@ fun putSettingIntoIntent(intent: Intent): Intent
 
 ## 计划清单
 
+- 支持AndoridX
 - 使用`READ_CONTENT`实现无需权限的选择
 
 ## License
