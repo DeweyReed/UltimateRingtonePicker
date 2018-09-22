@@ -41,6 +41,8 @@ class MusicPickerDialog : DialogFragment(), MusicPickerListener {
     override fun onAttach(context: Context?) {
         super.onAttach(context)
         musicPickerListener = when {
+            // In case using picker dialog in a fragment
+            parentFragment is MusicPickerListener -> parentFragment as MusicPickerListener
             context is MusicPickerListener -> context
             activity is MusicPickerListener -> activity as MusicPickerListener
             else -> throw IllegalStateException("MusicPickerDialog requires a MusicPickerListener")
