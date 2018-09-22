@@ -4,10 +4,10 @@ ext {
             min_sdk       : 14,
             target_sdk    : 28,
 
-            version_code  : 100,
-            version_name  : '1.0.0',
+            version_code  : 101,
+            version_name  : '1.0.1',
 
-            support       : '28.0.0-rc02',
+            support       : '28.0.0',
 
             kotlin_anko   : '0.10.5',
 
