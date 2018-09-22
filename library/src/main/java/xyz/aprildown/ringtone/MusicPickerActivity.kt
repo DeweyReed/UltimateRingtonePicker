@@ -24,9 +24,11 @@ class MusicPickerActivity : AppCompatActivity(), MusicPickerListener {
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                    .add(android.R.id.content,
-                            UltimateMusicPicker.createFragmentFromIntent(intent))
-                    .commit()
+                .add(
+                    android.R.id.content,
+                    UltimateMusicPicker.createFragmentFromIntent(intent)
+                )
+                .commit()
         }
     }
 
@@ -38,15 +40,19 @@ class MusicPickerActivity : AppCompatActivity(), MusicPickerListener {
     override fun onBackPressed() {
         val fragment = supportFragmentManager.findFragmentById(android.R.id.content)
         if (fragment == null ||
-                (fragment is MusicPickerFragment && !fragment.isBackHandled())) {
+            (fragment is MusicPickerFragment && !fragment.isBackHandled())
+        ) {
             super.onBackPressed()
         }
     }
 
     override fun onMusicPick(uri: Uri, title: String) {
-        setResult(Activity.RESULT_OK, Intent()
+        setResult(
+            Activity.RESULT_OK,
+            Intent()
                 .putExtra(UltimateMusicPicker.EXTRA_SELECTED_URI, uri)
-                .putExtra(UltimateMusicPicker.EXTRA_SELECTED_TITLE, title))
+                .putExtra(UltimateMusicPicker.EXTRA_SELECTED_TITLE, title)
+        )
         finish()
     }
 

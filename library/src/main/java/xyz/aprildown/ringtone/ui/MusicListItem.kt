@@ -13,11 +13,11 @@ internal class HeaderItem(val title: String) : MusicListItem()
 internal object AddCustomItem : MusicListItem()
 
 internal open class SoundItem(
-        val type: Int,
-        val uri: Uri,
-        val title: String,
-        var isSelected: Boolean,
-        var isPlaying: Boolean
+    val type: Int,
+    val uri: Uri,
+    val title: String,
+    var isSelected: Boolean,
+    var isPlaying: Boolean
 ) : MusicListItem() {
     companion object {
         const val TYPE_CUSTOM = 0

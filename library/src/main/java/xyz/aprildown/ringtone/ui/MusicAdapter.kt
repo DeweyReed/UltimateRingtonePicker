@@ -11,8 +11,8 @@ import xyz.aprildown.ringtone.R
 import xyz.aprildown.ringtone.startDrawableAnimation
 
 internal class MusicAdapter(
-        private val listener: OnItemCLickedListener,
-        private val showContextMenu: Boolean = true
+    private val listener: OnItemCLickedListener,
+    private val showContextMenu: Boolean = true
 ) : RecyclerView.Adapter<MusicAdapter.BaseViewHolder>() {
 
     companion object {
@@ -43,7 +43,7 @@ internal class MusicAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder {
         fun inflateView(layoutRes: Int): View = LayoutInflater.from(parent.context)
-                .inflate(layoutRes, parent, false)
+            .inflate(layoutRes, parent, false)
         return when (viewType) {
             ITEM_VIEW_TYPE_HEADER -> HeaderViewHolder(inflateView(R.layout.item_header), listener)
             ITEM_VIEW_TYPE_ADD_CUSTOM ->
@@ -77,15 +77,15 @@ internal class MusicAdapter(
     }
 
     abstract class BaseViewHolder(
-            view: View,
-            protected val listener: OnItemCLickedListener
+        view: View,
+        protected val listener: OnItemCLickedListener
     ) : RecyclerView.ViewHolder(view) {
         abstract fun bind(item: MusicListItem)
     }
 
     class HeaderViewHolder(
-            view: View,
-            listener: OnItemCLickedListener
+        view: View,
+        listener: OnItemCLickedListener
     ) : BaseViewHolder(view, listener) {
         private val titleView = view.findViewById<TextView>(R.id.textItemHeader)
 
@@ -97,8 +97,8 @@ internal class MusicAdapter(
     }
 
     class AddCustomViewHolder(
-            view: View,
-            listener: OnItemCLickedListener
+        view: View,
+        listener: OnItemCLickedListener
     ) : BaseViewHolder(view, listener), View.OnClickListener {
         override fun bind(item: MusicListItem) {
             itemView.setOnClickListener(this)
@@ -119,11 +119,11 @@ internal class MusicAdapter(
     }
 
     class SoundViewHolder(
-            view: View,
-            listener: OnItemCLickedListener,
-            private val showContextMenu: Boolean
+        view: View,
+        listener: OnItemCLickedListener,
+        private val showContextMenu: Boolean
     ) : BaseViewHolder(view, listener),
-            View.OnClickListener, View.OnCreateContextMenuListener {
+        View.OnClickListener, View.OnCreateContextMenuListener {
         private val imageSound = view.findViewById<ImageView>(R.id.imageSound)
         private val textSoundName = view.findViewById<TextView>(R.id.textSoundName)
         private val imageSelected = view.findViewById<ImageView>(R.id.imageSelected)
@@ -139,19 +139,22 @@ internal class MusicAdapter(
 
                 val itemType = item.type
 
-                imageSound.setImageResource(when {
-                    itemType == SoundItem.TYPE_CUSTOM -> R.drawable.ic_album
-                    itemType == SoundItem.TYPE_SILENT -> R.drawable.ic_ringtone_silent
-                    item.isPlaying -> R.drawable.ic_ringtone_active
-                    else -> R.drawable.ic_ringtone_normal
-                })
+                imageSound.setImageResource(
+                    when {
+                        itemType == SoundItem.TYPE_CUSTOM -> R.drawable.ic_album
+                        itemType == SoundItem.TYPE_SILENT -> R.drawable.ic_ringtone_silent
+                        item.isPlaying -> R.drawable.ic_ringtone_active
+                        else -> R.drawable.ic_ringtone_normal
+                    }
+                )
                 imageSound.startDrawableAnimation()
 
                 imageSelected.visibility = if (item.isSelected) VISIBLE else GONE
 
                 itemView.setBackgroundColor(
-                        if (item.isSelected) Color.parseColor("#14000000")
-                        else Color.TRANSPARENT)
+                    if (item.isSelected) Color.parseColor("#14000000")
+                    else Color.TRANSPARENT
+                )
 
                 if (showContextMenu && itemType == SoundItem.TYPE_CUSTOM) {
                     itemView.setOnCreateContextMenuListener(this)
@@ -164,9 +167,10 @@ internal class MusicAdapter(
         }
 
         override fun onCreateContextMenu(
-                menu: ContextMenu?,
-                v: View?, menuInfo:
-                ContextMenu.ContextMenuInfo?) {
+            menu: ContextMenu?,
+            v: View?, menuInfo:
+            ContextMenu.ContextMenuInfo?
+        ) {
             listener.onItemClicked(this, CLICK_LONG_PRESS)
             menu?.add(Menu.NONE, 0, Menu.NONE, R.string.remove_sound)
         }

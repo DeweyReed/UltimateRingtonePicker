@@ -28,8 +28,8 @@ import java.io.IOException
  * sort of noise is always preferable to remaining silent.
  */
 internal class AsyncRingtonePlayer(
-        /** The context. */
-        private val mContext: Context
+    /** The context. */
+    private val mContext: Context
 ) {
 
     companion object {
@@ -68,20 +68,23 @@ internal class AsyncRingtonePlayer(
 
     /** Handler running on the ringtone thread.  */
     @SuppressLint("StaticFieldLeak")
-    private val mHandler: Handler = object : Handler(HandlerThread("ringtone-player").apply { start() }.looper) {
-        override fun handleMessage(msg: Message) {
-            when (msg.what) {
-                EVENT_PLAY -> {
-                    val data = msg.data
-                    mPlaybackDelegate.play(mContext,
-                                    data.getParcelable(RINGTONE_URI_KEY),
-                                    data.getBoolean(LOOP),
-                            data.getInt(STREAM_TYPE))
+    private val mHandler: Handler =
+        object : Handler(HandlerThread("ringtone-player").apply { start() }.looper) {
+            override fun handleMessage(msg: Message) {
+                when (msg.what) {
+                    EVENT_PLAY -> {
+                        val data = msg.data
+                        mPlaybackDelegate.play(
+                            mContext,
+                            data.getParcelable(RINGTONE_URI_KEY),
+                            data.getBoolean(LOOP),
+                            data.getInt(STREAM_TYPE)
+                        )
+                    }
+                    EVENT_STOP -> mPlaybackDelegate.stop(mContext)
                 }
-                EVENT_STOP -> mPlaybackDelegate.stop(mContext)
             }
         }
-    }
 
     private val mPlaybackDelegate: PlaybackDelegate by lazy {
         MediaPlayerPlaybackDelegate()
@@ -136,7 +139,7 @@ internal class AsyncRingtonePlayer(
      * Loops playback of a ringtone using [MediaPlayer].
      */
     private inner class MediaPlayerPlaybackDelegate : PlaybackDelegate,
-            AudioManager.OnAudioFocusChangeListener {
+        AudioManager.OnAudioFocusChangeListener {
 
         /** The audio focus manager. Only used by the ringtone thread.  */
         private var mAudioManager: AudioManager? = null
@@ -157,8 +160,8 @@ internal class AsyncRingtonePlayer(
             mStreamType = streamType
             if (isLOrLater()) {
                 audioAttributes = AudioAttributes.Builder()
-                        .setLegacyStreamType(mStreamType)
-                        .build()
+                    .setLegacyStreamType(mStreamType)
+                    .build()
             }
 
             if (mAudioManager == null) {
@@ -166,7 +169,8 @@ internal class AsyncRingtonePlayer(
             }
 
             val inTelephoneCall = isInTelephoneCall(context)
-            var alarmNoise: Uri? = if (inTelephoneCall) getInCallRingtoneUri(context) else ringtoneUri
+            var alarmNoise: Uri? =
+                if (inTelephoneCall) getInCallRingtoneUri(context) else ringtoneUri
             // Fall back to the system default alarm if the database does not have an alarm stored.
             if (alarmNoise == null) {
                 alarmNoise = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
@@ -241,8 +245,10 @@ internal class AsyncRingtonePlayer(
                     mAudioManager?.requestAudioFocus(createAudioFocusRequest(audioAttributes!!))
                 } else {
                     @Suppress("DEPRECATION")
-                    mAudioManager?.requestAudioFocus(this@MediaPlayerPlaybackDelegate,
-                            mStreamType, AUDIOFOCUS_GAIN_TRANSIENT)
+                    mAudioManager?.requestAudioFocus(
+                        this@MediaPlayerPlaybackDelegate,
+                        mStreamType, AUDIOFOCUS_GAIN_TRANSIENT
+                    )
                 }
 
                 start()
@@ -271,7 +277,8 @@ internal class AsyncRingtonePlayer(
             if (isOOrLater()) {
                 if (audioAttributes != null) {
                     mAudioManager?.abandonAudioFocusRequest(
-                            createAudioFocusRequest(audioAttributes!!))
+                        createAudioFocusRequest(audioAttributes!!)
+                    )
                 }
             } else {
                 @Suppress("DEPRECATION")
@@ -282,11 +289,11 @@ internal class AsyncRingtonePlayer(
         @RequiresApi(Build.VERSION_CODES.O)
         private fun createAudioFocusRequest(aa: AudioAttributes): AudioFocusRequest {
             return AudioFocusRequest.Builder(AUDIOFOCUS_GAIN_TRANSIENT)
-                    .setOnAudioFocusChangeListener(this@MediaPlayerPlaybackDelegate)
-                    .setAcceptsDelayedFocusGain(false)
-                    .setWillPauseWhenDucked(false)
-                    .setAudioAttributes(aa)
-                    .build()
+                .setOnAudioFocusChangeListener(this@MediaPlayerPlaybackDelegate)
+                .setAcceptsDelayedFocusGain(false)
+                .setWillPauseWhenDucked(false)
+                .setAudioAttributes(aa)
+                .build()
         }
     }
 }

@@ -18,8 +18,8 @@ import xyz.aprildown.ringtone.R
  * Handles RecyclerView
  */
 internal abstract class PickerBaseFragment : Fragment(),
-        LoaderManager.LoaderCallbacks<List<MusicListItem>>,
-        MusicAdapter.OnItemCLickedListener {
+    LoaderManager.LoaderCallbacks<List<MusicListItem>>,
+    MusicAdapter.OnItemCLickedListener {
 
     protected lateinit var viewModel: PickerViewModel
 
@@ -31,9 +31,13 @@ internal abstract class PickerBaseFragment : Fragment(),
     abstract fun init()
     abstract fun shouldShowContextMenu(): Boolean
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        parent = (parentFragment as? MusicPickerFragment)
-                ?: throw IllegalStateException("PickerBaseFragment should show in the MusicPickerActivity!")
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        parent = (parentFragment as? MusicPickerFragment) ?:
+                throw IllegalStateException("PickerBaseFragment should show in the MusicPickerActivity!")
 
         viewModel = ViewModelProviders.of(parent).get(PickerViewModel::class.java)
 
@@ -61,7 +65,7 @@ internal abstract class PickerBaseFragment : Fragment(),
             musicAdapter.notifyItemChanged(index)
             if (scrollTo) {
                 recyclerView.layoutManager
-                        ?.smoothScrollToPosition(recyclerView, null, index)
+                    ?.smoothScrollToPosition(recyclerView, null, index)
             }
         }
     }
@@ -69,7 +73,7 @@ internal abstract class PickerBaseFragment : Fragment(),
     protected fun onMusicItemClicked(viewHolder: RecyclerView.ViewHolder) {
         val old = getSelectedSoundItem()
         val new = musicAdapter.getData()
-                .getOrNull(viewHolder.adapterPosition) as? SoundItem ?: return
+            .getOrNull(viewHolder.adapterPosition) as? SoundItem ?: return
         if (old == new) {
             if (new.isPlaying) {
                 parent.stopPlayingMusic(new, false)

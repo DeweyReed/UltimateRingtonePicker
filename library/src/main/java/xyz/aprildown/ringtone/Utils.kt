@@ -25,19 +25,19 @@ internal fun MutableList<CustomMusic>.sortWithCollator() {
 }
 
 internal fun Context.safeContext(): Context =
-        takeIf { Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && !isDeviceProtectedStorage }?.let {
-            ContextCompat.createDeviceProtectedStorageContext(it) ?: it
-        } ?: this
+    takeIf { Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && !isDeviceProtectedStorage }?.let {
+        ContextCompat.createDeviceProtectedStorageContext(it) ?: it
+    } ?: this
 
 /**
  * @param resourceId identifies an application resource
  * @return the Uri by which the application resource is accessed
  */
 internal fun Context.getResourceUri(@AnyRes resourceId: Int): Uri = Uri.Builder()
-        .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
-        .authority(packageName)
-        .path(resourceId.toString())
-        .build()
+    .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
+    .authority(packageName)
+    .path(resourceId.toString())
+    .build()
 
 internal fun isLOrLater(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
 

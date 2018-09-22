@@ -49,7 +49,11 @@ class MusicPickerDialog : DialogFragment(), MusicPickerListener {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         val view = inflater.inflate(R.layout.dialog_music_picker, container, false)
 
         val header = view.findViewById<TextView>(R.id.textMusicHeader)
@@ -59,9 +63,12 @@ class MusicPickerDialog : DialogFragment(), MusicPickerListener {
 
         if (savedInstanceState == null) {
             childFragmentManager.beginTransaction()
-                    .replace(R.id.layoutDialogMusicPicker, MusicPickerFragment.newInstance(
-                            arguments?.getParcelable(EXTRA_SETTING_BUNDLE)))
-                    .commit()
+                .replace(
+                    R.id.layoutDialogMusicPicker, MusicPickerFragment.newInstance(
+                        arguments?.getParcelable(EXTRA_SETTING_BUNDLE)
+                    )
+                )
+                .commit()
         }
         return view
     }

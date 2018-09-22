@@ -22,16 +22,16 @@ import android.net.Uri
  * A read-only domain object representing a custom music chosen from the file system.
  */
 internal data class CustomMusic(
-        /**
-         * The unique identifier of the custom music.
-         */
-        val id: Long,
-        /**
-         * The uri that allows playback of the music.
-         */
-        val uri: Uri,
-        /**
-         * The title describing the file at the given uri; typically the file name.
-         */
-        val title: String
+    /**
+     * The unique identifier of the custom music.
+     */
+    val id: Long,
+    /**
+     * The uri that allows playback of the music.
+     */
+    val uri: Uri,
+    /**
+     * The title describing the file at the given uri; typically the file name.
+     */
+    val title: String
 )

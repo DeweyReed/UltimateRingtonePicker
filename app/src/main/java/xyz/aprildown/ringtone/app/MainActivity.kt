@@ -17,8 +17,8 @@ import xyz.aprildown.ringtone.MusicPickerListener
 import xyz.aprildown.ringtone.UltimateMusicPicker
 
 class MainActivity : AppCompatActivity(),
-        View.OnClickListener,
-        MusicPickerListener {
+    View.OnClickListener,
+    MusicPickerListener {
 
     private var selectedTitle: String? = null
     private var selectedUri: Uri? = null
@@ -35,7 +35,8 @@ class MainActivity : AppCompatActivity(),
                 AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES
         switchNightTheme.setOnCheckedChangeListener { _, isChecked ->
             AppCompatDelegate.setDefaultNightMode(
-                    if (isChecked) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO)
+                if (isChecked) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
+            )
             recreate()
         }
 
@@ -43,8 +44,10 @@ class MainActivity : AppCompatActivity(),
             inputDefaultTitle.visibility = if (isChecked) View.VISIBLE else View.GONE
         }
 
-        spinnerStreamTypes.adapter = ArrayAdapter.createFromResource(this,
-                R.array.stream_types, android.R.layout.simple_spinner_item).apply {
+        spinnerStreamTypes.adapter = ArrayAdapter.createFromResource(
+            this,
+            R.array.stream_types, android.R.layout.simple_spinner_item
+        ).apply {
             setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         }
 
@@ -56,21 +59,23 @@ class MainActivity : AppCompatActivity(),
         when (v?.id) {
             R.id.btnCustom -> {
                 UltimateMusicPicker()
-                        .windowTitle("CustomCustomCustom")
-                        .streamType(AudioManager.STREAM_MUSIC)
-                        .alarm().music()
-                        .goWithActivity(this, 0, CustomActivity::class.java)
+                    .windowTitle("CustomCustomCustom")
+                    .streamType(AudioManager.STREAM_MUSIC)
+                    .alarm().music()
+                    .goWithActivity(this, 0, CustomActivity::class.java)
             }
             R.id.btnLaunch -> {
                 val picker = UltimateMusicPicker()
-                        .windowTitle(inputWindowTitle.editText?.text.toString())
+                    .windowTitle(inputWindowTitle.editText?.text.toString())
 
                 if (switchUseDefault.isChecked) {
-                    picker.defaultTitleAndUri(inputDefaultTitle.editText?.text.toString(),
-                            Uri.Builder().scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
-                                    .authority(packageName)
-                                    .path((R.raw.custom_default).toString())
-                                    .build())
+                    picker.defaultTitleAndUri(
+                        inputDefaultTitle.editText?.text.toString(),
+                        Uri.Builder().scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
+                            .authority(packageName)
+                            .path((R.raw.custom_default).toString())
+                            .build()
+                    )
                 }
 
                 if (switchRemoveSilent.isChecked) picker.removeSilent()
@@ -80,10 +85,14 @@ class MainActivity : AppCompatActivity(),
                 if (switchAddAdditional.isChecked) {
                     // Any way not to use hardcoded string?
                     picker
-                            .additional("Additional 1",
-                                    Uri.parse("file:///android_asset/music1.ogg"))
-                            .additional("Additional 2",
-                                    Uri.parse("file:///android_asset/music2.ogg"))
+                        .additional(
+                            "Additional 1",
+                            Uri.parse("file:///android_asset/music1.ogg")
+                        )
+                        .additional(
+                            "Additional 2",
+                            Uri.parse("file:///android_asset/music2.ogg")
+                        )
                 }
 
                 val streamType = when (spinnerStreamTypes.selectedItemPosition) {

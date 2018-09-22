@@ -30,8 +30,10 @@ internal class PickerNormalFragment : PickerBaseFragment(), View.OnCreateContext
 
     override fun onCreateLoader(id: Int, args: Bundle?): Loader<List<MusicListItem>> {
         return viewModel.setting.run {
-            MusicLoader(localContext, viewModel.musicModel, musicTypes,
-                    hasDefault, defaultTitle, defaultUri, hasSilent, additional)
+            MusicLoader(
+                localContext, viewModel.musicModel, musicTypes,
+                hasDefault, defaultTitle, defaultUri, hasSilent, additional
+            )
         }
     }
 
@@ -70,7 +72,11 @@ internal class PickerNormalFragment : PickerBaseFragment(), View.OnCreateContext
         return true
     }
 
-    override fun onCreateContextMenu(menu: ContextMenu?, v: View?, menuInfo: ContextMenu.ContextMenuInfo?) {
+    override fun onCreateContextMenu(
+        menu: ContextMenu?,
+        v: View?,
+        menuInfo: ContextMenu.ContextMenuInfo?
+    ) {
         val listener = MenuItem.OnMenuItemClickListener { item ->
             onContextItemSelected(item)
             true
@@ -112,14 +118,14 @@ internal class PickerNormalFragment : PickerBaseFragment(), View.OnCreateContext
     }
 
     private class MusicLoader(
-            context: Context,
-            private val musicModel: MusicModel,
-            private val musicTypes: IntArray,
-            private val hasDefault: Boolean,
-            private val defaultTitle: String,
-            private val defaultUri: Uri,
-            private val hasSilent: Boolean,
-            private val additional: List<Pair<String, Uri>>
+        context: Context,
+        private val musicModel: MusicModel,
+        private val musicTypes: IntArray,
+        private val hasDefault: Boolean,
+        private val defaultTitle: String,
+        private val defaultUri: Uri,
+        private val hasSilent: Boolean,
+        private val additional: List<Pair<String, Uri>>
     ) : AsyncTaskLoader<List<MusicListItem>>(context) {
 
         private lateinit var customMusics: List<CustomMusic>
@@ -139,8 +145,12 @@ internal class PickerNormalFragment : PickerBaseFragment(), View.OnCreateContext
             if (musicTypes.contains(UltimateMusicPicker.TYPE_MUSIC)) {
                 items.add(HeaderItem(context.getString(R.string.your_sounds)))
                 customMusics.forEach {
-                    items.add(SoundItem(SoundItem.TYPE_CUSTOM,
-                            it.uri, it.title, false, false))
+                    items.add(
+                        SoundItem(
+                            SoundItem.TYPE_CUSTOM, it.uri,
+                            it.title, false, false
+                        )
+                    )
                 }
                 items.add(AddCustomItem)
             }
@@ -148,21 +158,33 @@ internal class PickerNormalFragment : PickerBaseFragment(), View.OnCreateContext
             items.add(HeaderItem(context.getString(R.string.device_sounds)))
 
             if (hasSilent) {
-                items.add(SoundItem(SoundItem.TYPE_SILENT, MUSIC_SILENT,
+                items.add(
+                    SoundItem(
+                        SoundItem.TYPE_SILENT, MUSIC_SILENT,
                         context.getString(R.string.silent_ringtone_title),
-                        false, false))
+                        false, false
+                    )
+                )
             }
 
             if (hasDefault && defaultUri != MUSIC_SILENT) {
-                items.add(SoundItem(SoundItem.TYPE_RINGTONE, defaultUri,
+                items.add(
+                    SoundItem(
+                        SoundItem.TYPE_RINGTONE, defaultUri,
                         if (defaultTitle.isEmpty())
                             context.getString(R.string.default_ringtone_title) else defaultTitle,
-                        false, false))
+                        false, false
+                    )
+                )
             }
 
             additional.forEach { (title, uri) ->
-                items.add(SoundItem(SoundItem.TYPE_RINGTONE, uri, title,
-                        false, false))
+                items.add(
+                    SoundItem(
+                        SoundItem.TYPE_RINGTONE, uri,
+                        title, false, false
+                    )
+                )
             }
 
             val ringtones = musicModel.getRingtones(*musicTypes)
@@ -179,8 +201,12 @@ internal class PickerNormalFragment : PickerBaseFragment(), View.OnCreateContext
                 if (ringtones.keys.contains(type)) {
                     items.add(HeaderItem(context.getString(title)))
                     ringtones[type]?.forEach {
-                        items.add(SoundItem(SoundItem.TYPE_RINGTONE,
-                                it, musicModel.getMusicTitle(it), false, false))
+                        items.add(
+                            SoundItem(
+                                SoundItem.TYPE_RINGTONE, it,
+                                musicModel.getMusicTitle(it), false, false
+                            )
+                        )
                     }
                 }
             }

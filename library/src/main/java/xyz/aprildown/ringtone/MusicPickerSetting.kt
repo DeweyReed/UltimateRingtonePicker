@@ -9,31 +9,33 @@ import android.os.Parcelable
  */
 
 internal class MusicPickerSetting(
-        val hasDefault: Boolean,
-        val defaultTitle: String,
-        val defaultUri: Uri,
-        val hasSilent: Boolean,
-        val selectedUri: Uri?,
-        val additional: List<Pair<String, Uri>>,
-        val streamType: Int,
-        val musicTypes: IntArray
+    val hasDefault: Boolean,
+    val defaultTitle: String,
+    val defaultUri: Uri,
+    val hasSilent: Boolean,
+    val selectedUri: Uri?,
+    val additional: List<Pair<String, Uri>>,
+    val streamType: Int,
+    val musicTypes: IntArray
 ) : Parcelable {
     constructor(source: Parcel) : this(
-            1 == source.readInt(),
-            source.readString() ?: "",
-            source.readParcelable<Uri>(Uri::class.java.classLoader) ?: NO_MUSIC_URI,
-            1 == source.readInt(),
-            source.readParcelable<Uri>(Uri::class.java.classLoader),
+        1 == source.readInt(),
+        source.readString() ?: "",
+        source.readParcelable<Uri>(Uri::class.java.classLoader) ?: NO_MUSIC_URI,
+        1 == source.readInt(),
+        source.readParcelable<Uri>(Uri::class.java.classLoader),
 
-            mutableListOf<Pair<String, Uri>>().apply {
-                for (i in 0 until source.readInt()) {
-                    add(source.readString() to
-                            (source.readParcelable(Uri::class.java.classLoader) ?: NO_MUSIC_URI))
-                }
-            },
+        mutableListOf<Pair<String, Uri>>().apply {
+            for (i in 0 until source.readInt()) {
+                add(
+                    source.readString() to
+                            (source.readParcelable(Uri::class.java.classLoader) ?: NO_MUSIC_URI)
+                )
+            }
+        },
 
-            source.readInt(),
-            source.createIntArray() ?: intArrayOf()
+        source.readInt(),
+        source.createIntArray() ?: intArrayOf()
     )
 
     override fun describeContents() = 0
@@ -59,9 +61,12 @@ internal class MusicPickerSetting(
     companion object {
         @Suppress("unused")
         @JvmField
-        val CREATOR: Parcelable.Creator<MusicPickerSetting> = object : Parcelable.Creator<MusicPickerSetting> {
-            override fun createFromParcel(source: Parcel): MusicPickerSetting = MusicPickerSetting(source)
-            override fun newArray(size: Int): Array<MusicPickerSetting?> = arrayOfNulls(size)
-        }
+        val CREATOR: Parcelable.Creator<MusicPickerSetting> =
+            object : Parcelable.Creator<MusicPickerSetting> {
+                override fun createFromParcel(source: Parcel): MusicPickerSetting =
+                    MusicPickerSetting(source)
+
+                override fun newArray(size: Int): Array<MusicPickerSetting?> = arrayOfNulls(size)
+            }
     }
 }

@@ -37,8 +37,8 @@ internal class PickerCustomFragment : PickerBaseFragment() {
     }
 
     private class CustomMusicLoader(
-            context: Context,
-            private val musicModel: MusicModel
+        context: Context,
+        private val musicModel: MusicModel
     ) : AsyncTaskLoader<List<MusicListItem>>(context) {
 
         override fun onStartLoading() {
@@ -51,8 +51,10 @@ internal class PickerCustomFragment : PickerBaseFragment() {
             val available = musicModel.getAvailableCustomMusics()
             return List(available.size) {
                 val item = available[it]
-                SoundItem(SoundItem.TYPE_CUSTOM, item.uri, item.title,
-                        false, false)
+                SoundItem(
+                    SoundItem.TYPE_CUSTOM, item.uri, item.title,
+                    false, false
+                )
             }
         }
     }

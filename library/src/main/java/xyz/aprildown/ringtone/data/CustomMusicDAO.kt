@@ -60,11 +60,11 @@ internal class CustomMusicDAO(private val prefs: SharedPreferences) {
         ids.add(id.toString())
 
         prefs.edit()
-                .putString(MUSIC_URI + id, uri.toString())
-                .putString(MUSIC_TITLE + id, title)
-                .putLong(NEXT_MUSIC_ID, id + 1)
-                .putStringSet(MUSIC_IDS, ids)
-                .apply()
+            .putString(MUSIC_URI + id, uri.toString())
+            .putString(MUSIC_TITLE + id, title)
+            .putLong(NEXT_MUSIC_ID, id + 1)
+            .putStringSet(MUSIC_IDS, ids)
+            .apply()
 
         return CustomMusic(id, uri, title)
     }
@@ -98,7 +98,8 @@ internal class CustomMusicDAO(private val prefs: SharedPreferences) {
         for (id in ids) {
             val idLong = id.toLongOrNull() ?: continue
             val uri = Uri.parse(
-                    prefs.getString(MUSIC_URI + id, null) ?: continue)
+                prefs.getString(MUSIC_URI + id, null) ?: continue
+            )
             val title = prefs.getString(MUSIC_TITLE + id, null) ?: continue
             musics.add(CustomMusic(idLong, uri, title))
         }

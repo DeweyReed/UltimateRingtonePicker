@@ -37,8 +37,9 @@ class UltimateMusicPicker {
          * Useful when customize how to start activity. Check [MusicPickerActivity.onCreate].
          */
         fun createFragmentFromIntent(intent: Intent): Fragment =
-                MusicPickerFragment.newInstance(
-                        intent.getParcelableExtra(EXTRA_SETTING_BUNDLE))
+            MusicPickerFragment.newInstance(
+                intent.getParcelableExtra(EXTRA_SETTING_BUNDLE)
+            )
     }
 
     private var windowTitle: String = ""
@@ -136,8 +137,9 @@ class UltimateMusicPicker {
      * Create a setting [Parcelable]. Useful when customize how to start activity
      */
     fun buildParcelable(): Parcelable = MusicPickerSetting(
-            hasDefault, defaultTitle, defaultUri, hasSilent, selectedUri,
-            additional, streamType, musicTypes.toIntArray())
+        hasDefault, defaultTitle, defaultUri, hasSilent, selectedUri,
+        additional, streamType, musicTypes.toIntArray()
+    )
 
     /**
      * Put a setting [Parcelable] into a [Intent]. Useful when customize how to start activity
@@ -153,11 +155,13 @@ class UltimateMusicPicker {
      * @param c An activity implementing [MusicPickerListener]. Just like [MusicPickerActivity].
      */
     fun goWithActivity(activity: Activity, requestCode: Int, c: Class<out AppCompatActivity>) {
-        activity.startActivityForResult(Intent(activity, c)
+        activity.startActivityForResult(
+            Intent(activity, c)
                 .apply {
                     putSettingIntoIntent(this)
                     putExtra(EXTRA_WINDOW_TITLE, windowTitle)
-                }, requestCode)
+                }, requestCode
+        )
     }
 
     /**
@@ -167,11 +171,13 @@ class UltimateMusicPicker {
      * @param c An activity implementing [MusicPickerListener]. Just like [MusicPickerActivity].
      */
     fun goWithActivity(fragment: Fragment, requestCode: Int, c: Class<out AppCompatActivity>) {
-        fragment.startActivityForResult(Intent(fragment.requireContext(), c)
+        fragment.startActivityForResult(
+            Intent(fragment.requireContext(), c)
                 .apply {
                     putSettingIntoIntent(this)
                     putExtra(EXTRA_WINDOW_TITLE, windowTitle)
-                }, requestCode)
+                }, requestCode
+        )
     }
 
     /**

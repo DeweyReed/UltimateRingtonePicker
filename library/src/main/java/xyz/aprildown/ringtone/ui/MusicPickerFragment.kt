@@ -53,7 +53,11 @@ class MusicPickerFragment : Fragment(), View.OnClickListener {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         viewModel = ViewModelProviders.of(this).get(PickerViewModel::class.java)
         if (savedInstanceState == null) {
             viewModel.setMusicPickerSetting(arguments?.getParcelable(EXTRA_SETTING_BUNDLE))
@@ -71,8 +75,8 @@ class MusicPickerFragment : Fragment(), View.OnClickListener {
 
         if (savedInstanceState == null) {
             childFragmentManager.beginTransaction()
-                    .replace(R.id.layoutMusicPicker, PickerNormalFragment(), TAG_FRAGMENT)
-                    .commit()
+                .replace(R.id.layoutMusicPicker, PickerNormalFragment(), TAG_FRAGMENT)
+                .commit()
         }
     }
 
@@ -108,9 +112,14 @@ class MusicPickerFragment : Fragment(), View.OnClickListener {
         } else false
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        if (permissions.size == 1 && permissions[0] == Manifest.permission.READ_EXTERNAL_STORAGE
-                && grantResults.size == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        if (permissions.size == 1 && permissions[0] == Manifest.permission.READ_EXTERNAL_STORAGE &&
+            grantResults.size == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED
+        ) {
             launchCustom()
         } else super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
@@ -119,15 +128,18 @@ class MusicPickerFragment : Fragment(), View.OnClickListener {
     internal fun toCustom() {
         val context = requireContext()
         val permission = Manifest.permission.READ_EXTERNAL_STORAGE
-        if (ContextCompat.checkSelfPermission(context, permission)
-                != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(
+                context,
+                permission
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
             if (shouldShowRequestPermissionRationale(permission)) {
                 AlertDialog.Builder(context)
-                        .setMessage(R.string.permission_external_rational)
-                        .setPositiveButton(android.R.string.ok) { _, _ ->
-                            requestPermissions(arrayOf(permission), 0)
-                        }
-                        .show()
+                    .setMessage(R.string.permission_external_rational)
+                    .setPositiveButton(android.R.string.ok) { _, _ ->
+                        requestPermissions(arrayOf(permission), 0)
+                    }
+                    .show()
             } else {
                 requestPermissions(arrayOf(permission), 0)
             }
@@ -140,15 +152,17 @@ class MusicPickerFragment : Fragment(), View.OnClickListener {
         if (isNormalFragment()) {
             stopPlayingMusic(getSelectedSoundItem(), false)
             childFragmentManager.beginTransaction()
-                    // first: enter animation for enter fragment
-                    // second: exit animation for exit fragment
-                    // third: enter animation for enter fragment when popBackStack
-                    // fourth: exit animation for exit fragment when popBackStack
-                    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
-                            R.anim.slide_in_left, R.anim.slide_out_right)
-                    .replace(R.id.layoutMusicPicker, PickerCustomFragment(), TAG_FRAGMENT)
-                    .addToBackStack(null)
-                    .commit()
+                // first: enter animation for enter fragment
+                // second: exit animation for exit fragment
+                // third: enter animation for enter fragment when popBackStack
+                // fourth: exit animation for exit fragment when popBackStack
+                .setCustomAnimations(
+                    R.anim.slide_in_right, R.anim.slide_out_left,
+                    R.anim.slide_in_left, R.anim.slide_out_right
+                )
+                .replace(R.id.layoutMusicPicker, PickerCustomFragment(), TAG_FRAGMENT)
+                .addToBackStack(null)
+                .commit()
         }
     }
 
@@ -206,8 +220,8 @@ class MusicPickerFragment : Fragment(), View.OnClickListener {
     private fun getSelectedSoundItem() = getCurrentFragment().getSelectedSoundItem()
 
     private fun getCurrentFragment() = childFragmentManager
-            .findFragmentByTag(TAG_FRAGMENT) as? PickerBaseFragment
-            ?: throw IllegalStateException("Requires PickerBaseFragment in the MusicpickerFragment")
+        .findFragmentByTag(TAG_FRAGMENT) as? PickerBaseFragment
+        ?: throw IllegalStateException("Requires PickerBaseFragment in the MusicpickerFragment")
 
     private fun isNormalFragment() = getCurrentFragment() is PickerNormalFragment
     private fun isCustomFragment() = getCurrentFragment() is PickerCustomFragment

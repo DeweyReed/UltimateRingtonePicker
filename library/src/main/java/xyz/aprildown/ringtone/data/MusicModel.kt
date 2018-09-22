@@ -23,7 +23,8 @@ internal class MusicModel(private val context: Context) {
     companion object {
         internal fun Context.getCustomMusicSharedPrefs(): SharedPreferences {
             return safeContext().getSharedPreferences(
-                    "music_picker_prefs", Context.MODE_PRIVATE)
+                "music_picker_prefs", Context.MODE_PRIVATE
+            )
         }
     }
 
@@ -91,20 +92,29 @@ internal class MusicModel(private val context: Context) {
 
         val contentResolver = context.contentResolver ?: return musics
         val uri = android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
-        val cursor = contentResolver.query(uri, null,
-                null, null, null)
+        val cursor = contentResolver.query(
+            uri, null,
+            null, null, null
+        )
         if (cursor != null) {
             if (cursor.moveToFirst()) {
                 val titleColumn = cursor.getColumnIndex(
-                        android.provider.MediaStore.Audio.Media.TITLE)
+                    android.provider.MediaStore.Audio.Media.TITLE
+                )
                 val idColumn = cursor.getColumnIndex(
-                        android.provider.MediaStore.Audio.Media._ID)
+                    android.provider.MediaStore.Audio.Media._ID
+                )
                 do {
                     val thisId = cursor.getLong(idColumn)
                     val thisTitle = cursor.getString(titleColumn)
-                    val customMusic = CustomMusic(thisId, ContentUris.withAppendedId(
-                            MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, thisId),
-                            thisTitle)
+                    val customMusic = CustomMusic(
+                        thisId,
+                        ContentUris.withAppendedId(
+                            MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                            thisId
+                        ),
+                        thisTitle
+                    )
                     musics.add(customMusic)
                 } while (cursor.moveToNext())
             }
@@ -180,7 +190,7 @@ internal class MusicModel(private val context: Context) {
      * @return groups them by type and [Uri]s
      */
     fun getRingtones(
-            @UltimateMusicPicker.Companion.MusicType vararg types: Int
+        @UltimateMusicPicker.Companion.MusicType vararg types: Int
     ): ArrayMap<Int, MutableList<Uri>> {
         val map = ArrayMap<Int, MutableList<Uri>>().apply {
             types.forEach { put(it, mutableListOf()) }
@@ -191,7 +201,8 @@ internal class MusicModel(private val context: Context) {
 
     private fun getCustomMusic(uri: Uri) = localCustomMusics.find { it.uri == uri }
 
-    private fun MutableList<Uri>.addRingtones(@UltimateMusicPicker.Companion.MusicType type: Int
+    private fun MutableList<Uri>.addRingtones(
+        @UltimateMusicPicker.Companion.MusicType type: Int
     ): MutableList<Uri> {
         if (type == UltimateMusicPicker.TYPE_MUSIC) return this
 
