@@ -6,10 +6,10 @@ import android.media.AudioManager
 import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Parcelable
-import android.support.annotation.IntDef
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v7.app.AppCompatActivity
+import androidx.annotation.IntDef
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import xyz.aprildown.ringtone.ui.MusicPickerFragment
 
 /**
@@ -170,7 +170,11 @@ class UltimateMusicPicker {
      * @param requestCode To get picked music result
      * @param c An activity implementing [MusicPickerListener]. Just like [MusicPickerActivity].
      */
-    fun goWithActivity(fragment: Fragment, requestCode: Int, c: Class<out AppCompatActivity>) {
+    fun goWithActivity(
+        fragment: Fragment,
+        requestCode: Int,
+        c: Class<out AppCompatActivity>
+    ) {
         fragment.startActivityForResult(
             Intent(fragment.requireContext(), c)
                 .apply {

@@ -7,10 +7,10 @@ import android.content.Context
 import android.graphics.drawable.Animatable
 import android.net.Uri
 import android.os.Build
-import android.support.annotation.AnyRes
-import android.support.v4.content.ContextCompat
 import android.view.View
 import android.widget.ImageView
+import androidx.annotation.AnyRes
+import androidx.core.content.ContextCompat
 import xyz.aprildown.ringtone.data.CustomMusic
 import java.text.Collator
 

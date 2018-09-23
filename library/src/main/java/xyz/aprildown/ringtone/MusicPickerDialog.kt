@@ -4,11 +4,11 @@ import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
-import android.support.v4.app.DialogFragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.fragment.app.DialogFragment
 import xyz.aprildown.ringtone.UltimateMusicPicker.Companion.EXTRA_SETTING_BUNDLE
 import xyz.aprildown.ringtone.UltimateMusicPicker.Companion.EXTRA_WINDOW_TITLE
 import xyz.aprildown.ringtone.ui.MusicPickerFragment

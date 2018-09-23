@@ -3,10 +3,10 @@ package xyz.aprildown.ringtone.ui
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
-import android.support.v4.content.AsyncTaskLoader
-import android.support.v4.content.Loader
-import android.support.v7.widget.RecyclerView
 import android.widget.Toast
+import androidx.loader.content.AsyncTaskLoader
+import androidx.loader.content.Loader
+import androidx.recyclerview.widget.RecyclerView
 import xyz.aprildown.ringtone.R
 import xyz.aprildown.ringtone.data.MusicModel
 
@@ -19,7 +19,10 @@ internal class PickerCustomFragment : PickerBaseFragment() {
         return CustomMusicLoader(localContext, viewModel.musicModel)
     }
 
-    override fun onLoadFinished(loader: Loader<List<MusicListItem>>, data: List<MusicListItem>?) {
+    override fun onLoadFinished(
+        loader: Loader<List<MusicListItem>>,
+        data: List<MusicListItem>?
+    ) {
         if (data != null) {
             if (data.isNotEmpty()) {
                 musicAdapter.populateData(data)

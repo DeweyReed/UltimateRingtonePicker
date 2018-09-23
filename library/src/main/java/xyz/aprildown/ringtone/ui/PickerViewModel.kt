@@ -1,9 +1,9 @@
 package xyz.aprildown.ringtone.ui
 
 import android.app.Application
-import android.arch.lifecycle.AndroidViewModel
 import android.media.AudioManager
 import android.net.Uri
+import androidx.lifecycle.AndroidViewModel
 import xyz.aprildown.ringtone.MusicPickerSetting
 import xyz.aprildown.ringtone.data.MusicModel
 

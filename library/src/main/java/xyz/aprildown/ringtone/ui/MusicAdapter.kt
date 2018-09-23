@@ -1,12 +1,12 @@
 package xyz.aprildown.ringtone.ui
 
 import android.graphics.Color
-import android.support.v7.widget.RecyclerView
 import android.view.*
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
 import xyz.aprildown.ringtone.R
 import xyz.aprildown.ringtone.startDrawableAnimation
 

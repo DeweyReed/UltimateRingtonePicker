@@ -18,7 +18,7 @@
             style="@style/SwitchStyle"
             android:text="Enable Night Theme" />
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/inputWindowTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -29,19 +29,19 @@
             android:paddingStart="?listPreferredItemPaddingLeft"
             app:hintEnabled="true">
 
-            <android.support.design.widget.TextInputEditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="UltimateMusicPicker" />
 
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <Switch
             android:id="@+id/switchUseDefault"
             style="@style/SwitchStyle"
             android:text="Add Default Ringtone" />
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/inputDefaultTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -54,12 +54,12 @@
             app:hintEnabled="true"
             tools:visibility="visible">
 
-            <android.support.design.widget.TextInputEditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="DefaultDefaultDefault" />
 
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <Switch
             android:id="@+id/switchRemoveSilent"

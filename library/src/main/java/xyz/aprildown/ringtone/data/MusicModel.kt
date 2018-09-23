@@ -10,8 +10,8 @@ import android.database.MatrixCursor
 import android.media.RingtoneManager
 import android.net.Uri
 import android.provider.MediaStore
-import android.support.annotation.RequiresPermission
-import android.support.v4.util.ArrayMap
+import androidx.annotation.RequiresPermission
+import androidx.collection.ArrayMap
 import xyz.aprildown.ringtone.*
 
 /**

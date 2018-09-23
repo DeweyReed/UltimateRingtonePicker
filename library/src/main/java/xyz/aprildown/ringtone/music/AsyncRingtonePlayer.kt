@@ -1,13 +1,14 @@
 package xyz.aprildown.ringtone.music
 
 import android.annotation.SuppressLint
+import android.annotation.TargetApi
 import android.content.Context
 import android.media.*
 import android.media.AudioManager.*
 import android.net.Uri
 import android.os.*
-import android.support.annotation.RequiresApi
 import android.telephony.TelephonyManager
+import androidx.annotation.RequiresApi
 import xyz.aprildown.ringtone.R
 import xyz.aprildown.ringtone.getResourceUri
 import xyz.aprildown.ringtone.isLOrLater
@@ -286,6 +287,7 @@ internal class AsyncRingtonePlayer(
             }
         }
 
+        @TargetApi(Build.VERSION_CODES.O)
         @RequiresApi(Build.VERSION_CODES.O)
         private fun createAudioFocusRequest(aa: AudioAttributes): AudioFocusRequest {
             return AudioFocusRequest.Builder(AUDIOFOCUS_GAIN_TRANSIENT)
