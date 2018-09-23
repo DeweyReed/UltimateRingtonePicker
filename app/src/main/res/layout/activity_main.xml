@@ -114,29 +114,25 @@
             style="@style/SwitchStyle"
             android:text="Show Picker Dialog" />
 
-        <LinearLayout
+        <Button
+            android:id="@+id/btnLaunch"
+            style="?buttonBarPositiveButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:text="Launch" />
 
-            <Button
-                android:id="@+id/btnCustom"
-                style="?buttonBarPositiveButtonStyle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Custom Activity" />
+        <Button
+            android:id="@+id/btnCustom"
+            style="?buttonBarPositiveButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Custom Activity" />
 
-            <Button
-                android:id="@+id/btnLaunch"
-                style="?buttonBarPositiveButtonStyle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Launch" />
-
-        </LinearLayout>
-
+        <fragment
+            android:id="@+id/fragmentMain"
+            android:name="xyz.aprildown.ringtone.app.MainFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
 </ScrollView>
