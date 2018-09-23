@@ -160,7 +160,7 @@ fun putSettingIntoIntent(intent: Intent): Intent
 
 ## 计划清单
 
-- 支持AndoridX
+- ~~支持AndoridX~~
 - 使用`READ_CONTENT`实现无需权限的选择
 
 ## License

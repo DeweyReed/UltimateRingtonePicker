@@ -4,8 +4,8 @@ ext {
             min_sdk       : 14,
             target_sdk    : 28,
 
-            version_code  : 101,
-            version_name  : '1.0.1',
+            version_code  : 102,
+            version_name  : '1.0.2',
 
             androidx      : '1.0.0',
 

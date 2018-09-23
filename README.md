@@ -164,7 +164,7 @@ This library supports dark theme with a naive way. It works fine when I use `App
 
 ## Todo List
 
-- AndoridX support
+- ~~AndoridX support~~
 - Use `READ_CONTENT` to select without permission
 
 ## License
