@@ -1,4 +1,4 @@
-package xyz.aprildown.ringtone
+package xyz.aprildown.ultimatemusicpicker
 
 import android.app.Activity
 import android.content.Intent
@@ -10,7 +10,7 @@ import androidx.annotation.IntDef
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import xyz.aprildown.ringtone.ui.MusicPickerFragment
+import xyz.aprildown.ultimatemusicpicker.ui.MusicPickerFragment
 
 /**
  * Created on 2018/4/16.

@@ -1,4 +1,4 @@
-package xyz.aprildown.ringtone.app
+package xyz.aprildown.ultimatemusicpicker.app
 
 import android.app.Activity
 import android.content.ContentResolver
@@ -12,9 +12,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.toast
-import xyz.aprildown.ringtone.MusicPickerActivity
-import xyz.aprildown.ringtone.MusicPickerListener
-import xyz.aprildown.ringtone.UltimateMusicPicker
+import xyz.aprildown.ultimatemusicpicker.MusicPickerActivity
+import xyz.aprildown.ultimatemusicpicker.MusicPickerListener
+import xyz.aprildown.ultimatemusicpicker.UltimateMusicPicker
 
 class MainActivity : AppCompatActivity(),
     View.OnClickListener,

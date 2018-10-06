@@ -1,4 +1,4 @@
-package xyz.aprildown.ringtone
+package xyz.aprildown.ultimatemusicpicker
 
 import android.content.Context
 import android.net.Uri
@@ -9,9 +9,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
-import xyz.aprildown.ringtone.UltimateMusicPicker.Companion.EXTRA_SETTING_BUNDLE
-import xyz.aprildown.ringtone.UltimateMusicPicker.Companion.EXTRA_WINDOW_TITLE
-import xyz.aprildown.ringtone.ui.MusicPickerFragment
+import xyz.aprildown.ultimatemusicpicker.UltimateMusicPicker.Companion.EXTRA_SETTING_BUNDLE
+import xyz.aprildown.ultimatemusicpicker.UltimateMusicPicker.Companion.EXTRA_WINDOW_TITLE
+import xyz.aprildown.ultimatemusicpicker.ui.MusicPickerFragment
 
 /**
  * Created on 2018/9/9.

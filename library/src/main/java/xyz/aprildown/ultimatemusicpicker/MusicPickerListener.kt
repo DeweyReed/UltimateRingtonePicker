@@ -1,4 +1,4 @@
-package xyz.aprildown.ringtone
+package xyz.aprildown.ultimatemusicpicker
 
 import android.net.Uri
 

@@ -1,4 +1,4 @@
-package xyz.aprildown.ringtone.ui
+package xyz.aprildown.ultimatemusicpicker.ui
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -12,12 +12,12 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
-import xyz.aprildown.ringtone.MUSIC_SILENT
-import xyz.aprildown.ringtone.MusicPickerListener
-import xyz.aprildown.ringtone.MusicPickerSetting
-import xyz.aprildown.ringtone.R
-import xyz.aprildown.ringtone.UltimateMusicPicker.Companion.EXTRA_SETTING_BUNDLE
-import xyz.aprildown.ringtone.music.AsyncRingtonePlayer
+import xyz.aprildown.ultimatemusicpicker.MUSIC_SILENT
+import xyz.aprildown.ultimatemusicpicker.MusicPickerListener
+import xyz.aprildown.ultimatemusicpicker.MusicPickerSetting
+import xyz.aprildown.ultimatemusicpicker.R
+import xyz.aprildown.ultimatemusicpicker.UltimateMusicPicker.Companion.EXTRA_SETTING_BUNDLE
+import xyz.aprildown.ultimatemusicpicker.music.AsyncRingtonePlayer
 
 /**
  * Created on 2018/6/7.

@@ -1,4 +1,4 @@
-package xyz.aprildown.ringtone.app
+package xyz.aprildown.ultimatemusicpicker.app
 
 import android.app.Application
 

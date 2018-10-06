@@ -1,31 +1,33 @@
-package xyz.aprildown.ringtone
+package xyz.aprildown.ultimatemusicpicker.app
 
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import xyz.aprildown.ringtone.UltimateMusicPicker.Companion.EXTRA_WINDOW_TITLE
-import xyz.aprildown.ringtone.ui.MusicPickerFragment
+import xyz.aprildown.ultimatemusicpicker.MusicPickerListener
+import xyz.aprildown.ultimatemusicpicker.UltimateMusicPicker
+import xyz.aprildown.ultimatemusicpicker.ui.MusicPickerFragment
 
 /**
- * Created on 2018/6/7.
+ * Created on 2018/9/16.
  */
 
-class MusicPickerActivity : AppCompatActivity(), MusicPickerListener {
+class CustomActivity : AppCompatActivity(), MusicPickerListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_custom)
 
         supportActionBar?.run {
             setDisplayHomeAsUpEnabled(true)
-            title = intent.getStringExtra(EXTRA_WINDOW_TITLE)
+            title = intent.getStringExtra(UltimateMusicPicker.EXTRA_WINDOW_TITLE)
         }
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                 .add(
-                    android.R.id.content,
+                    R.id.fragment,
                     UltimateMusicPicker.createFragmentFromIntent(intent)
                 )
                 .commit()

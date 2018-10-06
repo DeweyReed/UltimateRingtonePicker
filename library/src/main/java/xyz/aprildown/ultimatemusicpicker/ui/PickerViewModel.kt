@@ -1,11 +1,11 @@
-package xyz.aprildown.ringtone.ui
+package xyz.aprildown.ultimatemusicpicker.ui
 
 import android.app.Application
 import android.media.AudioManager
 import android.net.Uri
 import androidx.lifecycle.AndroidViewModel
-import xyz.aprildown.ringtone.MusicPickerSetting
-import xyz.aprildown.ringtone.data.MusicModel
+import xyz.aprildown.ultimatemusicpicker.MusicPickerSetting
+import xyz.aprildown.ultimatemusicpicker.data.MusicModel
 
 /**
  * Created on 2018/6/10.
