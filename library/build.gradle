@@ -2,7 +2,9 @@ apply plugin: 'com.android.library'
 
 apply plugin: 'kotlin-android'
 
-apply from: '../bintrayconfig.gradle'
+apply plugin: 'com.github.dcendents.android-maven'
+
+group = 'com.github.DeweyReed'
 
 android {
     compileSdkVersion versions.compile_sdk
@@ -18,10 +20,6 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
-    }
-
-    lintOptions {
-        abortOnError false
     }
 }
 
