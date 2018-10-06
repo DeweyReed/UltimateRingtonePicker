@@ -1,4 +1,4 @@
-package xyz.aprildown.ringtone.data
+package xyz.aprildown.ultimatemusicpicker.data
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -12,7 +12,7 @@ import android.net.Uri
 import android.provider.MediaStore
 import androidx.annotation.RequiresPermission
 import androidx.collection.ArrayMap
-import xyz.aprildown.ringtone.*
+import xyz.aprildown.ultimatemusicpicker.*
 
 /**
  * All music data is accessed via this model.

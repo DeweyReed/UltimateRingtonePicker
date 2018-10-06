@@ -1,4 +1,4 @@
-package xyz.aprildown.ringtone.ui
+package xyz.aprildown.ultimatemusicpicker.ui
 
 import android.content.Context
 import android.net.Uri
@@ -10,11 +10,11 @@ import androidx.loader.app.LoaderManager
 import androidx.loader.content.AsyncTaskLoader
 import androidx.loader.content.Loader
 import androidx.recyclerview.widget.RecyclerView
-import xyz.aprildown.ringtone.MUSIC_SILENT
-import xyz.aprildown.ringtone.R
-import xyz.aprildown.ringtone.UltimateMusicPicker
-import xyz.aprildown.ringtone.data.CustomMusic
-import xyz.aprildown.ringtone.data.MusicModel
+import xyz.aprildown.ultimatemusicpicker.MUSIC_SILENT
+import xyz.aprildown.ultimatemusicpicker.R
+import xyz.aprildown.ultimatemusicpicker.UltimateMusicPicker
+import xyz.aprildown.ultimatemusicpicker.data.CustomMusic
+import xyz.aprildown.ultimatemusicpicker.data.MusicModel
 
 internal class PickerNormalFragment : PickerBaseFragment(), View.OnCreateContextMenuListener {
 

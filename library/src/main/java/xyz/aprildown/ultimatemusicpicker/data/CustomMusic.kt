@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package xyz.aprildown.ringtone.data
+package xyz.aprildown.ultimatemusicpicker.data
 
 import android.net.Uri
 

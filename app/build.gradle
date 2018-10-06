@@ -7,7 +7,7 @@ android {
     compileSdkVersion versions.compile_sdk
 
     defaultConfig {
-        applicationId "xyz.aprildown.ringtone.app"
+        applicationId "xyz.aprildown.ultimatemusicpicker.app"
         minSdkVersion versions.min_sdk
         targetSdkVersion versions.target_sdk
         versionCode versions.version_code

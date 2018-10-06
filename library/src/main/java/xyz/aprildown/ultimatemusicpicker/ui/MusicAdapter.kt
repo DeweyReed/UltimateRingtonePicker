@@ -1,4 +1,4 @@
-package xyz.aprildown.ringtone.ui
+package xyz.aprildown.ultimatemusicpicker.ui
 
 import android.graphics.Color
 import android.view.*
@@ -7,8 +7,8 @@ import android.view.View.VISIBLE
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import xyz.aprildown.ringtone.R
-import xyz.aprildown.ringtone.startDrawableAnimation
+import xyz.aprildown.ultimatemusicpicker.R
+import xyz.aprildown.ultimatemusicpicker.startDrawableAnimation
 
 internal class MusicAdapter(
     private val listener: OnItemCLickedListener,
