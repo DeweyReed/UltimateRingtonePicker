@@ -46,12 +46,12 @@ internal class PickerNormalFragment : PickerBaseFragment(), View.OnCreateContext
 
             val toSelect: SoundItem? = getSoundItem(viewModel.selectedUri)
 
+            parent.musicPlayer.stop()
             if (toSelect != null) {
                 toSelect.isSelected = true
                 viewModel.selectedUri = toSelect.uri
                 toSelect.notifyItemChanged(true)
             } else {
-                parent.musicPlayer.stop()
                 viewModel.selectedUri = null
                 viewModel.isPreviewPlaying = false
             }
