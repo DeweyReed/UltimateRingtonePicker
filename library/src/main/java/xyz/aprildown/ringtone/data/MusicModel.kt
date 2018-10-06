@@ -185,26 +185,11 @@ internal class MusicModel(private val context: Context) {
     }
 
     /**
-     * Retrieve all system ringtones
-     * @param types system ringtones types
-     * @return groups them by type and [Uri]s
+     * Retrieve all system [type] ringtones
      */
-    fun getRingtones(
-        @UltimateMusicPicker.Companion.MusicType vararg types: Int
-    ): ArrayMap<Int, MutableList<Uri>> {
-        val map = ArrayMap<Int, MutableList<Uri>>().apply {
-            types.forEach { put(it, mutableListOf()) }
-        }
-        types.forEach { type -> map[type]?.addRingtones(type) }
-        return map
-    }
-
-    private fun getCustomMusic(uri: Uri) = localCustomMusics.find { it.uri == uri }
-
-    private fun MutableList<Uri>.addRingtones(
-        @UltimateMusicPicker.Companion.MusicType type: Int
-    ): MutableList<Uri> {
-        if (type == UltimateMusicPicker.TYPE_MUSIC) return this
+    fun getRingtones(@UltimateMusicPicker.Companion.MusicType type: Int): MutableList<Uri> {
+        val result = mutableListOf<Uri>()
+        if (type == UltimateMusicPicker.TYPE_MUSIC) return result
 
         // Fetch the standard system ringtones.
         val ringtoneManager = RingtoneManager(context)
@@ -219,9 +204,11 @@ internal class MusicModel(private val context: Context) {
 
         // Add an item holder for each system ringtone.
         for (i in 0 until systemRingtoneCursor.count) {
-            this.add(ringtoneManager.getRingtoneUri(i))
+            result.add(ringtoneManager.getRingtoneUri(i))
         }
 
-        return this
+        return result
     }
+
+    private fun getCustomMusic(uri: Uri) = localCustomMusics.find { it.uri == uri }
 }

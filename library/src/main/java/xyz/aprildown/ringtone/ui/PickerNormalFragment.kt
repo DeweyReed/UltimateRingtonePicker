@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.ContextMenu
 import android.view.MenuItem
 import android.view.View
-import androidx.collection.ArrayMap
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.AsyncTaskLoader
 import androidx.loader.content.Loader
@@ -190,27 +189,22 @@ internal class PickerNormalFragment : PickerBaseFragment(), View.OnCreateContext
                 )
             }
 
-            val ringtones = musicModel.getRingtones(*musicTypes)
-
-            // Foreach will crash the app on Kitkat and some Lollipops. Weired.
-            val info = ArrayMap<Int, Int>().apply {
-                put(UltimateMusicPicker.TYPE_RINGTONE, R.string.music_type_ringtone)
-                put(UltimateMusicPicker.TYPE_NOTIFICATION, R.string.music_type_notification)
-                put(UltimateMusicPicker.TYPE_ALARM, R.string.music_type_alarm)
-            }
-            for (index in 0 until info.size) {
-                val type = info.keyAt(index)
-                val title = info.valueAt(index)
-                if (ringtones.keys.contains(type)) {
-                    items.add(HeaderItem(context.getString(title)))
-                    ringtones[type]?.forEach {
-                        items.add(
-                            SoundItem(
-                                SoundItem.TYPE_RINGTONE, it,
-                                musicModel.getMusicTitle(it), false, false
-                            )
+            for (index in 0 until musicTypes.size) {
+                val type = musicTypes[index]
+                val title = when (type) {
+                    UltimateMusicPicker.TYPE_ALARM -> R.string.music_type_alarm
+                    UltimateMusicPicker.TYPE_NOTIFICATION -> R.string.music_type_notification
+                    UltimateMusicPicker.TYPE_RINGTONE -> R.string.music_type_ringtone
+                    else -> null
+                } ?: continue
+                items.add(HeaderItem(context.getString(title)))
+                musicModel.getRingtones(type).forEach {
+                    items.add(
+                        SoundItem(
+                            SoundItem.TYPE_RINGTONE, it,
+                            musicModel.getMusicTitle(it), false, false
                         )
-                    }
+                    )
                 }
             }
 
