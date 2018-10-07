@@ -51,7 +51,7 @@
     1. [自定义Activity](#自定义Activity)
     1. [暗色主题](#暗色主题)
 1. [计划清单](#计划清单)
-1. [从1.X升级](#从1.X升级)
+1. [从1.X升级](#从1x升级)
 1. [License](#license)
 
 ## Gradle依赖
@@ -83,76 +83,76 @@ dependencies {
 
 1. 如果需要选择外部储存的音乐文件，需添加`READ_EXTERNAL_STORAGE`权限到`Manifest.xml`。
 
-`<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />`
+    `<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />`
 
 1. 如果需要使用对话框选择音乐, 为activity或fragment实现`MusicPickerListener`。
 
-```Kotlin
- interface MusicPickerListener {
-     fun onMusicPick(uri: Uri, title: String)
-     fun onPickCanceled()
- }
-```
+    ```Kotlin
+    interface MusicPickerListener {
+        fun onMusicPick(uri: Uri, title: String)
+        fun onPickCanceled()
+    }
+    ```
 
 1. 如果需要使用Activity选择音乐，需添加这一行到`Manifest.xml`:
 
-`<activity android:name="xyz.aprildown.ultimatemusicpicker.MusicPickerActivity" />`
+    `<activity android:name="xyz.aprildown.ultimatemusicpicker.MusicPickerActivity" />`
 
-并在`onActivityResult`获取选择结果:
+    并在`onActivityResult`获取选择结果:
 
-```Kotlin
-override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-    if (resultCode == Activity.RESULT_OK) {
-        val title = data?.getStringExtra(UltimateMusicPicker.EXTRA_SELECTED_TITLE)
-        val uri = data?.getParcelableExtra<Uri>(UltimateMusicPicker.EXTRA_SELECTED_URI)
-        if (title != null && uri != null) {
-            onMusicPick(uri, title)
-        } else {
-            onPickCanceled()
-        }
-    } else super.onActivityResult(requestCode, resultCode, data)
-}
-```
+    ```Kotlin
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (resultCode == Activity.RESULT_OK) {
+            val title = data?.getStringExtra(UltimateMusicPicker.EXTRA_SELECTED_TITLE)
+            val uri = data?.getParcelableExtra<Uri>(UltimateMusicPicker.EXTRA_SELECTED_URI)
+            if (title != null && uri != null) {
+                onMusicPick(uri, title)
+            } else {
+                onPickCanceled()
+            }
+        } else super.onActivityResult(requestCode, resultCode, data)
+    }
+    ```
 
 1. 开始选择
 
-```Kotlin
-UltimateMusicPicker()
-    // 选择器Activity或对话框的标题
-    .windowTitle("UltimateMusicPicker")
+    ```Kotlin
+    UltimateMusicPicker()
+        // 选择器Activity或对话框的标题
+        .windowTitle("UltimateMusicPicker")
 
-    // 添加一个默认条目
-    .defaultUri(uri)
-    // 添加的同时修改默认条目的名字(否则将会是"默认提示音")
-    .defaultTitleAndUri("My default name", uri)
+        // 添加一个默认条目
+        .defaultUri(uri)
+        // 添加的同时修改默认条目的名字(否则将会是"默认提示音")
+        .defaultTitleAndUri("My default name", uri)
 
-    // 默认有一个"静音"条目，使用这行移除"静音"条目
-    .removeSilent()
+        // 默认有一个"静音"条目，使用这行移除"静音"条目
+        .removeSilent()
 
-    // 预选择一个条目
-    .selectUri(uri)
+        // 预选择一个条目
+        .selectUri(uri)
 
-    // 添加一些额外的条目(来自R.raw或应用的asset)
-    .additional("Myself Music", uri)
-    .additional("Another Music", uri)
+        // 添加一些额外的条目(来自R.raw或应用的asset)
+        .additional("Myself Music", uri)
+        .additional("Another Music", uri)
 
-    // 预览音乐的播放类型，默认是AudioManager.STREAM_MUSIC
-    .streamType(AudioManager.STREAM_ALARM)
+        // 预览音乐的播放类型，默认是AudioManager.STREAM_MUSIC
+        .streamType(AudioManager.STREAM_ALARM)
 
-    // 显示设备的铃声、通知音、闹钟音，它们的显示顺序和这里的调用顺序一致
-    .ringtone()
-    .notification()
-    .alarm()
-    // 显示外部储存中的音乐文件，需要READ_EXTERNAL_STORAGE权限
-    .music()
+        // 显示设备的铃声、通知音、闹钟音，它们的显示顺序和这里的调用顺序一致
+        .ringtone()
+        .notification()
+        .alarm()
+        // 显示外部储存中的音乐文件，需要READ_EXTERNAL_STORAGE权限
+        .music()
 
-    // 显示选择对话框
-    .goWithDialog(supportFragmentManager)
-    // 显示选择Activity
-    //.goWithActivity(this, 0, MusicPickerActivity::class.java)
-```
+        // 显示选择对话框
+        .goWithDialog(supportFragmentManager)
+        // 显示选择Activity
+        //.goWithActivity(this, 0, MusicPickerActivity::class.java)
+    ```
 
-**在fragment中启动选择对话框时，要使用`childFragmentManager`而不是`fragmentManager`**
+    **在fragment中启动选择对话框时，要使用`childFragmentManager`而不是`fragmentManager`**
 
 ## 高级用法
 
