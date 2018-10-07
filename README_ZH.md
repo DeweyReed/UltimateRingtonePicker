@@ -24,6 +24,18 @@
 </div>
 </br>
 
+## 概览
+
+- 将音乐文件分为闹钟音、通知音、铃声和外部音乐文件
+- 可以设置默认条目
+- 可以添加自定义音乐条目
+- 自动保存用户选择过的外部音乐文件
+- 音乐预览
+- 既可以使用Activity也可以使用对话框
+- 暗色主题的支持
+- 内部已负责了权限的获取
+- AndroidX支持
+
 ## 截图
 
 ||||
@@ -39,6 +51,7 @@
     1. [自定义Activity](#自定义Activity)
     1. [暗色主题](#暗色主题)
 1. [计划清单](#计划清单)
+1. [从1.X升级](#从1.X升级)
 1. [License](#license)
 
 ## Gradle依赖
@@ -68,6 +81,41 @@ dependencies {
 
 ## 使用方法
 
+1. 如果需要选择外部储存的音乐文件，需添加`READ_EXTERNAL_STORAGE`权限到`Manifest.xml`。
+
+`<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />`
+
+1. 如果需要使用对话框选择音乐, 为activity或fragment实现`MusicPickerListener`。
+
+```Kotlin
+ interface MusicPickerListener {
+     fun onMusicPick(uri: Uri, title: String)
+     fun onPickCanceled()
+ }
+```
+
+1. 如果需要使用Activity选择音乐，需添加这一行到`Manifest.xml`:
+
+`<activity android:name="xyz.aprildown.ultimatemusicpicker.MusicPickerActivity" />`
+
+并在`onActivityResult`获取选择结果:
+
+```Kotlin
+override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    if (resultCode == Activity.RESULT_OK) {
+        val title = data?.getStringExtra(UltimateMusicPicker.EXTRA_SELECTED_TITLE)
+        val uri = data?.getParcelableExtra<Uri>(UltimateMusicPicker.EXTRA_SELECTED_URI)
+        if (title != null && uri != null) {
+            onMusicPick(uri, title)
+        } else {
+            onPickCanceled()
+        }
+    } else super.onActivityResult(requestCode, resultCode, data)
+}
+```
+
+1. 开始选择
+
 ```Kotlin
 UltimateMusicPicker()
     // 选择器Activity或对话框的标题
@@ -78,7 +126,7 @@ UltimateMusicPicker()
     // 添加的同时修改默认条目的名字(否则将会是"默认提示音")
     .defaultTitleAndUri("My default name", uri)
 
-    // 移除"静音"条目
+    // 默认有一个"静音"条目，使用这行移除"静音"条目
     .removeSilent()
 
     // 预选择一个条目
@@ -88,49 +136,23 @@ UltimateMusicPicker()
     .additional("Myself Music", uri)
     .additional("Another Music", uri)
 
-    // 预览音乐的播放类型
-    .streamType(AudioManager.STREAM_MUSIC)
+    // 预览音乐的播放类型，默认是AudioManager.STREAM_MUSIC
+    .streamType(AudioManager.STREAM_ALARM)
 
-    // 显示设备的铃声
+    // 显示设备的铃声、通知音、闹钟音，它们的显示顺序和这里的调用顺序一致
     .ringtone()
-    // 显示设备的通知音
     .notification()
-    // 显示设备的闹钟音
     .alarm()
-    // 显示外部储存中的音乐文件
-    // 记得添加READ_EXTERNAL_STORAGE到`Manifest.xml`中
+    // 显示外部储存中的音乐文件，需要READ_EXTERNAL_STORAGE权限
     .music()
 
     // 显示选择对话框
-    // 要在调用此方法Activity或Fragment实现MusicPickerListener
     .goWithDialog(supportFragmentManager)
-    // 显示选择Activity，具体方法见下
+    // 显示选择Activity
     //.goWithActivity(this, 0, MusicPickerActivity::class.java)
 ```
 
-需要注意：
-
-- 默认不需要任何权限(内部使用了`RingtoneManager`实现)，除非你要用`.music()`选择外部储存的音乐文件。
-
-    这样的话，在你的`Manifest.xml`中添加`READ_EXTERNAL_STORAGE`权限，此库内部会处理权限请求。
-- 使用`.goWithDialog(supportFragmentManager)`时, 调用此方法的类需要实现`MusicPickerListener`来获取结果。
-- 使用`.goWithActivity(this, 0, MusicPickerActivity::class.java)`(第三个参数是一个实现了`MusicPickerListener`的Activity)时, 要在`Manifest.xml`中添加`MusicPickerActivity`(它已经定义好啦)。
-
-    然后在Activity's的`onActivityResult`,
-
-    ```Kotlin
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode == Activity.RESULT_OK) {
-            val title = data?.getStringExtra(UltimateMusicPicker.EXTRA_SELECTED_TITLE)
-            val uri = data?.getParcelableExtra<Uri>(UltimateMusicPicker.EXTRA_SELECTED_URI)
-            if (title != null && uri != null) {
-                onMusicPick(uri, title)
-            } else {
-                onPickCanceled()
-            }
-        } else super.onActivityResult(requestCode, resultCode, data)
-    }
-    ```
+**在fragment中启动选择对话框时，要使用`childFragmentManager`而不是`fragmentManager`**
 
 ## 高级用法
 
@@ -160,8 +182,13 @@ fun putSettingIntoIntent(intent: Intent): Intent
 
 ## 计划清单
 
-- ~~支持AndoridX~~
 - 使用`READ_CONTENT`实现无需权限的选择
+
+## 从1.X升级
+
+2.0.0将包名从`xyz.aprildown.ringtone.UltimateMusicPicker`改名为`xyz.aprildown.ultimatemusicpicker.UltimateMusicPicker`，来让它更有意义。
+
+清理一下imports应该就可以了。
 
 ## License
 
