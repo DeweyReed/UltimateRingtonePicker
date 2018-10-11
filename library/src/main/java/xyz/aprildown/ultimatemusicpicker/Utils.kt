@@ -58,14 +58,14 @@ internal fun ImageView.stopDrawableAnimation() {
 }
 
 
-inline fun View.show() {
+internal inline fun View.show() {
     visibility = View.VISIBLE
 }
 
-inline fun View.hide() {
+internal inline fun View.hide() {
     visibility = View.INVISIBLE
 }
 
-inline fun View.gone() {
+internal inline fun View.gone() {
     visibility = View.GONE
 }
