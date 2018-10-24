@@ -21,11 +21,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
 }
 
 dependencies {
@@ -35,9 +30,9 @@ dependencies {
     implementation libs.kotlin_stdlib_jdk7
     implementation libs.kotlin_anko_common
 
-//    debugImplementation libs.leak_cannary
-//    releaseImplementation libs.leak_cannary_no_op
-//    debugImplementation libs.leak_cannary_support
+    debugImplementation libs.leak_cannary
+    debugImplementation libs.leak_cannary_support
+    releaseImplementation libs.leak_cannary_no_op
 
     implementation libs.appcompat
     implementation libs.material

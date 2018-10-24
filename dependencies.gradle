@@ -13,7 +13,7 @@ ext {
 
             arch_lifecycle: '2.0.0',
 
-            leak_cannary  : '1.6.1',
+            leak_cannary  : '1.6.2',
     ]
     libs = [
             appcompat           : "androidx.appcompat:appcompat:${versions.androidx}",
