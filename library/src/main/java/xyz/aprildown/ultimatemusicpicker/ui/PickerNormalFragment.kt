@@ -30,7 +30,7 @@ internal class PickerNormalFragment : PickerBaseFragment(), View.OnCreateContext
     override fun onCreateLoader(id: Int, args: Bundle?): Loader<List<MusicListItem>> {
         return viewModel.setting.run {
             MusicLoader(
-                localContext, viewModel.musicModel, musicTypes,
+                requireContext(), viewModel.musicModel, musicTypes,
                 hasDefault, defaultTitle, defaultUri, hasSilent, additional
             )
         }

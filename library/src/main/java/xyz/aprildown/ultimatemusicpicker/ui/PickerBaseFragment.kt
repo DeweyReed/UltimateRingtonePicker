@@ -1,6 +1,5 @@
 package xyz.aprildown.ultimatemusicpicker.ui
 
-import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -24,9 +23,17 @@ internal abstract class PickerBaseFragment : Fragment(),
     protected lateinit var viewModel: PickerViewModel
 
     protected lateinit var parent: MusicPickerFragment
-    protected lateinit var localContext: Context
-    protected lateinit var recyclerView: RecyclerView
-    protected lateinit var musicAdapter: MusicAdapter
+
+    // TODO: Is there any better solution?
+    private var _recyclerView: RecyclerView? = null
+    protected val recyclerView: RecyclerView
+        get() = _recyclerView
+            ?: throw IllegalStateException("Accessing _recyclerView after onDestroyView")
+
+    private var _musicAdapter: MusicAdapter? = null
+    protected val musicAdapter: MusicAdapter
+        get() = _musicAdapter
+            ?: throw IllegalStateException("Accessing _musicAdapter after onDestroyView")
 
     abstract fun init()
     abstract fun shouldShowContextMenu(): Boolean
@@ -42,10 +49,9 @@ internal abstract class PickerBaseFragment : Fragment(),
         viewModel = ViewModelProviders.of(parent).get(PickerViewModel::class.java)
 
         val view = inflater.inflate(R.layout.layout_music_picker, container, false)
-        localContext = view.context
 
-        recyclerView = view.findViewById(R.id.list)
-        musicAdapter = MusicAdapter(this, shouldShowContextMenu())
+        _recyclerView = view.findViewById(R.id.list)
+        _musicAdapter = MusicAdapter(this, shouldShowContextMenu())
         recyclerView.adapter = musicAdapter
 
         init()
@@ -55,6 +61,12 @@ internal abstract class PickerBaseFragment : Fragment(),
     }
 
     override fun onLoaderReset(loader: Loader<List<MusicListItem>>) = Unit
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _recyclerView = null
+        _musicAdapter = null
+    }
 
     internal fun getSelectedSoundItem(): SoundItem? = getSoundItem(viewModel.selectedUri)
 

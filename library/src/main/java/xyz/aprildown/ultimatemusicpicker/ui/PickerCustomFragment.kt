@@ -16,7 +16,7 @@ internal class PickerCustomFragment : PickerBaseFragment() {
     override fun shouldShowContextMenu(): Boolean = false
 
     override fun onCreateLoader(id: Int, args: Bundle?): Loader<List<MusicListItem>> {
-        return CustomMusicLoader(localContext, viewModel.musicModel)
+        return CustomMusicLoader(requireContext(), viewModel.musicModel)
     }
 
     override fun onLoadFinished(
@@ -27,7 +27,7 @@ internal class PickerCustomFragment : PickerBaseFragment() {
             if (data.isNotEmpty()) {
                 musicAdapter.populateData(data)
             } else {
-                Toast.makeText(localContext, R.string.no_music_found, Toast.LENGTH_LONG).show()
+                Toast.makeText(requireContext(), R.string.no_music_found, Toast.LENGTH_LONG).show()
                 parent.customPicked(null)
             }
         }

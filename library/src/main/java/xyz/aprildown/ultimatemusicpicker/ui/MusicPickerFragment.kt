@@ -37,7 +37,6 @@ class MusicPickerFragment : Fragment(), View.OnClickListener {
 
     private lateinit var viewModel: PickerViewModel
 
-    private lateinit var localContext: Context
     private lateinit var musicPickerListener: MusicPickerListener
 
     internal lateinit var musicPlayer: AsyncRingtonePlayer
@@ -53,23 +52,23 @@ class MusicPickerFragment : Fragment(), View.OnClickListener {
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(PickerViewModel::class.java)
         if (savedInstanceState == null) {
             viewModel.setMusicPickerSetting(arguments?.getParcelable(EXTRA_SETTING_BUNDLE))
         }
-        return inflater.inflate(R.layout.fragment_music_picker, container, false)
+        musicPlayer = AsyncRingtonePlayer(requireContext())
+        activity?.volumeControlStream = viewModel.setting.streamType
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        localContext = view.context
-        musicPlayer = AsyncRingtonePlayer(localContext)
-        activity?.volumeControlStream = viewModel.setting.streamType
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? = inflater.inflate(R.layout.fragment_music_picker, container, false)
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         view.findViewById<View>(R.id.btnRingtoneCancel).setOnClickListener(this)
         view.findViewById<View>(R.id.btnRingtoneSelect).setOnClickListener(this)
 
