@@ -45,11 +45,14 @@ internal class MusicAdapter(
         fun inflateView(layoutRes: Int): View = LayoutInflater.from(parent.context)
             .inflate(layoutRes, parent, false)
         return when (viewType) {
-            ITEM_VIEW_TYPE_HEADER -> HeaderViewHolder(inflateView(R.layout.item_header), listener)
+            ITEM_VIEW_TYPE_HEADER -> HeaderViewHolder(
+                inflateView(R.layout.music_section_header),
+                listener
+            )
             ITEM_VIEW_TYPE_ADD_CUSTOM ->
-                AddCustomViewHolder(inflateView(R.layout.item_sound), listener)
+                AddCustomViewHolder(inflateView(R.layout.music_item_sound), listener)
             ITEM_VIEW_TYPE_SOUND ->
-                SoundViewHolder(inflateView(R.layout.item_sound), listener, showContextMenu)
+                SoundViewHolder(inflateView(R.layout.music_item_sound), listener, showContextMenu)
             else -> throw IllegalArgumentException("Wrong viewType: $viewType")
         }
     }
@@ -110,7 +113,7 @@ internal class MusicAdapter(
             nameView.text = itemView.context.getString(R.string.add_new_sound)
 
             val imageView = itemView.findViewById<ImageView>(R.id.imageSound)
-            imageView.setImageResource(R.drawable.ic_add_white_24dp)
+            imageView.setImageResource(R.drawable.ic_add_custom)
         }
 
         override fun onClick(v: View?) {
@@ -141,7 +144,7 @@ internal class MusicAdapter(
 
                 imageSound.setImageResource(
                     when {
-                        itemType == SoundItem.TYPE_CUSTOM -> R.drawable.ic_album
+                        itemType == SoundItem.TYPE_CUSTOM -> R.drawable.ic_custom_music
                         itemType == SoundItem.TYPE_SILENT -> R.drawable.ic_ringtone_silent
                         item.isPlaying -> R.drawable.ic_ringtone_active
                         else -> R.drawable.ic_ringtone_normal

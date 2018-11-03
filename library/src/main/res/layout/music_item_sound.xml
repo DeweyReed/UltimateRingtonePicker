@@ -63,7 +63,7 @@
                 android:importantForAccessibility="no"
                 android:scaleType="center"
                 android:visibility="gone"
-                app:srcCompat="@drawable/ic_check_white_24dp"
+                app:srcCompat="@drawable/ic_music_selected"
                 app:tint="?colorControlNormal"
                 tools:ignore="MissingPrefix,RtlHardcoded"
                 tools:targetApi="jelly_bean" />

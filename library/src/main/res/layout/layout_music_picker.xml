@@ -7,4 +7,4 @@
     android:layout_height="match_parent"
     android:scrollbars="vertical"
     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-    tools:listitem="@layout/item_sound" />
+    tools:listitem="@layout/music_item_sound" />
