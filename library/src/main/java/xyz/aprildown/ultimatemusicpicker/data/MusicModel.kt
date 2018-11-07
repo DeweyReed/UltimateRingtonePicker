@@ -135,7 +135,8 @@ internal class MusicModel(private val context: Context) {
             return
         }
 
-        types.forEach { type ->
+        for (type in types) {
+            if (type == UltimateMusicPicker.TYPE_MUSIC) continue
             val ringtoneManager = RingtoneManager(context)
             ringtoneManager.setType(type)
 
