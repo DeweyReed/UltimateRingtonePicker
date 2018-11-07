@@ -85,25 +85,29 @@ internal class MusicModel(private val context: Context) {
      * Get all musics from external storage
      * @return list of all musics. ids are all 0 since they're not stored in shared preference
      */
-    @SuppressLint("InlinedApi", "MissingPermission")
+    @SuppressLint("InlinedApi")
     @RequiresPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
     fun getAvailableCustomMusics(): List<CustomMusic> {
         val musics = mutableListOf<CustomMusic>()
 
         val contentResolver = context.contentResolver ?: return musics
-        val uri = android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
+        val uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
         val cursor = contentResolver.query(
-            uri, null,
-            null, null, null
+            uri,
+            arrayOf(MediaStore.Audio.Media._ID, MediaStore.Audio.Media.TITLE),
+            "${MediaStore.Audio.Media.IS_PODCAST} == 0 AND (" +
+                    "${MediaStore.Audio.Media.IS_MUSIC} != 0 OR " +
+                    "${MediaStore.Audio.Media.IS_ALARM} != 0 OR " +
+                    "${MediaStore.Audio.Media.IS_NOTIFICATION} != 0 OR " +
+                    "${MediaStore.Audio.Media.IS_RINGTONE} != 0" +
+                    ")",
+            null,
+            MediaStore.Audio.Media.TITLE
         )
         if (cursor != null) {
             if (cursor.moveToFirst()) {
-                val titleColumn = cursor.getColumnIndex(
-                    android.provider.MediaStore.Audio.Media.TITLE
-                )
-                val idColumn = cursor.getColumnIndex(
-                    android.provider.MediaStore.Audio.Media._ID
-                )
+                val idColumn = cursor.getColumnIndex(MediaStore.Audio.Media._ID)
+                val titleColumn = cursor.getColumnIndex(MediaStore.Audio.Media.TITLE)
                 do {
                     val thisId = cursor.getLong(idColumn)
                     val thisTitle = cursor.getString(titleColumn)
