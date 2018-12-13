@@ -94,7 +94,7 @@ class UltimateMusicPicker {
     /**
      * Add an extra music item.
      */
-    fun additional(title: String, uri: Uri) = apply {
+    fun additional(title: String, uri: Uri): UltimateMusicPicker = apply {
         additional.add(title to uri)
     }
 
