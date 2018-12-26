@@ -20,17 +20,17 @@
         android:orientation="horizontal"
         tools:ignore="UnusedAttribute">
 
-        <Button
+        <TextView
             android:id="@+id/btnRingtoneCancel"
-            style="?buttonBarNegativeButtonStyle"
+            style="?buttonBarButtonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@android:string/cancel" />
 
-        <Button
+        <TextView
             android:id="@+id/btnRingtoneSelect"
-            style="?buttonBarPositiveButtonStyle"
+            style="?buttonBarButtonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
