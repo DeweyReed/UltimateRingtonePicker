@@ -26,7 +26,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@android:string/cancel" />
+            android:text="@android:string/cancel"
+            android:textColor="?colorAccent" />
 
         <TextView
             android:id="@+id/btnRingtoneSelect"
@@ -34,7 +35,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/select_ringtone" />
+            android:text="@string/select_ringtone"
+            android:textColor="?colorAccent" />
 
     </LinearLayout>
 
