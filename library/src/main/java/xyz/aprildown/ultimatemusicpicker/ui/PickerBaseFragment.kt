@@ -76,8 +76,7 @@ internal abstract class PickerBaseFragment : Fragment(),
         if (index in 0 until data.size) {
             musicAdapter.notifyItemChanged(index)
             if (scrollTo) {
-                recyclerView.layoutManager
-                    ?.smoothScrollToPosition(recyclerView, null, index)
+                recyclerView.scrollToPosition(index)
             }
         }
     }
