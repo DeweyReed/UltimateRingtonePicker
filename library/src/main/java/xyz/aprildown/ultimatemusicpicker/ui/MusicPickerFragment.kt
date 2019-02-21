@@ -55,9 +55,7 @@ class MusicPickerFragment : Fragment(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(PickerViewModel::class.java)
-        if (savedInstanceState == null) {
-            viewModel.setMusicPickerSetting(arguments?.getParcelable(EXTRA_SETTING_BUNDLE))
-        }
+        viewModel.setMusicPickerSetting(arguments?.getParcelable(EXTRA_SETTING_BUNDLE))
         musicPlayer = AsyncRingtonePlayer(requireContext())
         activity?.volumeControlStream = viewModel.setting.streamType
     }

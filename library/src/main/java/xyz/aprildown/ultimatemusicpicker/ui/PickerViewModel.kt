@@ -19,16 +19,17 @@ internal class PickerViewModel(application: Application) : AndroidViewModel(appl
     var isPreviewPlaying: Boolean = false
     var selectedUri: Uri? = null
 
-    fun setMusicPickerSetting(setting: MusicPickerSetting?) {
-        if (setting == null) {
-            this.setting = MusicPickerSetting(
+    fun setMusicPickerSetting(newSetting: MusicPickerSetting?) {
+        if (::setting.isInitialized) return
+        if (newSetting == null) {
+            setting = MusicPickerSetting(
                 false,
                 "", Uri.EMPTY, true,
                 null, listOf(), AudioManager.STREAM_MUSIC, intArrayOf()
             )
         } else {
-            this.setting = setting
-            this.selectedUri = setting.selectedUri
+            setting = newSetting
+            selectedUri = newSetting.selectedUri
         }
     }
 }
