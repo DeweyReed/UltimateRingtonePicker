@@ -8,10 +8,10 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import kotlinx.android.synthetic.main.activity_main.*
-import org.jetbrains.anko.toast
 import xyz.aprildown.ultimatemusicpicker.MusicPickerActivity
 import xyz.aprildown.ultimatemusicpicker.MusicPickerListener
 import xyz.aprildown.ultimatemusicpicker.UltimateMusicPicker
@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity(),
 
     private fun setUpViews() {
         switchNightTheme.isChecked =
-                AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES
+            AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES
         switchNightTheme.setOnCheckedChangeListener { _, isChecked ->
             AppCompatDelegate.setDefaultNightMode(
                 if (isChecked) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
@@ -133,12 +133,12 @@ class MainActivity : AppCompatActivity(),
     override fun onMusicPick(uri: Uri, title: String) {
         selectedTitle = title
         selectedUri = uri
-        toast("$title: $uri")
+        Toast.makeText(this, "$title: $uri", Toast.LENGTH_SHORT).show()
     }
 
     override fun onPickCanceled() {
         selectedTitle = null
         selectedUri = null
-        toast("Canceled")
+        Toast.makeText(this, "Canceled", Toast.LENGTH_SHORT).show()
     }
 }

@@ -16,7 +16,6 @@ ext {
             material            : 'com.google.android.material:material:1.0.0',
 
             kotlin_stdlib_jdk7  : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${versions.kotlin}",
-            kotlin_anko_common  : 'org.jetbrains.anko:anko-commons:0.10.8',
 
             lifecycle_extensions: 'androidx.lifecycle:lifecycle-extensions:2.0.0',
 

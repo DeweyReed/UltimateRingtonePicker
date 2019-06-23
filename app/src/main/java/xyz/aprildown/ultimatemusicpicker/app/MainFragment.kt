@@ -6,8 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.Toast
 import androidx.fragment.app.Fragment
-import org.jetbrains.anko.toast
 import xyz.aprildown.ultimatemusicpicker.MusicPickerListener
 import xyz.aprildown.ultimatemusicpicker.UltimateMusicPicker
 
@@ -35,10 +35,10 @@ class MainFragment : Fragment(),
     }
 
     override fun onMusicPick(uri: Uri, title: String) {
-        requireContext().toast("MainFragment\n$title: $uri")
+        Toast.makeText(requireContext(), "MainFragment\n$title: $uri", Toast.LENGTH_SHORT).show()
     }
 
     override fun onPickCanceled() {
-        requireContext().toast("MainFragment\nCanceled")
+        Toast.makeText(requireContext(), "MainFragment\nCanceled", Toast.LENGTH_SHORT).show()
     }
 }

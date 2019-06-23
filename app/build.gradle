@@ -28,7 +28,6 @@ dependencies {
     implementation project(':library')
 
     implementation libs.kotlin_stdlib_jdk7
-    implementation libs.kotlin_anko_common
 
     debugImplementation libs.leak_cannary
     debugImplementation libs.leak_cannary_support
