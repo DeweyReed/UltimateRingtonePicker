@@ -4,7 +4,6 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'com.github.dcendents.android-maven'
 
-group = 'com.github.DeweyReed'
 
 android {
     compileSdkVersion versions.compile_sdk
@@ -15,10 +14,6 @@ android {
         versionCode versions.version_code
         versionName versions.version_name
         vectorDrawables.useSupportLibrary true
-    }
-
-    lintOptions {
-        abortOnError false
     }
 }
 
