@@ -11,13 +11,22 @@ ext {
             version_name: '2.0.5',
     ]
     libs = [
+            // Kotlin
+            kotlin_stdlib_jdk7            : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${versions.kotlin}",
+            // Kotlin Coroutines
+            kotlin_coroutines_core        : 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.2.2',
+            kotlin_coroutines_android     : 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.2.2',
+
             appcompat           : 'androidx.appcompat:appcompat:1.0.2',
             recyclerview        : 'androidx.recyclerview:recyclerview:1.0.0',
+
             material            : 'com.google.android.material:material:1.0.0',
 
-            kotlin_stdlib_jdk7  : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${versions.kotlin}",
-
             lifecycle_extensions: 'androidx.lifecycle:lifecycle-extensions:2.0.0',
+
+            // Navigation
+            androidx_navigation_fragment  : 'androidx.navigation:navigation-fragment:2.1.0-alpha05',
+            androidx_navigation_ui        : 'androidx.navigation:navigation-ui:2.1.0-alpha05',
 
             leak_cannary        : 'com.squareup.leakcanary:leakcanary-android:1.6.3',
             leak_cannary_no_op  : 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.3',
