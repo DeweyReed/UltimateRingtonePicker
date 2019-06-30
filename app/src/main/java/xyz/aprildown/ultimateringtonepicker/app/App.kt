@@ -1,4 +1,4 @@
-package xyz.aprildown.ultimatemusicpicker.app
+package xyz.aprildown.ultimateringtonepicker.app
 
 import android.app.Application
 import com.squareup.leakcanary.LeakCanary

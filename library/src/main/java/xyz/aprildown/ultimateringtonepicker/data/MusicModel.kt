@@ -1,4 +1,4 @@
-package xyz.aprildown.ultimatemusicpicker.data
+package xyz.aprildown.ultimateringtonepicker.data
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -12,7 +12,7 @@ import android.net.Uri
 import android.provider.MediaStore
 import androidx.annotation.RequiresPermission
 import androidx.collection.ArrayMap
-import xyz.aprildown.ultimatemusicpicker.*
+import xyz.aprildown.ultimateringtonepicker.*
 
 /**
  * All music data is accessed via this model.

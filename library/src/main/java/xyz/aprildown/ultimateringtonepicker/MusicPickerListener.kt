@@ -1,4 +1,4 @@
-package xyz.aprildown.ultimatemusicpicker
+package xyz.aprildown.ultimateringtonepicker
 
 import android.net.Uri
 

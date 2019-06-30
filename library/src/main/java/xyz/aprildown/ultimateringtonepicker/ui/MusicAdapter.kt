@@ -1,4 +1,4 @@
-package xyz.aprildown.ultimatemusicpicker.ui
+package xyz.aprildown.ultimateringtonepicker.ui
 
 import android.graphics.Color
 import android.view.*
@@ -7,8 +7,8 @@ import android.view.View.VISIBLE
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import xyz.aprildown.ultimatemusicpicker.R
-import xyz.aprildown.ultimatemusicpicker.startDrawableAnimation
+import xyz.aprildown.ultimateringtonepicker.R
+import xyz.aprildown.ultimateringtonepicker.startDrawableAnimation
 
 internal class MusicAdapter(
     private val listener: OnItemCLickedListener,

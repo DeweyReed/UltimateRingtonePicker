@@ -1,4 +1,4 @@
-package xyz.aprildown.ultimatemusicpicker.ui
+package xyz.aprildown.ultimateringtonepicker.ui
 
 import android.net.Uri
 import android.os.Bundle
@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.Loader
 import androidx.recyclerview.widget.RecyclerView
-import xyz.aprildown.ultimatemusicpicker.R
+import xyz.aprildown.ultimateringtonepicker.R
 
 /**
  * Created on 2018/4/20.

@@ -1,4 +1,4 @@
-package xyz.aprildown.ultimatemusicpicker.ui
+package xyz.aprildown.ultimateringtonepicker.ui
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -12,12 +12,12 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
-import xyz.aprildown.ultimatemusicpicker.MUSIC_SILENT
-import xyz.aprildown.ultimatemusicpicker.MusicPickerListener
-import xyz.aprildown.ultimatemusicpicker.MusicPickerSetting
-import xyz.aprildown.ultimatemusicpicker.R
-import xyz.aprildown.ultimatemusicpicker.UltimateMusicPicker.Companion.EXTRA_SETTING_BUNDLE
-import xyz.aprildown.ultimatemusicpicker.music.AsyncRingtonePlayer
+import xyz.aprildown.ultimateringtonepicker.MUSIC_SILENT
+import xyz.aprildown.ultimateringtonepicker.MusicPickerListener
+import xyz.aprildown.ultimateringtonepicker.MusicPickerSetting
+import xyz.aprildown.ultimateringtonepicker.R
+import xyz.aprildown.ultimateringtonepicker.UltimateMusicPicker.Companion.EXTRA_SETTING_BUNDLE
+import xyz.aprildown.ultimateringtonepicker.music.AsyncRingtonePlayer
 
 /**
  * Created on 2018/6/7.

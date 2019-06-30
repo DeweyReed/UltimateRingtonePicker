@@ -1,4 +1,4 @@
-package xyz.aprildown.ultimatemusicpicker.app
+package xyz.aprildown.ultimateringtonepicker.app
 
 import android.net.Uri
 import android.os.Bundle
@@ -8,8 +8,8 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import xyz.aprildown.ultimatemusicpicker.MusicPickerListener
-import xyz.aprildown.ultimatemusicpicker.UltimateMusicPicker
+import xyz.aprildown.ultimateringtonepicker.MusicPickerListener
+import xyz.aprildown.ultimateringtonepicker.UltimateMusicPicker
 
 /**
  * Created on 2018/9/23.

@@ -1,4 +1,4 @@
-package xyz.aprildown.ultimatemusicpicker.app
+package xyz.aprildown.ultimateringtonepicker.app
 
 import android.app.Activity
 import android.content.ContentResolver
@@ -12,9 +12,9 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import kotlinx.android.synthetic.main.activity_main.*
-import xyz.aprildown.ultimatemusicpicker.MusicPickerActivity
-import xyz.aprildown.ultimatemusicpicker.MusicPickerListener
-import xyz.aprildown.ultimatemusicpicker.UltimateMusicPicker
+import xyz.aprildown.ultimateringtonepicker.MusicPickerActivity
+import xyz.aprildown.ultimateringtonepicker.MusicPickerListener
+import xyz.aprildown.ultimateringtonepicker.UltimateMusicPicker
 
 class MainActivity : AppCompatActivity(),
     View.OnClickListener,

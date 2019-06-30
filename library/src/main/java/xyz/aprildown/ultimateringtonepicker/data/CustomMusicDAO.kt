@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package xyz.aprildown.ultimatemusicpicker.data
+package xyz.aprildown.ultimateringtonepicker.data
 
 import android.content.SharedPreferences
 import android.net.Uri
-import xyz.aprildown.ultimatemusicpicker.sortWithCollator
+import xyz.aprildown.ultimateringtonepicker.sortWithCollator
 import java.util.*
 
 /**

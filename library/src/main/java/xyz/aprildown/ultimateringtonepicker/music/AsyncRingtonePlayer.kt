@@ -1,4 +1,4 @@
-package xyz.aprildown.ultimatemusicpicker.music
+package xyz.aprildown.ultimateringtonepicker.music
 
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
@@ -9,10 +9,10 @@ import android.net.Uri
 import android.os.*
 import android.telephony.TelephonyManager
 import androidx.annotation.RequiresApi
-import xyz.aprildown.ultimatemusicpicker.R
-import xyz.aprildown.ultimatemusicpicker.getResourceUri
-import xyz.aprildown.ultimatemusicpicker.isLOrLater
-import xyz.aprildown.ultimatemusicpicker.isOOrLater
+import xyz.aprildown.ultimateringtonepicker.R
+import xyz.aprildown.ultimateringtonepicker.getResourceUri
+import xyz.aprildown.ultimateringtonepicker.isLOrLater
+import xyz.aprildown.ultimateringtonepicker.isOOrLater
 import java.io.IOException
 
 /**

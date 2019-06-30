@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package xyz.aprildown.ultimatemusicpicker.data
+package xyz.aprildown.ultimateringtonepicker.data
 
 import android.net.Uri
 

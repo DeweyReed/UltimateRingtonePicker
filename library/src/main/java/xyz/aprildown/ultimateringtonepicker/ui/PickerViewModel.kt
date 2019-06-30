@@ -1,11 +1,11 @@
-package xyz.aprildown.ultimatemusicpicker.ui
+package xyz.aprildown.ultimateringtonepicker.ui
 
 import android.app.Application
 import android.media.AudioManager
 import android.net.Uri
 import androidx.lifecycle.AndroidViewModel
-import xyz.aprildown.ultimatemusicpicker.MusicPickerSetting
-import xyz.aprildown.ultimatemusicpicker.data.MusicModel
+import xyz.aprildown.ultimateringtonepicker.MusicPickerSetting
+import xyz.aprildown.ultimateringtonepicker.data.MusicModel
 
 /**
  * Created on 2018/6/10.

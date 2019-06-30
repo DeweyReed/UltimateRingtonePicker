@@ -130,7 +130,7 @@
 
         <fragment
             android:id="@+id/fragmentMain"
-            android:name="xyz.aprildown.ultimatemusicpicker.app.MainFragment"
+            android:name="xyz.aprildown.ultimateringtonepicker.app.MainFragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>

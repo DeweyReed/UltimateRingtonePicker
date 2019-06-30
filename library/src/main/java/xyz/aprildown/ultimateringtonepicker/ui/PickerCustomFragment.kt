@@ -1,4 +1,4 @@
-package xyz.aprildown.ultimatemusicpicker.ui
+package xyz.aprildown.ultimateringtonepicker.ui
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -7,8 +7,8 @@ import android.widget.Toast
 import androidx.loader.content.AsyncTaskLoader
 import androidx.loader.content.Loader
 import androidx.recyclerview.widget.RecyclerView
-import xyz.aprildown.ultimatemusicpicker.R
-import xyz.aprildown.ultimatemusicpicker.data.MusicModel
+import xyz.aprildown.ultimateringtonepicker.R
+import xyz.aprildown.ultimateringtonepicker.data.MusicModel
 
 internal class PickerCustomFragment : PickerBaseFragment() {
 

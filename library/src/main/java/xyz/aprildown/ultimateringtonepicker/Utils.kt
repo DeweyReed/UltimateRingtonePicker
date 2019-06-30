@@ -1,6 +1,6 @@
 @file:Suppress("unused", "NOTHING_TO_INLINE")
 
-package xyz.aprildown.ultimatemusicpicker
+package xyz.aprildown.ultimateringtonepicker
 
 import android.content.ContentResolver
 import android.content.Context
@@ -11,7 +11,7 @@ import android.view.View
 import android.widget.ImageView
 import androidx.annotation.AnyRes
 import androidx.core.content.ContextCompat
-import xyz.aprildown.ultimatemusicpicker.data.CustomMusic
+import xyz.aprildown.ultimateringtonepicker.data.CustomMusic
 import java.text.Collator
 
 internal val MUSIC_SILENT: Uri = Uri.EMPTY
