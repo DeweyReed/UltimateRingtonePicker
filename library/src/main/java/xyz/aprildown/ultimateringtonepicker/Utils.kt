@@ -11,13 +11,13 @@ import android.view.View
 import android.widget.ImageView
 import androidx.annotation.AnyRes
 import androidx.core.content.ContextCompat
-import xyz.aprildown.ultimateringtonepicker.data.CustomMusic
+import xyz.aprildown.ultimateringtonepicker.data.CustomRingtone
 import java.text.Collator
 
 internal val MUSIC_SILENT: Uri = Uri.EMPTY
 internal val NO_MUSIC_URI: Uri = Uri.EMPTY
 
-internal fun MutableList<CustomMusic>.sortWithCollator() {
+internal fun MutableList<CustomRingtone>.sortWithCollator() {
     val collator = Collator.getInstance()
     sortWith(Comparator { o1, o2 ->
         collator.compare(o1.title, o2.title)

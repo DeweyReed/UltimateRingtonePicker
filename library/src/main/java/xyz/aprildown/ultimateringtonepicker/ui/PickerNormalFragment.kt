@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import xyz.aprildown.ultimateringtonepicker.MUSIC_SILENT
 import xyz.aprildown.ultimateringtonepicker.R
 import xyz.aprildown.ultimateringtonepicker.UltimateMusicPicker
-import xyz.aprildown.ultimateringtonepicker.data.CustomMusic
+import xyz.aprildown.ultimateringtonepicker.data.CustomRingtone
 import xyz.aprildown.ultimateringtonepicker.data.MusicModel
 
 internal class PickerNormalFragment : PickerBaseFragment(), View.OnCreateContextMenuListener {
@@ -130,11 +130,11 @@ internal class PickerNormalFragment : PickerBaseFragment(), View.OnCreateContext
         private val additional: List<Pair<String, Uri>>
     ) : AsyncTaskLoader<List<MusicListItem>>(context) {
 
-        private lateinit var customMusics: List<CustomMusic>
+        private lateinit var customRingtones: List<CustomRingtone>
 
         override fun onStartLoading() {
             super.onStartLoading()
-            customMusics = musicModel.getCustomMusics()
+            customRingtones = musicModel.getCustomMusics()
             forceLoad()
         }
 
@@ -146,7 +146,7 @@ internal class PickerNormalFragment : PickerBaseFragment(), View.OnCreateContext
             val items = mutableListOf<MusicListItem>()
             if (musicTypes.contains(UltimateMusicPicker.TYPE_MUSIC)) {
                 items.add(HeaderItem(context.getString(R.string.your_sounds)))
-                customMusics.forEach {
+                customRingtones.forEach {
                     items.add(
                         SoundItem(
                             SoundItem.TYPE_CUSTOM, it.uri,

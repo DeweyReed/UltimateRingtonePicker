@@ -31,7 +31,7 @@ internal class MusicModel(private val context: Context) {
     /**
      * Stores all custom musics that users select
      */
-    private val customMusicDAO = CustomMusicDAO(context.getCustomMusicSharedPrefs())
+    private val customMusicDAO = CustomRingtoneDAO(context.getCustomMusicSharedPrefs())
 
     /**
      * Maps music uri to music title; looking up a title from scratch is expensive.
@@ -42,24 +42,24 @@ internal class MusicModel(private val context: Context) {
     /**
      * Local custom musics cache
      */
-    private val localCustomMusics: MutableList<CustomMusic> by lazy {
-        customMusicDAO.getCustomMusics()
+    private val localCustomRingtones: MutableList<CustomRingtone> by lazy {
+        customMusicDAO.getCustomRingtones()
     }
 
     /**
      * User selects a custom music and we store it in both shared preference and cache
      */
-    fun addCustomMusic(uri: Uri, title: String): CustomMusic {
+    fun addCustomMusic(uri: Uri, title: String): CustomRingtone {
         // If the uri is already present in an existing ringtone, do nothing.
         val existing = getCustomMusic(uri)
         if (existing != null) {
             return existing
         }
 
-        val ringtone = customMusicDAO.addCustomMusic(uri, title)
-        localCustomMusics.add(ringtone)
+        val ringtone = customMusicDAO.addCustomRingtone(uri, title)
+        localCustomRingtones.add(ringtone)
 
-        localCustomMusics.sortWithCollator()
+        localCustomRingtones.sortWithCollator()
         return ringtone
     }
 
@@ -68,8 +68,8 @@ internal class MusicModel(private val context: Context) {
      */
     fun removeCustomMusic(uri: Uri) {
         getCustomMusic(uri)?.let {
-            customMusicDAO.removeCustomMusic(it.id)
-            localCustomMusics.remove(it)
+            customMusicDAO.removeCustomRingtone(it.id)
+            localCustomRingtones.remove(it)
         }
     }
 
@@ -77,8 +77,8 @@ internal class MusicModel(private val context: Context) {
      * Get all custom musics selected by users
      * @return an immutable list of musics that users select
      */
-    fun getCustomMusics(): List<CustomMusic> {
-        return localCustomMusics.toList()
+    fun getCustomMusics(): List<CustomRingtone> {
+        return localCustomRingtones.toList()
     }
 
     /**
@@ -87,8 +87,8 @@ internal class MusicModel(private val context: Context) {
      */
     @SuppressLint("InlinedApi")
     @RequiresPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
-    fun getAvailableCustomMusics(): List<CustomMusic> {
-        val musics = mutableListOf<CustomMusic>()
+    fun getAvailableCustomMusics(): List<CustomRingtone> {
+        val musics = mutableListOf<CustomRingtone>()
 
         val contentResolver = context.contentResolver ?: return musics
         val uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
@@ -111,7 +111,7 @@ internal class MusicModel(private val context: Context) {
                 do {
                     val thisId = cursor.getLong(idColumn)
                     val thisTitle = cursor.getString(titleColumn)
-                    val customMusic = CustomMusic(
+                    val customMusic = CustomRingtone(
                         thisId,
                         ContentUris.withAppendedId(
                             MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
@@ -162,7 +162,7 @@ internal class MusicModel(private val context: Context) {
     }
 
     /**
-     * Find an [Uri]'s title from [localCustomMusics] and [musicTitles]
+     * Find an [Uri]'s title from [localCustomRingtones] and [musicTitles]
      */
     fun getMusicTitle(uri: Uri): String {
         // Special case: no ringtone has a title of "Silent".
@@ -215,5 +215,5 @@ internal class MusicModel(private val context: Context) {
         return result
     }
 
-    private fun getCustomMusic(uri: Uri) = localCustomMusics.find { it.uri == uri }
+    private fun getCustomMusic(uri: Uri) = localCustomRingtones.find { it.uri == uri }
 }

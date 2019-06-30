@@ -21,7 +21,7 @@ import android.net.Uri
 /**
  * A read-only domain object representing a custom music chosen from the file system.
  */
-internal data class CustomMusic(
+internal data class CustomRingtone(
     /**
      * The unique identifier of the custom music.
      */
@@ -34,4 +34,9 @@ internal data class CustomMusic(
      * The title describing the file at the given uri; typically the file name.
      */
     val title: String
-)
+) {
+    /**
+     * {@code true} iff the application has permission to read the content of {@code mUri uri}.
+     */
+    var hasPermissions: Boolean = true
+}
