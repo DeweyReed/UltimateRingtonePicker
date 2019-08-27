@@ -3,14 +3,24 @@ package xyz.aprildown.ultimateringtonepicker.music
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.content.Context
-import android.media.*
-import android.media.AudioManager.*
+import android.media.AudioAttributes
+import android.media.AudioFocusRequest
+import android.media.AudioManager
+import android.media.AudioManager.AUDIOFOCUS_GAIN_TRANSIENT
+import android.media.AudioManager.AUDIOFOCUS_LOSS
+import android.media.AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK
+import android.media.AudioManager.OnAudioFocusChangeListener
+import android.media.MediaPlayer
+import android.media.RingtoneManager
 import android.net.Uri
-import android.os.*
+import android.os.Build
+import android.os.Bundle
+import android.os.Handler
+import android.os.HandlerThread
+import android.os.Looper
+import android.os.Message
 import android.telephony.TelephonyManager
 import androidx.annotation.RequiresApi
-import xyz.aprildown.ultimateringtonepicker.R
-import xyz.aprildown.ultimateringtonepicker.getResourceUri
 import xyz.aprildown.ultimateringtonepicker.isLOrLater
 import xyz.aprildown.ultimateringtonepicker.isOOrLater
 import java.io.IOException
@@ -50,20 +60,6 @@ internal class AsyncRingtonePlayer(
         private fun isInTelephoneCall(context: Context): Boolean {
             val tm = context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
             return tm.callState != TelephonyManager.CALL_STATE_IDLE
-        }
-
-        /**
-         * @return Uri of the ringtone to play when the user is in a telephone call
-         */
-        private fun getInCallRingtoneUri(context: Context): Uri {
-            return context.getResourceUri(R.raw.default_ringtone)
-        }
-
-        /**
-         * @return Uri of the ringtone to play when the chosen ringtone fails to play
-         */
-        private fun getFallbackRingtoneUri(context: Context): Uri {
-            return context.getResourceUri(R.raw.default_ringtone)
         }
     }
 
@@ -121,8 +117,8 @@ internal class AsyncRingtonePlayer(
     }
 
     private fun checkAsyncRingtonePlayerThread() {
-        if (Looper.myLooper() != mHandler.looper) {
-            throw IllegalStateException("Must be on the AsyncRingtonePlayer thread!")
+        check(Looper.myLooper() == mHandler.looper) {
+            "Must be on the AsyncRingtonePlayer thread!"
         }
     }
 
@@ -139,8 +135,7 @@ internal class AsyncRingtonePlayer(
     /**
      * Loops playback of a ringtone using [MediaPlayer].
      */
-    private inner class MediaPlayerPlaybackDelegate : PlaybackDelegate,
-        AudioManager.OnAudioFocusChangeListener {
+    private inner class MediaPlayerPlaybackDelegate : PlaybackDelegate, OnAudioFocusChangeListener {
 
         /** The audio focus manager. Only used by the ringtone thread.  */
         private var mAudioManager: AudioManager? = null
@@ -170,8 +165,7 @@ internal class AsyncRingtonePlayer(
             }
 
             val inTelephoneCall = isInTelephoneCall(context)
-            var alarmNoise: Uri? =
-                if (inTelephoneCall) getInCallRingtoneUri(context) else ringtoneUri
+            var alarmNoise: Uri? = if (inTelephoneCall) null else ringtoneUri
             // Fall back to the system default alarm if the database does not have an alarm stored.
             if (alarmNoise == null) {
                 alarmNoise = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
@@ -192,15 +186,11 @@ internal class AsyncRingtonePlayer(
                 startPlayback(inTelephoneCall)
             } catch (t: Throwable) {
                 // The alarmNoise may be on the sd card which could be busy right now.
-                // Use the fallback ringtone.
                 try {
                     // Must reset the media player to clear the error state.
                     mMediaPlayer?.reset()
-                    mMediaPlayer?.setDataSource(context, getFallbackRingtoneUri(context))
-                    startPlayback(inTelephoneCall)
                 } catch (t2: Throwable) {
                     // At this point we just don't play anything.
-//                    Timber.e("Failed to play fallback ringtone")
                 }
             }
         }

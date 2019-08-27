@@ -30,8 +30,6 @@ dependencies {
     implementation libs.kotlin_stdlib_jdk7
 
     debugImplementation libs.leak_cannary
-    debugImplementation libs.leak_cannary_support
-    releaseImplementation libs.leak_cannary_no_op
 
     implementation libs.appcompat
     implementation libs.material

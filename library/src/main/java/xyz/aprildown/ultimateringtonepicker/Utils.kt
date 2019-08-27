@@ -14,8 +14,30 @@ import androidx.core.content.ContextCompat
 import xyz.aprildown.ultimateringtonepicker.data.CustomRingtone
 import java.text.Collator
 
-internal val MUSIC_SILENT: Uri = Uri.EMPTY
-internal val NO_MUSIC_URI: Uri = Uri.EMPTY
+internal const val EXTRA_SETTINGS = "settings"
+
+internal val RINGTONE_URI_SILENT: Uri = Uri.EMPTY
+internal val RINGTONE_URI_NULL: Uri = Uri.EMPTY
+
+internal const val KEY_RINGTONE_TYPE = "ringtone_type"
+internal const val KEY_CATEGORY_TYPE = "category_type"
+internal const val KEY_EXTRA_ID = "category_id"
+
+internal const val RINGTONE_TYPE_ALL = 0
+internal const val RINGTONE_TYPE_ARTIST = 10
+internal const val RINGTONE_TYPE_ALBUM = 11
+internal const val RINGTONE_TYPE_FOLDER = 13
+
+internal const val CATEGORY_TYPE_ARTIST = 1
+internal const val CATEGORY_TYPE_ALBUM = 2
+internal const val CATEGORY_TYPE_FOLDER = 3
+
+internal fun Int.categoryTypeToRingtoneType(): Int = when (this) {
+    CATEGORY_TYPE_ARTIST -> RINGTONE_TYPE_ARTIST
+    CATEGORY_TYPE_ALBUM -> RINGTONE_TYPE_ALBUM
+    CATEGORY_TYPE_FOLDER -> RINGTONE_TYPE_FOLDER
+    else -> throw IllegalArgumentException("No ringtone type for category type $this")
+}
 
 internal fun MutableList<CustomRingtone>.sortWithCollator() {
     val collator = Collator.getInstance()
@@ -45,10 +67,6 @@ internal fun isNOrLater(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODE
 
 internal fun isOOrLater(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
 
-//
-// View Helpers
-//
-
 internal fun ImageView.startDrawableAnimation() {
     (drawable as? Animatable)?.start()
 }
@@ -56,7 +74,6 @@ internal fun ImageView.startDrawableAnimation() {
 internal fun ImageView.stopDrawableAnimation() {
     (drawable as? Animatable)?.run { if (isRunning) stop() }
 }
-
 
 internal inline fun View.show() {
     visibility = View.VISIBLE
