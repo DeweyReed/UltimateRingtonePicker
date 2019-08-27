@@ -10,7 +10,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import xyz.aprildown.ultimateringtonepicker.ui.Navigator
 
@@ -44,40 +43,43 @@ class RingtonePickerFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.urp_fragment_ringtone_picker, container, false)
-        // if (savedInstanceState == null) {
-        //     val navHostFragment = NavHostFragment.create(R.navigation.urp_nav_graph)
-        //     childFragmentManager.beginTransaction()
-        //         .replace(R.id.urpFrameNavHost, navHostFragment, "host")
-        //         .setPrimaryNavigationFragment(navHostFragment)
-        //         .commit()
-        // }
-        return view
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val context = view.context
 
-        val navController = findOurNavController()
+        val settings = arguments?.getParcelable(EXTRA_SETTINGS)
+            ?: UltimateRingtonePicker.Settings(
+                showCustomRingtone = true,
+                showDefault = false,
+                showSilent = true,
+                ringtoneTypes = listOf(
+                    RingtoneManager.TYPE_RINGTONE,
+                    RingtoneManager.TYPE_NOTIFICATION,
+                    RingtoneManager.TYPE_ALARM
+                )
+            )
+
+        if (savedInstanceState == null) {
+            val fragment = NavHostFragment()
+            childFragmentManager.beginTransaction()
+                .replace(R.id.layoutUrpRoot, fragment)
+                .setPrimaryNavigationFragment(fragment)
+                .commitNow()
+        }
+
+        val navController = findNavHostFragment().navController
+
+        navController.graph = navController.navInflater.inflate(R.navigation.urp_nav_graph).apply {
+            startDestination =
+                if (settings.onlyShowDevice) R.id.urp_dest_device else R.id.urp_dest_system
+        }
+
         val viewModel = ViewModelProvider(
-            navController.getViewModelStoreOwner(R.id.urp_nav_graph),
+            navController.getViewModelStoreOwner(R.id.urp_nav_graph).viewModelStore,
             object : ViewModelProvider.Factory {
                 @Suppress("UNCHECKED_CAST")
                 override fun <T : ViewModel?> create(modelClass: Class<T>): T {
                     return when (modelClass) {
-                        RingtonePickerViewModel::class.java -> RingtonePickerViewModel(
-                            context,
-                            arguments?.getParcelable(EXTRA_SETTINGS)
-                                ?: UltimateRingtonePicker.Settings(
-                                    showCustomRingtone = true,
-                                    showDefault = false,
-                                    showSilent = true,
-                                    ringtoneTypes = listOf(
-                                        RingtoneManager.TYPE_RINGTONE,
-                                        RingtoneManager.TYPE_NOTIFICATION,
-                                        RingtoneManager.TYPE_ALARM
-                                    )
-                                )
-                        ) as T
+                        RingtonePickerViewModel::class.java ->
+                            RingtonePickerViewModel(context, settings) as T
                         else -> throw IllegalArgumentException()
                     }
                 }
@@ -89,15 +91,18 @@ class RingtonePickerFragment : Fragment() {
                 pickListener.onRingtonePicked(it.map { ringtone -> ringtone.uri to ringtone.title })
             }
         })
+
+        return view
     }
 
-    private fun findOurNavController(): NavController =
-        (childFragmentManager.findFragmentById(R.id.urpFragmentNavHost) as NavHostFragment)
-            .navController
+    private fun findNavHostFragment(): NavHostFragment =
+        childFragmentManager.findFragmentById(R.id.layoutUrpRoot) as NavHostFragment
+
+    private fun findOurTopFragment(): Fragment? =
+        findNavHostFragment().childFragmentManager.primaryNavigationFragment
 
     fun onSelectClick() {
-        val topFragment =
-            (childFragmentManager.findFragmentById(R.id.urpFragmentNavHost) as NavHostFragment).childFragmentManager.primaryNavigationFragment
+        val topFragment = findOurTopFragment()
         if (topFragment is Navigator.Selector) {
             topFragment.onSelect()
         }
@@ -108,8 +113,7 @@ class RingtonePickerFragment : Fragment() {
      *         False if the back stack is popped up once and you should do nothing.
      */
     fun onBackClick(): Boolean {
-        val topFragment =
-            (childFragmentManager.findFragmentById(R.id.urpFragmentNavHost) as NavHostFragment).childFragmentManager.primaryNavigationFragment
+        val topFragment = findOurTopFragment()
         return if (topFragment is Navigator.Selector) {
             !topFragment.onBack()
         } else {

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/urp_nav_graph"
-    app:startDestination="@id/urp_dest_system">
+    tools:ignore="InvalidNavigation,UnusedNavigation">
     <fragment
         android:id="@+id/urp_dest_system"
         android:name="xyz.aprildown.ultimateringtonepicker.ui.SystemRingtoneFragment"
