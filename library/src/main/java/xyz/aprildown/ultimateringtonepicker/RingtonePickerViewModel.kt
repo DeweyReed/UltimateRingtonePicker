@@ -1,7 +1,11 @@
 package xyz.aprildown.ultimateringtonepicker
 
+import android.content.ContentResolver
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
+import android.provider.MediaStore
+import android.provider.OpenableColumns
 import androidx.collection.ArrayMap
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -115,9 +119,46 @@ internal class RingtonePickerViewModel(
         selectedRingtones.forEach {
             addCustomRingtone(it.title, it.uri)
         }
-        customRingtones.addAll(selectedRingtones)
+        // In this way we can keep ringtone order.
+        customRingtones.clear()
+        customRingtones.addAll(customRingtoneModel.getCustomRingtones().map {
+            Ringtone(it.uri, it.title)
+        })
 
         dataLoadedEvent.value = true
+    }
+
+    fun onSafSelect(contentResolver: ContentResolver, uri: Uri) {
+        // Take the long-term permission to read (playback) the audio at the uri.
+        contentResolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
+
+        contentResolver.query(uri, null, null, null, null)?.use { cursor ->
+
+            if (!cursor.moveToFirst()) return@use
+
+            var title: String? = null
+
+            // If the file was a media file, return its title.
+            val titleIndex = cursor.getColumnIndex(MediaStore.Audio.Media.TITLE)
+            if (titleIndex != -1) {
+                title = cursor.getString(titleIndex)
+            } else {
+                // If the file was a simple openable, return its display name.
+                val displayNameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+                if (displayNameIndex != -1) {
+                    var displayName = cursor.getString(displayNameIndex)
+                    val dotIndex = displayName.lastIndexOf(".")
+                    if (dotIndex > 0) {
+                        displayName = displayName.substring(0, dotIndex)
+                    }
+                    title = displayName
+                }
+            }
+
+            if (title != null) {
+                onDeviceSelection(listOf(Ringtone(uri, title)))
+            }
+        }
     }
 
     fun onTotalSelection(selectedRingtones: List<Ringtone>) {

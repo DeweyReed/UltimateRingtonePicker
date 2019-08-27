@@ -5,8 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.media.RingtoneManager
 import android.os.Bundle
-import android.provider.MediaStore
-import android.provider.OpenableColumns
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
@@ -123,17 +121,17 @@ internal class SystemRingtoneFragment : Fragment(), Navigator.Selector {
 
     private fun pickCustom() {
         viewModel.stopPlaying()
-        // if (viewModel.settings.useSafSelect) {
-        // startActivityForResult(
-        //     Intent(Intent.ACTION_OPEN_DOCUMENT)
-        //         .addCategory(Intent.CATEGORY_OPENABLE)
-        //         .setType("audio/*")
-        //         .addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION),
-        //     0
-        // )
-        // } else {
-        findNavController().navigate(R.id.urp_action_system_to_device)
-        // }
+        if (viewModel.settings.useSafSelect) {
+            startActivityForResult(
+                Intent(Intent.ACTION_OPEN_DOCUMENT)
+                    .addCategory(Intent.CATEGORY_OPENABLE)
+                    .setType("audio/*")
+                    .addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION),
+                0
+            )
+        } else {
+            findNavController().navigate(R.id.urp_action_system_to_device)
+        }
     }
 
     /**
@@ -143,43 +141,12 @@ internal class SystemRingtoneFragment : Fragment(), Navigator.Selector {
         val uri = data?.data
         if (resultCode == Activity.RESULT_OK && uri != null && uri != RINGTONE_URI_SILENT) {
             // Bail if the permission to read (playback) the audio at the uri was not granted.
-            val flags = data.flags and Intent.FLAG_GRANT_READ_URI_PERMISSION
-            if (flags != Intent.FLAG_GRANT_READ_URI_PERMISSION) {
+            if (data.flags and Intent.FLAG_GRANT_READ_URI_PERMISSION
+                != Intent.FLAG_GRANT_READ_URI_PERMISSION
+            ) {
                 return
             }
-
-            val cr = requireContext().contentResolver
-
-            // Take the long-term permission to read (playback) the audio at the uri.
-            cr.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
-
-            cr.query(uri, null, null, null, null)?.use { cursor ->
-
-                if (!cursor.moveToFirst()) return@use
-
-                var title: String? = null
-
-                // If the file was a media file, return its title.
-                val titleIndex = cursor.getColumnIndex(MediaStore.Audio.Media.TITLE)
-                if (titleIndex != -1) {
-                    title = cursor.getString(titleIndex)
-                } else {
-                    // If the file was a simple openable, return its display name.
-                    val displayNameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
-                    if (displayNameIndex != -1) {
-                        var displayName = cursor.getString(displayNameIndex)
-                        val dotIndex = displayName.lastIndexOf(".")
-                        if (dotIndex > 0) {
-                            displayName = displayName.substring(0, dotIndex)
-                        }
-                        title = displayName
-                    }
-                }
-
-                if (title != null) {
-                    viewModel.onDeviceSelection(listOf(Ringtone(uri, title)))
-                }
-            }
+            viewModel.onSafSelect(requireContext().contentResolver, uri)
         }
     }
 
