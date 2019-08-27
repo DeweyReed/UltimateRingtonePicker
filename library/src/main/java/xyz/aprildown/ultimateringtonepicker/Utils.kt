@@ -71,10 +71,6 @@ internal fun ImageView.startDrawableAnimation() {
     (drawable as? Animatable)?.start()
 }
 
-internal fun ImageView.stopDrawableAnimation() {
-    (drawable as? Animatable)?.run { if (isRunning) stop() }
-}
-
 internal inline fun View.show() {
     visibility = View.VISIBLE
 }

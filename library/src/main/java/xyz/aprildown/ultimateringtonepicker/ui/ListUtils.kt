@@ -19,13 +19,24 @@ internal fun FastAdapter<IItem<*>>.setUpSelectableRingtoneExtension(
         override fun onSelectionChanged(item: IItem<*>?, selected: Boolean) {
             if (item !is VisibleRingtone) return
 
-            // Handle current ringtone
+            // Clicked ringtone item
             if (selected) {
+                // item.isSelected = true
                 if (item.ringtone.uri != RINGTONE_URI_SILENT) {
                     item.isPlaying = true
                     viewModel.startPlaying(item.ringtone.uri)
                 }
+                // Stop other playing items
+                if (multiSelect) {
+                    selectedItems.forEach { selectedItem ->
+                        if (selectedItem is VisibleRingtone && selectedItem != item) {
+                            selectedItem.isPlaying = false
+                            notifyItemChanged(getPosition(selectedItem))
+                        }
+                    }
+                }
             } else {
+                // item.isSelected = false
                 item.isPlaying = false
                 viewModel.stopPlaying()
             }
