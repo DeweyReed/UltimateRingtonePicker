@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -54,25 +55,34 @@ class RingtonePickerFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val context = view.context
 
         val navController = findOurNavController()
         val viewModel = ViewModelProvider(
             navController.getViewModelStoreOwner(R.id.urp_nav_graph),
-            ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)
+            object : ViewModelProvider.Factory {
+                @Suppress("UNCHECKED_CAST")
+                override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+                    return when (modelClass) {
+                        RingtonePickerViewModel::class.java -> RingtonePickerViewModel(
+                            context,
+                            arguments?.getParcelable(EXTRA_SETTINGS)
+                                ?: UltimateRingtonePicker.Settings(
+                                    showCustomRingtone = true,
+                                    showDefault = false,
+                                    showSilent = true,
+                                    ringtoneTypes = listOf(
+                                        RingtoneManager.TYPE_RINGTONE,
+                                        RingtoneManager.TYPE_NOTIFICATION,
+                                        RingtoneManager.TYPE_ALARM
+                                    )
+                                )
+                        ) as T
+                        else -> throw IllegalArgumentException()
+                    }
+                }
+            }
         ).get(RingtonePickerViewModel::class.java)
-
-        viewModel.withSettings(
-            arguments?.getParcelable(EXTRA_SETTINGS) ?: UltimateRingtonePicker.Settings(
-                showCustomRingtone = true,
-                showDefault = false,
-                showSilent = true,
-                ringtoneTypes = listOf(
-                    RingtoneManager.TYPE_RINGTONE,
-                    RingtoneManager.TYPE_NOTIFICATION,
-                    RingtoneManager.TYPE_ALARM
-                )
-            )
-        )
 
         viewModel.totalSelection.observe(viewLifecycleOwner, Observer {
             if (it != null) {

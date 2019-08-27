@@ -1,16 +1,15 @@
 package xyz.aprildown.ultimateringtonepicker
 
-import android.app.Application
+import android.content.Context
 import android.net.Uri
 import androidx.collection.ArrayMap
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import xyz.aprildown.ultimateringtonepicker.data.Category
 import xyz.aprildown.ultimateringtonepicker.data.CustomRingtoneModel
 import xyz.aprildown.ultimateringtonepicker.data.DeviceRingtoneModel
@@ -18,24 +17,25 @@ import xyz.aprildown.ultimateringtonepicker.data.Ringtone
 import xyz.aprildown.ultimateringtonepicker.data.SystemRingtoneModel
 import xyz.aprildown.ultimateringtonepicker.music.AsyncRingtonePlayer
 
-internal class RingtonePickerViewModel(application: Application) : AndroidViewModel(application) {
+internal class RingtonePickerViewModel(
+    context: Context,
+    val settings: UltimateRingtonePicker.Settings
+) : ViewModel() {
 
-    private val mediaPlayer by lazy { AsyncRingtonePlayer(application) }
-
-    lateinit var settings: UltimateRingtonePicker.Settings
+    private val mediaPlayer by lazy { AsyncRingtonePlayer(context) }
 
     val initialSelection = mutableListOf<Ringtone>()
 
-    private val customRingtoneModel by lazy { CustomRingtoneModel(application) }
+    private val customRingtoneModel by lazy { CustomRingtoneModel(context) }
     val customRingtones = mutableSetOf<Ringtone>()
-    private val systemRingtoneModel by lazy { SystemRingtoneModel(application) }
+    private val systemRingtoneModel by lazy { SystemRingtoneModel(context) }
     val systemRingtones = ArrayMap<Int, List<Ringtone>>()
 
     val dataLoadedEvent = MutableLiveData<Boolean>()
 
     val totalSelection = MutableLiveData<List<Ringtone>>()
 
-    private val deviceRingtoneModel by lazy { DeviceRingtoneModel(application) }
+    private val deviceRingtoneModel by lazy { DeviceRingtoneModel(context) }
 
     /**
      * All device ringtones. Artist and Album ringtones are filtered from this.
@@ -53,31 +53,10 @@ internal class RingtonePickerViewModel(application: Application) : AndroidViewMo
     private val folderRingtones = ArrayMap<Long, MutableLiveData<List<Ringtone>>>()
 
     init {
-        initRingtones()
-    }
+        viewModelScope.launch(Dispatchers.IO) {
 
-    fun withSettings(s: UltimateRingtonePicker.Settings) {
-        if (!::settings.isInitialized) {
-            settings = s
-        }
-    }
+            check(initialSelection.isEmpty())
 
-    fun startPlaying(uri: Uri) {
-        mediaPlayer.stop()
-        mediaPlayer.play(uri, true, settings.streamType)
-    }
-
-    fun stopPlaying() {
-        mediaPlayer.stop()
-    }
-
-    /**
-     * Only called once during initialization.
-     */
-    private fun initRingtones() = viewModelScope.launch {
-        withContext(Dispatchers.IO) {
-
-            require(initialSelection.isEmpty())
             val preSelectUris = settings.preSelectUris
 
             if (settings.showCustomRingtone) {
@@ -107,10 +86,19 @@ internal class RingtonePickerViewModel(application: Application) : AndroidViewMo
                             }
                         }
                 }
-            }
 
-            dataLoadedEvent.postValue(true)
+                dataLoadedEvent.postValue(true)
+            }
         }
+    }
+
+    fun startPlaying(uri: Uri) {
+        mediaPlayer.stop()
+        mediaPlayer.play(uri, true, settings.streamType)
+    }
+
+    fun stopPlaying() {
+        mediaPlayer.stop()
     }
 
     fun addCustomRingtone(title: String, uri: Uri) {
