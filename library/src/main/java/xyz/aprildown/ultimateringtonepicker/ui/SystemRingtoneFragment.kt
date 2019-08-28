@@ -1,5 +1,6 @@
 package xyz.aprildown.ultimateringtonepicker.ui
 
+import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -21,12 +22,16 @@ import com.mikepenz.fastadapter.adapters.GenericItemAdapter
 import com.mikepenz.fastadapter.diff.FastAdapterDiffUtil
 import com.mikepenz.fastadapter.listeners.CustomEventHook
 import com.mikepenz.fastadapter.select.getSelectExtension
+import pub.devrel.easypermissions.EasyPermissions
+import pub.devrel.easypermissions.PermissionRequest
 import xyz.aprildown.ultimateringtonepicker.R
 import xyz.aprildown.ultimateringtonepicker.RINGTONE_URI_SILENT
 import xyz.aprildown.ultimateringtonepicker.RingtonePickerViewModel
 import xyz.aprildown.ultimateringtonepicker.data.Ringtone
 
-internal class SystemRingtoneFragment : Fragment(), Navigator.Selector {
+internal class SystemRingtoneFragment : Fragment(),
+    Navigator.Selector,
+    EasyPermissions.PermissionCallbacks {
 
     private val viewModel by navGraphViewModels<RingtonePickerViewModel>(R.id.urp_nav_graph)
 
@@ -122,16 +127,53 @@ internal class SystemRingtoneFragment : Fragment(), Navigator.Selector {
     private fun pickCustom() {
         viewModel.stopPlaying()
         if (viewModel.settings.useSafSelect) {
-            startActivityForResult(
-                Intent(Intent.ACTION_OPEN_DOCUMENT)
-                    .addCategory(Intent.CATEGORY_OPENABLE)
-                    .setType("audio/*")
-                    .addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION),
-                0
-            )
+            launchSaf()
         } else {
-            findNavController().navigate(R.id.urp_dest_device)
+            val permission = Manifest.permission.READ_EXTERNAL_STORAGE
+            if (EasyPermissions.hasPermissions(requireContext(), permission)) {
+                launchDevicePick()
+            } else {
+                EasyPermissions.requestPermissions(
+                    PermissionRequest.Builder(this, 0, permission)
+                        .setRationale(R.string.urp_permission_external_rational)
+                        .setPositiveButtonText(android.R.string.ok)
+                        .setNegativeButtonText(android.R.string.cancel)
+                        .build()
+                )
+            }
         }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
+    }
+
+    override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {
+        launchDevicePick()
+    }
+
+    override fun onPermissionsDenied(requestCode: Int, perms: MutableList<String>) {
+        if (EasyPermissions.permissionPermanentlyDenied(this, perms[0])) {
+            launchSaf()
+        }
+    }
+
+    private fun launchSaf() {
+        startActivityForResult(
+            Intent(Intent.ACTION_OPEN_DOCUMENT)
+                .addCategory(Intent.CATEGORY_OPENABLE)
+                .setType("audio/*")
+                .addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION),
+            0
+        )
+    }
+
+    private fun launchDevicePick() {
+        findNavController().navigate(R.id.urp_dest_device)
     }
 
     /**

@@ -51,4 +51,6 @@ dependencies {
 
     implementation libs.fastadapter
     implementation libs.fastadapter_diff
+
+    implementation libs.easy_permission
 }

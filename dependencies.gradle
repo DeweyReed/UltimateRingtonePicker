@@ -33,5 +33,7 @@ ext {
 
             fastadapter                 : 'com.mikepenz:fastadapter:4.0.1',
             fastadapter_diff            : 'com.mikepenz:fastadapter-extensions-diff:4.0.1',
+
+            easy_permission             : 'pub.devrel:easypermissions:3.0.0',
     ]
 }
