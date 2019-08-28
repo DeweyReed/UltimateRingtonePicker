@@ -86,7 +86,7 @@ class RingtonePickerFragment : Fragment() {
             }
         ).get(RingtonePickerViewModel::class.java)
 
-        viewModel.totalSelection.observe(viewLifecycleOwner, Observer {
+        viewModel.finalSelection.observe(viewLifecycleOwner, Observer {
             if (it != null) {
                 pickListener.onRingtonePicked(it.map { ringtone -> ringtone.uri to ringtone.title })
             }

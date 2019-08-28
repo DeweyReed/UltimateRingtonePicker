@@ -62,7 +62,18 @@ internal class RingtoneFragment : Fragment(), Navigator.Selector {
         myself = this
     }
 
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        (view as? RecyclerView)?.retrievePositionFrom(savedInstanceState)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        (view as? RecyclerView)?.savePositionTo(outState)
+        super.onSaveInstanceState(outState)
+    }
+
     override fun onSelect() {
+        viewModel.stopPlaying()
         @Suppress("UNCHECKED_CAST")
         val ringtones =
             selectExtension?.selectedItems?.mapNotNull { (it as? VisibleRingtone)?.ringtone }
@@ -77,12 +88,13 @@ internal class RingtoneFragment : Fragment(), Navigator.Selector {
     }
 
     override fun onBack(): Boolean {
+        viewModel.stopPlaying()
+        // TODO: If we pop back to DeviceRingtoneFragment, the scroll position is lost.
         return findNavController().popBackStack()
     }
 
     override fun onPause() {
         super.onPause()
-        viewModel.stopPlaying()
         myself = null
     }
 

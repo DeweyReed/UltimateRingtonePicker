@@ -42,7 +42,7 @@ internal class CategoryFragment : Fragment() {
             when (item) {
                 is VisibleCategory -> {
                     findNavController().navigate(
-                        R.id.urp_action_device_to_list,
+                        R.id.urp_dest_ringtone_list,
                         Bundle().apply {
                             putInt(KEY_RINGTONE_TYPE, categoryType.categoryTypeToRingtoneType())
                             putLong(KEY_EXTRA_ID, item.category.categoryId)
@@ -70,5 +70,15 @@ internal class CategoryFragment : Fragment() {
                     )
                 })
             })
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        (view as? RecyclerView)?.retrievePositionFrom(savedInstanceState)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        (view as? RecyclerView)?.savePositionTo(outState)
+        super.onSaveInstanceState(outState)
     }
 }

@@ -2,7 +2,6 @@ package xyz.aprildown.ultimateringtonepicker.app
 
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_ringtone_picker.*
 import xyz.aprildown.ultimateringtonepicker.RingtonePickerFragment
@@ -37,7 +36,7 @@ class MusicPickerActivity : AppCompatActivity(),
         btnCancel.setOnClickListener {
             val fragment = supportFragmentManager.findFragmentByTag(TAG_RINGTONE_PICKER)
             if ((fragment as RingtonePickerFragment).onBackClick()) {
-                Log.i("???", "onBackClick")
+                toast("Back")
                 finish()
             }
         }
@@ -54,7 +53,7 @@ class MusicPickerActivity : AppCompatActivity(),
     }
 
     override fun onRingtonePicked(ringtones: List<Pair<Uri, String>>) {
-        Log.i("???", ringtones.joinToString { it.second })
+        toast(ringtones.joinToString(separator = "\n") { it.second })
         finish()
     }
 }

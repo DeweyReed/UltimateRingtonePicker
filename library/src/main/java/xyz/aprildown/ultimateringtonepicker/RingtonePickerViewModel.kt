@@ -28,16 +28,19 @@ internal class RingtonePickerViewModel(
 
     private val mediaPlayer by lazy { AsyncRingtonePlayer(context) }
 
-    val initialSelection = mutableListOf<Ringtone>()
+    val currentSelectedUris = mutableSetOf<Uri>()
 
     private val customRingtoneModel by lazy { CustomRingtoneModel(context) }
     val customRingtones = mutableSetOf<Ringtone>()
     private val systemRingtoneModel by lazy { SystemRingtoneModel(context) }
     val systemRingtones = ArrayMap<Int, List<Ringtone>>()
 
-    val dataLoadedEvent = MutableLiveData<Boolean>()
+    /**
+     * Use this event to get [customRingtones] and [systemRingtones].
+     */
+    val systemRingtoneLoadedEvent = MutableLiveData<Boolean>()
 
-    val totalSelection = MutableLiveData<List<Ringtone>>()
+    val finalSelection = MutableLiveData<List<Ringtone>>()
 
     private val deviceRingtoneModel by lazy { DeviceRingtoneModel(context) }
 
@@ -48,26 +51,29 @@ internal class RingtonePickerViewModel(
 
     /**
      * Artists, albums and folders
+     * Key: [CATEGORY_TYPE_ARTIST], [CATEGORY_TYPE_ALBUM], [CATEGORY_TYPE_FOLDER] and no more.
      */
     private val categories = ArrayMap<Int, MutableLiveData<List<Category>>>()
 
     /**
      * Since folder ringtones have a different load mechanism, we use another map to host them.
+     * Key: Folder id
      */
     private val folderRingtones = ArrayMap<Long, MutableLiveData<List<Ringtone>>>()
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
 
-            check(initialSelection.isEmpty())
+            check(currentSelectedUris.isEmpty())
 
             val preSelectUris = settings.preSelectUris
 
             if (settings.showCustomRingtone) {
                 customRingtones.addAll(customRingtoneModel.getCustomRingtones().map {
                     Ringtone(it.uri, it.title).also { ringtone ->
-                        if (ringtone.uri in preSelectUris) {
-                            initialSelection.add(ringtone)
+                        val uri = ringtone.uri
+                        if (uri in preSelectUris) {
+                            currentSelectedUris.add(uri)
                         }
                     }
                 })
@@ -84,15 +90,16 @@ internal class RingtonePickerViewModel(
                                 it,
                                 systemRingtoneModel.getRingtoneTitle(it)
                             ).also { ringtone ->
-                                if (ringtone.uri in preSelectUris) {
-                                    initialSelection.add(ringtone)
+                                val uri = ringtone.uri
+                                if (uri in preSelectUris) {
+                                    currentSelectedUris.add(uri)
                                 }
                             }
                         }
                 }
-
-                dataLoadedEvent.postValue(true)
             }
+
+            systemRingtoneLoadedEvent.postValue(true)
         }
     }
 
@@ -105,7 +112,7 @@ internal class RingtonePickerViewModel(
         mediaPlayer.stop()
     }
 
-    fun addCustomRingtone(title: String, uri: Uri) {
+    private fun addCustomRingtone(title: String, uri: Uri) {
         customRingtoneModel.addCustomMusic(uri, title)
     }
 
@@ -114,18 +121,18 @@ internal class RingtonePickerViewModel(
     }
 
     fun onDeviceSelection(selectedRingtones: List<Ringtone>) {
-        initialSelection.addAll(selectedRingtones)
+        currentSelectedUris.addAll(selectedRingtones.map { it.uri })
 
         selectedRingtones.forEach {
             addCustomRingtone(it.title, it.uri)
         }
-        // In this way we can keep ringtone order.
+        // In this way we can keep ringtone order. They're cached anyway.
         customRingtones.clear()
         customRingtones.addAll(customRingtoneModel.getCustomRingtones().map {
             Ringtone(it.uri, it.title)
         })
 
-        dataLoadedEvent.value = true
+        systemRingtoneLoadedEvent.value = true
     }
 
     fun onSafSelect(contentResolver: ContentResolver, uri: Uri) {
@@ -162,7 +169,7 @@ internal class RingtonePickerViewModel(
     }
 
     fun onTotalSelection(selectedRingtones: List<Ringtone>) {
-        totalSelection.value = selectedRingtones
+        finalSelection.value = selectedRingtones
     }
 
     fun initDeviceRingtones() = viewModelScope.launch(Dispatchers.Default) {

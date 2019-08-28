@@ -40,7 +40,6 @@ dependencies {
 
     implementation libs.appcompat
     implementation libs.recyclerview
-    implementation libs.viewpager
 
     implementation libs.material
 

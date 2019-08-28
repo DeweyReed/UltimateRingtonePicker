@@ -101,7 +101,7 @@ internal class SystemRingtoneFragment : Fragment(), Navigator.Selector {
             }
         })
 
-        viewModel.dataLoadedEvent.observe(viewLifecycleOwner, Observer<Boolean> {
+        viewModel.systemRingtoneLoadedEvent.observe(viewLifecycleOwner, Observer<Boolean> {
             if (it == true) {
                 loadRingtonesIntoAdapter(context, itemAdapter)
             }
@@ -130,7 +130,7 @@ internal class SystemRingtoneFragment : Fragment(), Navigator.Selector {
                 0
             )
         } else {
-            findNavController().navigate(R.id.urp_action_system_to_device)
+            findNavController().navigate(R.id.urp_dest_device)
         }
     }
 
@@ -232,20 +232,18 @@ internal class SystemRingtoneFragment : Fragment(), Navigator.Selector {
         }
 
         // Deselect all
+        // TODO: Sync selectExtension with currentSelectedUris
         val selectExtension = fastAdapter.getSelectExtension()
-        selectExtension.selectedItems.forEach {
-            selectExtension.deselect(it)
+        selectExtension.deleteAllSelectedItems()
+
+        val viewModelSelect = viewModel.currentSelectedUris
+        items.forEach { item ->
+            if (item is VisibleRingtone && item.ringtone.uri in viewModelSelect) {
+                item.isSelected = true
+            }
         }
 
         FastAdapterDiffUtil[itemAdapter] = items
-
-        // Select view model initialSelection
-        val viewModelSelect = viewModel.initialSelection
-        items.forEachIndexed { index, item ->
-            if (item is VisibleRingtone && item.ringtone in viewModelSelect) {
-                selectExtension.select(index)
-            }
-        }
     }
 
     override fun onDestroyView() {

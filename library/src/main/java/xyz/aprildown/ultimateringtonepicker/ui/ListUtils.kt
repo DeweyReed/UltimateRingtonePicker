@@ -1,10 +1,14 @@
 package xyz.aprildown.ultimateringtonepicker.ui
 
+import android.os.Bundle
+import android.os.Parcelable
+import androidx.recyclerview.widget.RecyclerView
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.IItem
 import com.mikepenz.fastadapter.ISelectionListener
 import com.mikepenz.fastadapter.select.SelectExtension
 import com.mikepenz.fastadapter.select.getSelectExtension
+import xyz.aprildown.ultimateringtonepicker.KEY_LAYOUT_MANAGER_POSITION
 import xyz.aprildown.ultimateringtonepicker.RINGTONE_URI_SILENT
 import xyz.aprildown.ultimateringtonepicker.RingtonePickerViewModel
 
@@ -41,5 +45,17 @@ internal fun FastAdapter<IItem<*>>.setUpSelectableRingtoneExtension(
                 viewModel.stopPlaying()
             }
         }
+    }
+}
+
+internal fun RecyclerView.savePositionTo(outState: Bundle) {
+    layoutManager?.onSaveInstanceState()?.let {
+        outState.putParcelable(KEY_LAYOUT_MANAGER_POSITION, it)
+    }
+}
+
+internal fun RecyclerView.retrievePositionFrom(savedInstanceState: Bundle?) {
+    savedInstanceState?.getParcelable<Parcelable>(KEY_LAYOUT_MANAGER_POSITION)?.let {
+        layoutManager?.onRestoreInstanceState(it)
     }
 }

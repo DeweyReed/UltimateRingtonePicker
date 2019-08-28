@@ -23,6 +23,8 @@ internal const val KEY_RINGTONE_TYPE = "ringtone_type"
 internal const val KEY_CATEGORY_TYPE = "category_type"
 internal const val KEY_EXTRA_ID = "category_id"
 
+internal const val KEY_LAYOUT_MANAGER_POSITION = "layout_manager_position"
+
 internal const val RINGTONE_TYPE_ALL = 0
 internal const val RINGTONE_TYPE_ARTIST = 10
 internal const val RINGTONE_TYPE_ALBUM = 11
