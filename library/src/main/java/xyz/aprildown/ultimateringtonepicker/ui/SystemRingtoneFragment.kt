@@ -274,7 +274,6 @@ internal class SystemRingtoneFragment : Fragment(),
         }
 
         // Deselect all
-        // TODO: Sync selectExtension with currentSelectedUris
         val selectExtension = fastAdapter.getSelectExtension()
         selectExtension.deleteAllSelectedItems()
 
@@ -286,6 +285,16 @@ internal class SystemRingtoneFragment : Fragment(),
         }
 
         FastAdapterDiffUtil[itemAdapter] = items
+    }
+
+    override fun onPause() {
+        super.onPause()
+        viewModel.currentSelectedUris.clear()
+        viewModel.currentSelectedUris.addAll(
+            fastAdapter.getSelectExtension().selectedItems.mapNotNull {
+                (it as? VisibleRingtone)?.ringtone?.uri
+            }
+        )
     }
 
     override fun onDestroyView() {
