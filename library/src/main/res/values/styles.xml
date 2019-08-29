@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--<style name="URP.DialogTheme" parent="Theme.MaterialComponents.Dialog.Alert" tools:ignore="PrivateResource">-->
+    <!--<item name="android:windowMinWidthMajor">@dimen/abc_dialog_min_width_major</item>-->
+    <!--<item name="android:windowMinWidthMinor">@dimen/abc_dialog_min_width_minor</item>-->
+    <!--</style>-->
+
+</resources>

@@ -28,13 +28,7 @@ class RingtonePickerFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        pickListener = when {
-            // Check parentFragment first in case using MusicPickerDialog
-            parentFragment is RingtonePickerListener -> parentFragment as RingtonePickerListener
-            context is RingtonePickerListener -> context
-            activity is RingtonePickerListener -> activity as RingtonePickerListener
-            else -> throw IllegalStateException("Cannot find RingtonePickerListener")
-        }
+        pickListener = findRingtonePickerListener()
     }
 
     override fun onCreateView(
@@ -50,7 +44,7 @@ class RingtonePickerFragment : Fragment() {
                 showCustomRingtone = true,
                 showDefault = false,
                 showSilent = true,
-                ringtoneTypes = listOf(
+                systemRingtoneTypes = listOf(
                     RingtoneManager.TYPE_RINGTONE,
                     RingtoneManager.TYPE_NOTIFICATION,
                     RingtoneManager.TYPE_ALARM
@@ -88,7 +82,9 @@ class RingtonePickerFragment : Fragment() {
 
         viewModel.finalSelection.observe(viewLifecycleOwner, Observer {
             if (it != null) {
-                pickListener.onRingtonePicked(it.map { ringtone -> ringtone.uri to ringtone.title })
+                pickListener.onRingtonePicked(it.map { ringtone ->
+                    RingtonePickerResult(ringtone.uri, ringtone.title)
+                })
             }
         })
 

@@ -23,8 +23,9 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".CustomActivity" />
-        <activity android:name=".MusicPickerActivity" />
+        <activity
+            android:name="xyz.aprildown.ultimateringtonepicker.RingtonePickerActivity"
+            android:parentActivityName=".MainActivity" />
     </application>
 
 </manifest>

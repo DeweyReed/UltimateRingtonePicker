@@ -2,18 +2,18 @@
 
 package xyz.aprildown.ultimateringtonepicker
 
-import android.content.ContentResolver
 import android.content.Context
 import android.graphics.drawable.Animatable
 import android.net.Uri
 import android.os.Build
 import android.view.View
 import android.widget.ImageView
-import androidx.annotation.AnyRes
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import xyz.aprildown.ultimateringtonepicker.data.CustomRingtone
 import java.text.Collator
 
+internal const val TAG_RINGTONE_PICKER = "ringtone_picker"
 internal const val EXTRA_SETTINGS = "settings"
 
 internal val RINGTONE_URI_SILENT: Uri = Uri.EMPTY
@@ -53,16 +53,6 @@ internal fun Context.safeContext(): Context =
         ContextCompat.createDeviceProtectedStorageContext(it) ?: it
     } ?: this
 
-/**
- * @param resourceId identifies an application resource
- * @return the Uri by which the application resource is accessed
- */
-internal fun Context.getResourceUri(@AnyRes resourceId: Int): Uri = Uri.Builder()
-    .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
-    .authority(packageName)
-    .path(resourceId.toString())
-    .build()
-
 internal fun isLOrLater(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
 
 internal fun isNOrLater(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
@@ -83,4 +73,12 @@ internal inline fun View.hide() {
 
 internal inline fun View.gone() {
     visibility = View.GONE
+}
+
+internal fun Fragment.findRingtonePickerListener(): RingtonePickerListener = when {
+    // Check parentFragment first in case using MusicPickerDialog
+    parentFragment is RingtonePickerListener -> parentFragment as RingtonePickerListener
+    context is RingtonePickerListener -> context as RingtonePickerListener
+    activity is RingtonePickerListener -> activity as RingtonePickerListener
+    else -> throw IllegalStateException("Cannot find RingtonePickerListener")
 }

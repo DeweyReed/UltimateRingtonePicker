@@ -79,11 +79,11 @@ internal class RingtonePickerViewModel(
                 })
             }
 
-            val ringtoneTypes = settings.ringtoneTypes
+            val ringtoneTypes = settings.systemRingtoneTypes
             // System ringtones doesn't change so we don't repeat loading.
             if (systemRingtones.isEmpty && ringtoneTypes.isNotEmpty()) {
                 systemRingtoneModel.preloadRingtoneTitles(ringtoneTypes)
-                settings.ringtoneTypes.forEach { ringtoneType ->
+                settings.systemRingtoneTypes.forEach { ringtoneType ->
                     systemRingtones[ringtoneType] =
                         systemRingtoneModel.getRingtones(ringtoneType).map {
                             Ringtone(
