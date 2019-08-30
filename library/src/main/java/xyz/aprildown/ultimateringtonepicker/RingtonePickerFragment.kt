@@ -31,8 +31,6 @@ class RingtonePickerFragment : NavHostFragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val context = view.context
-
         val settings = arguments?.getParcelable(EXTRA_SETTINGS)
             ?: UltimateRingtonePicker.Settings(
                 showCustomRingtone = true,
@@ -56,7 +54,7 @@ class RingtonePickerFragment : NavHostFragment() {
                 override fun <T : ViewModel?> create(modelClass: Class<T>): T {
                     return when (modelClass) {
                         RingtonePickerViewModel::class.java ->
-                            RingtonePickerViewModel(context, settings) as T
+                            RingtonePickerViewModel(requireActivity().application, settings) as T
                         else -> throw IllegalArgumentException()
                     }
                 }
