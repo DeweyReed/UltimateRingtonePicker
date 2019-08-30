@@ -16,7 +16,7 @@ class UltimateRingtonePicker {
         var defaultUri: Uri? = null,
         var defaultTitle: String? = null,
         var showSilent: Boolean = true,
-        var additionalRingtones: List<Pair<Uri, String>> = emptyList(),
+        var additionalRingtones: List<RingtonePickerEntry> = emptyList(),
         var preSelectUris: List<Uri> = emptyList(),
         var enableMultiSelect: Boolean = false,
         var streamType: Int = AudioManager.STREAM_MUSIC,
@@ -25,6 +25,22 @@ class UltimateRingtonePicker {
         var onlyShowDevice: Boolean = false,
         var deviceRingtoneTypes: List<Int> = emptyList()
     ) : Parcelable {
+
+        init {
+            require(!(showDefault && defaultUri == null)) {
+                "Provide a default URI when show default ringtone"
+            }
+            require(!(onlyShowDevice && deviceRingtoneTypes.isEmpty())) {
+                "Provide at least one device ringtone type when only show device ringtones"
+            }
+        }
+
+        fun createFragment(): RingtonePickerFragment = RingtonePickerFragment().apply {
+            arguments = Bundle().apply {
+                putParcelable(EXTRA_SETTINGS, this@Settings)
+            }
+        }
+
         companion object {
             const val SYSTEM_RINGTONE_TYPE_RINGTONE = RingtoneManager.TYPE_RINGTONE
             const val SYSTEM_RINGTONE_TYPE_NOTIFICATION = RingtoneManager.TYPE_NOTIFICATION
@@ -53,11 +69,4 @@ class UltimateRingtonePicker {
                 )
         }
     }
-
-    fun createFragment(settings: Settings): RingtonePickerFragment =
-        RingtonePickerFragment().apply {
-            arguments = Bundle().apply {
-                putParcelable(EXTRA_SETTINGS, settings)
-            }
-        }
 }

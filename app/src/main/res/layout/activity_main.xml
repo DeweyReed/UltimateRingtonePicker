@@ -18,7 +18,7 @@
             style="@style/ExampleButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="RingtonePickerActivity"
+            android:text="Standard Activity"
             android:textAllCaps="false" />
 
         <Button
@@ -26,7 +26,7 @@
             style="@style/ExampleButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="RingtonePickerDialog"
+            android:text="Standard Fragment"
             android:textAllCaps="false" />
 
     </LinearLayout>

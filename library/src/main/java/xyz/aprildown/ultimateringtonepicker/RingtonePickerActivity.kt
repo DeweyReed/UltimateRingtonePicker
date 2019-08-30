@@ -22,9 +22,9 @@ class RingtonePickerActivity : AppCompatActivity(), RingtonePickerListener {
         }
 
         if (savedInstanceState == null) {
-            val fragment = UltimateRingtonePicker().createFragment(
-                intent.getParcelableExtra(EXTRA_SETTINGS)
-            )
+            val fragment =
+                intent.getParcelableExtra<UltimateRingtonePicker.Settings>(EXTRA_SETTINGS)
+                    .createFragment()
             supportFragmentManager.beginTransaction()
                 .add(R.id.layoutRingtonePicker, fragment, TAG_RINGTONE_PICKER)
                 .setPrimaryNavigationFragment(fragment)
@@ -53,7 +53,7 @@ class RingtonePickerActivity : AppCompatActivity(), RingtonePickerListener {
         }
     }
 
-    override fun onRingtonePicked(ringtones: List<RingtonePickerResult>) {
+    override fun onRingtonePicked(ringtones: List<RingtonePickerEntry>) {
         setResult(
             Activity.RESULT_OK,
             Intent()
@@ -78,7 +78,7 @@ class RingtonePickerActivity : AppCompatActivity(), RingtonePickerListener {
         }
 
         @JvmStatic
-        fun getPickerResult(intent: Intent): List<RingtonePickerResult> {
+        fun getPickerResult(intent: Intent): List<RingtonePickerEntry> {
             return intent.getParcelableArrayListExtra(EXTRA_RESULT)
         }
     }

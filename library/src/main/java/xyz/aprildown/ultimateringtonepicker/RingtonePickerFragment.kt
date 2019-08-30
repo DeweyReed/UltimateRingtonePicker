@@ -83,7 +83,7 @@ class RingtonePickerFragment : Fragment() {
         viewModel.finalSelection.observe(viewLifecycleOwner, Observer {
             if (it != null) {
                 pickListener.onRingtonePicked(it.map { ringtone ->
-                    RingtonePickerResult(ringtone.uri, ringtone.title)
+                    RingtonePickerEntry(ringtone.uri, ringtone.title)
                 })
             }
         })

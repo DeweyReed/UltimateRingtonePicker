@@ -242,7 +242,7 @@ internal class SystemRingtoneFragment : Fragment(),
             settings.additionalRingtones.forEach {
                 items.add(
                     VisibleRingtone(
-                        ringtone = Ringtone(it.first, it.second),
+                        ringtone = Ringtone(it.uri, it.name),
                         ringtoneType = VisibleRingtone.RINGTONE_TYPE_SYSTEM
                     )
                 )
@@ -278,13 +278,20 @@ internal class SystemRingtoneFragment : Fragment(),
         selectExtension.deleteAllSelectedItems()
 
         val viewModelSelect = viewModel.currentSelectedUris
-        items.forEach { item ->
+        var firstIndex = RecyclerView.NO_POSITION
+        items.forEachIndexed { index, item ->
             if (item is VisibleRingtone && item.ringtone.uri in viewModelSelect) {
+                if (firstIndex == RecyclerView.NO_POSITION) {
+                    firstIndex = index
+                }
                 item.isSelected = true
             }
         }
 
         FastAdapterDiffUtil[itemAdapter] = items
+        if (firstIndex != RecyclerView.NO_POSITION) {
+            (view as? RecyclerView)?.scrollToPosition(firstIndex)
+        }
     }
 
     override fun onPause() {

@@ -10,16 +10,37 @@
         android:layout_height="0dp"
         android:layout_weight="1" />
 
-    <Button
-        android:id="@+id/btnSelect"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/urp_select_ringtone" />
+    <include layout="@layout/urp_horizontal_divider" />
 
-    <Button
-        android:id="@+id/btnCancel"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@android:string/cancel" />
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnCancel"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginBottom="2dp"
+            android:layout_weight="1"
+            android:text="@android:string/cancel" />
+
+        <Button
+            android:id="@+id/btnSelect"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="2dp"
+            android:layout_weight="1"
+            android:text="@string/urp_select_ringtone" />
+
+    </LinearLayout>
 
 </LinearLayout>

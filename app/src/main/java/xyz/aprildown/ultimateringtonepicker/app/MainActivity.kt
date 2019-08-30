@@ -7,11 +7,13 @@ import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import xyz.aprildown.ultimateringtonepicker.RingtonePickerActivity
 import xyz.aprildown.ultimateringtonepicker.RingtonePickerDialog
+import xyz.aprildown.ultimateringtonepicker.RingtonePickerEntry
 import xyz.aprildown.ultimateringtonepicker.RingtonePickerListener
-import xyz.aprildown.ultimateringtonepicker.RingtonePickerResult
 import xyz.aprildown.ultimateringtonepicker.UltimateRingtonePicker
 
 class MainActivity : AppCompatActivity(), RingtonePickerListener {
+
+    private var currentSelectedRingtones = listOf<RingtonePickerEntry>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,16 +27,7 @@ class MainActivity : AppCompatActivity(), RingtonePickerListener {
             startActivityForResult(
                 RingtonePickerActivity.putInfoToLaunchIntent(
                     Intent(this, RingtonePickerActivity::class.java),
-                    UltimateRingtonePicker.Settings(
-                        showCustomRingtone = true,
-                        showDefault = true,
-                        defaultUri = getResourceUri(R.raw.default_ringtone),
-                        defaultTitle = "Default Title",
-                        showSilent = true,
-                        systemRingtoneTypes = UltimateRingtonePicker.Settings.allSystemRingtoneTypes,
-                        useSafSelect = false,
-                        deviceRingtoneTypes = UltimateRingtonePicker.Settings.allDeviceRingtoneTypes
-                    ),
+                    createStandardSettings(),
                     "Picker Picker"
                 ),
                 0
@@ -42,32 +35,42 @@ class MainActivity : AppCompatActivity(), RingtonePickerListener {
         }
         btnDialog.setOnClickListener {
             RingtonePickerDialog.createInstance(
-                UltimateRingtonePicker.Settings(
-                    showCustomRingtone = true,
-                    showDefault = false,
-                    showSilent = true,
-                    systemRingtoneTypes = UltimateRingtonePicker.Settings.allSystemRingtoneTypes,
-                    enableMultiSelect = true,
-                    useSafSelect = true
-                ),
+                createStandardSettings(),
                 "Dialog!"
             ).show(supportFragmentManager, null)
         }
     }
 
+    private fun createStandardSettings(): UltimateRingtonePicker.Settings =
+        UltimateRingtonePicker.Settings(
+            showDefault = true,
+            defaultUri = getResourceUri(R.raw.default_ringtone),
+            defaultTitle = "Default Ringtone",
+            additionalRingtones = listOf(
+                RingtonePickerEntry(
+                    getResourceUri(R.raw.short_message),
+                    "Ringtone from raw"
+                )
+            ),
+            preSelectUris = currentSelectedRingtones.map { it.uri },
+            systemRingtoneTypes = UltimateRingtonePicker.Settings.allSystemRingtoneTypes,
+            deviceRingtoneTypes = UltimateRingtonePicker.Settings.allDeviceRingtoneTypes
+        )
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK) {
-            showResult(RingtonePickerActivity.getPickerResult(data!!))
+            handleResult(RingtonePickerActivity.getPickerResult(data!!))
         } else {
             super.onActivityResult(requestCode, resultCode, data)
         }
     }
 
-    override fun onRingtonePicked(ringtones: List<RingtonePickerResult>) {
-        showResult(ringtones)
+    override fun onRingtonePicked(ringtones: List<RingtonePickerEntry>) {
+        handleResult(ringtones)
     }
 
-    private fun showResult(ringtones: List<RingtonePickerResult>) {
+    private fun handleResult(ringtones: List<RingtonePickerEntry>) {
+        currentSelectedRingtones = ringtones
         toast(ringtones.joinToString(separator = "\n") { it.name })
     }
 }

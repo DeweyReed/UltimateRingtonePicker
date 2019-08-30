@@ -17,9 +17,8 @@ class RingtonePickerDialog : DialogFragment(), RingtonePickerListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         if (savedInstanceState == null) {
-            val fragment = UltimateRingtonePicker().createFragment(
-                arguments?.getParcelable(EXTRA_SETTINGS)!!
-            )
+            val fragment = arguments?.getParcelable<UltimateRingtonePicker.Settings>(EXTRA_SETTINGS)
+                ?.createFragment()!!
             childFragmentManager.beginTransaction()
                 .add(R.id.urpFrameDialog, fragment, TAG_RINGTONE_PICKER)
                 .setPrimaryNavigationFragment(fragment)
@@ -47,7 +46,7 @@ class RingtonePickerDialog : DialogFragment(), RingtonePickerListener {
         }
     }
 
-    override fun onRingtonePicked(ringtones: List<RingtonePickerResult>) {
+    override fun onRingtonePicked(ringtones: List<RingtonePickerEntry>) {
         findRingtonePickerListener().onRingtonePicked(ringtones)
         dismiss()
     }

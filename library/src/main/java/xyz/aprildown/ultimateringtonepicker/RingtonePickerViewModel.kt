@@ -64,18 +64,11 @@ internal class RingtonePickerViewModel(
     init {
         viewModelScope.launch(Dispatchers.IO) {
 
-            check(currentSelectedUris.isEmpty())
-
-            val preSelectUris = settings.preSelectUris
+            currentSelectedUris.addAll(settings.preSelectUris)
 
             if (settings.showCustomRingtone) {
                 customRingtones.addAll(customRingtoneModel.getCustomRingtones().map {
-                    Ringtone(it.uri, it.title).also { ringtone ->
-                        val uri = ringtone.uri
-                        if (uri in preSelectUris) {
-                            currentSelectedUris.add(uri)
-                        }
-                    }
+                    Ringtone(it.uri, it.title)
                 })
             }
 
@@ -86,15 +79,7 @@ internal class RingtonePickerViewModel(
                 settings.systemRingtoneTypes.forEach { ringtoneType ->
                     systemRingtones[ringtoneType] =
                         systemRingtoneModel.getRingtones(ringtoneType).map {
-                            Ringtone(
-                                it,
-                                systemRingtoneModel.getRingtoneTitle(it)
-                            ).also { ringtone ->
-                                val uri = ringtone.uri
-                                if (uri in preSelectUris) {
-                                    currentSelectedUris.add(uri)
-                                }
-                            }
+                            Ringtone(it, systemRingtoneModel.getRingtoneTitle(it))
                         }
                 }
             }
