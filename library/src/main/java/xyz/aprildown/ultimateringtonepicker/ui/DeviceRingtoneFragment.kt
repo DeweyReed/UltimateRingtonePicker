@@ -54,6 +54,11 @@ internal class DeviceRingtoneFragment : Fragment(), Navigator.Selector {
             findNavController().popBackStack()
         }
     }
+
+    override fun onPause() {
+        super.onPause()
+        viewModel.stopPlaying()
+    }
 }
 
 private class CategoryAdapter(

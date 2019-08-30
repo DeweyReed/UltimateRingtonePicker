@@ -95,6 +95,7 @@ internal class RingtoneFragment : Fragment(), Navigator.Selector {
 
     override fun onPause() {
         super.onPause()
+        viewModel.stopPlaying()
         myself = null
     }
 

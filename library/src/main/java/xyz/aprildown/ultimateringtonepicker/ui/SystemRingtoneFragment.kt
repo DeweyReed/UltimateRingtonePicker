@@ -296,6 +296,7 @@ internal class SystemRingtoneFragment : Fragment(),
 
     override fun onPause() {
         super.onPause()
+        viewModel.stopPlaying()
         viewModel.currentSelectedUris.clear()
         viewModel.currentSelectedUris.addAll(
             fastAdapter.getSelectExtension().selectedItems.mapNotNull {
@@ -306,7 +307,6 @@ internal class SystemRingtoneFragment : Fragment(),
 
     override fun onDestroyView() {
         super.onDestroyView()
-        viewModel.stopPlaying()
         _fastAdapter = null
     }
 }
