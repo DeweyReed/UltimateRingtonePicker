@@ -157,7 +157,7 @@ internal class RingtonePickerViewModel(
         finalSelection.value = selectedRingtones
     }
 
-    fun initDeviceRingtones() = viewModelScope.launch(Dispatchers.Default) {
+    fun ensureDeviceRingtones() = viewModelScope.launch(Dispatchers.Default) {
         if (categories.isEmpty && deviceRingtones.value == null) {
 
             deviceRingtones.postValue(deviceRingtoneModel.getAllDeviceRingtones())

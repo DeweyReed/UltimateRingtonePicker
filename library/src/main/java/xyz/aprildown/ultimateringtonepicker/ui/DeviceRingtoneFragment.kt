@@ -26,11 +26,6 @@ internal class DeviceRingtoneFragment : Fragment(), Navigator.Selector {
 
     private val viewModel by navGraphViewModels<RingtonePickerViewModel>(R.id.urp_nav_graph)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel.initDeviceRingtones()
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -44,7 +39,7 @@ internal class DeviceRingtoneFragment : Fragment(), Navigator.Selector {
         viewPager.adapter = CategoryAdapter(this, viewModel.settings.deviceRingtoneTypes)
         tabLayout.setupWithViewPager(viewPager)
 
-        // viewPager.onRestoreInstanceState(savedInstanceState?.getParcelable(KEY_VIEW_PAGER_STATE))
+        viewModel.ensureDeviceRingtones()
     }
 
     override fun onSelect() {
@@ -105,5 +100,3 @@ private class CategoryAdapter(
         else -> null
     }
 }
-
-private const val KEY_VIEW_PAGER_STATE = "view_pager_state"

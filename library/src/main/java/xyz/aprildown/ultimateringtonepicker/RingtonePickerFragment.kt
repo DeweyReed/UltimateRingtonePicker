@@ -3,14 +3,13 @@ package xyz.aprildown.ultimateringtonepicker
 import android.content.Context
 import android.media.RingtoneManager
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.navGraphViewModels
 import xyz.aprildown.ultimateringtonepicker.ui.Navigator
 
 /**
@@ -22,7 +21,7 @@ import xyz.aprildown.ultimateringtonepicker.ui.Navigator
  *       - [CategoryFragment]
  *         - [RingtoneFragment]
  */
-class RingtonePickerFragment : Fragment() {
+class RingtonePickerFragment : NavHostFragment() {
 
     private lateinit var pickListener: RingtonePickerListener
 
@@ -31,12 +30,7 @@ class RingtonePickerFragment : Fragment() {
         pickListener = findRingtonePickerListener()
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.urp_fragment_ringtone_picker, container, false)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val context = view.context
 
         val settings = arguments?.getParcelable(EXTRA_SETTINGS)
@@ -51,23 +45,12 @@ class RingtonePickerFragment : Fragment() {
                 )
             )
 
-        if (savedInstanceState == null) {
-            val fragment = NavHostFragment()
-            childFragmentManager.beginTransaction()
-                .replace(R.id.layoutUrpRoot, fragment)
-                .setPrimaryNavigationFragment(fragment)
-                .commitNow()
-        }
-
-        val navController = findNavHostFragment().navController
-
         navController.graph = navController.navInflater.inflate(R.navigation.urp_nav_graph).apply {
             startDestination =
                 if (settings.onlyShowDevice) R.id.urp_dest_device else R.id.urp_dest_system
         }
 
-        val viewModel = ViewModelProvider(
-            navController.getViewModelStoreOwner(R.id.urp_nav_graph).viewModelStore,
+        val viewModel by navGraphViewModels<RingtonePickerViewModel>(R.id.urp_nav_graph) {
             object : ViewModelProvider.Factory {
                 @Suppress("UNCHECKED_CAST")
                 override fun <T : ViewModel?> create(modelClass: Class<T>): T {
@@ -78,7 +61,7 @@ class RingtonePickerFragment : Fragment() {
                     }
                 }
             }
-        ).get(RingtonePickerViewModel::class.java)
+        }
 
         viewModel.finalSelection.observe(viewLifecycleOwner, Observer {
             if (it != null) {
@@ -87,15 +70,9 @@ class RingtonePickerFragment : Fragment() {
                 })
             }
         })
-
-        return view
     }
 
-    private fun findNavHostFragment(): NavHostFragment =
-        childFragmentManager.findFragmentById(R.id.layoutUrpRoot) as NavHostFragment
-
-    private fun findOurTopFragment(): Fragment? =
-        findNavHostFragment().childFragmentManager.primaryNavigationFragment
+    private fun findOurTopFragment(): Fragment? = childFragmentManager.primaryNavigationFragment
 
     fun onSelectClick() {
         val topFragment = findOurTopFragment()
