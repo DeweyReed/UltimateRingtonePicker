@@ -54,6 +54,7 @@ internal class RingtoneFragment : Fragment(), Navigator.Selector {
                     ringtoneType = VisibleRingtone.RINGTONE_TYPE_CUSTOM
                 )
             })
+            selectExtension?.withSavedInstanceState(savedInstanceState, "")
         })
     }
 
@@ -69,6 +70,7 @@ internal class RingtoneFragment : Fragment(), Navigator.Selector {
 
     override fun onSaveInstanceState(outState: Bundle) {
         (view as? RecyclerView)?.savePositionTo(outState)
+        selectExtension?.saveInstanceState(outState, "")
         super.onSaveInstanceState(outState)
     }
 
