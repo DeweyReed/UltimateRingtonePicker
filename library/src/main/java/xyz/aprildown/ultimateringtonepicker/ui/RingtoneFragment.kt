@@ -54,6 +54,7 @@ internal class RingtoneFragment : Fragment(), Navigator.Selector {
                     ringtoneType = VisibleRingtone.RINGTONE_TYPE_CUSTOM
                 )
             })
+            recyclerView.retrievePositionFrom(savedInstanceState)
             selectExtension?.withSavedInstanceState(savedInstanceState, "")
         })
     }
@@ -63,13 +64,8 @@ internal class RingtoneFragment : Fragment(), Navigator.Selector {
         myself = this
     }
 
-    override fun onViewStateRestored(savedInstanceState: Bundle?) {
-        super.onViewStateRestored(savedInstanceState)
-        (view as? RecyclerView)?.retrievePositionFrom(savedInstanceState)
-    }
-
     override fun onSaveInstanceState(outState: Bundle) {
-        (view as? RecyclerView)?.savePositionTo(outState)
+        viewAsRecyclerView()?.savePositionTo(outState)
         selectExtension?.saveInstanceState(outState, "")
         super.onSaveInstanceState(outState)
     }
@@ -97,7 +93,6 @@ internal class RingtoneFragment : Fragment(), Navigator.Selector {
 
     override fun onPause() {
         super.onPause()
-        viewModel.stopPlaying()
         myself = null
     }
 

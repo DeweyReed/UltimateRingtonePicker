@@ -109,11 +109,18 @@ internal class SystemRingtoneFragment : Fragment(),
         viewModel.systemRingtoneLoadedEvent.observe(viewLifecycleOwner, Observer<Boolean> {
             if (it == true) {
                 loadRingtonesIntoAdapter(context, itemAdapter)
+                list.retrievePositionFrom(savedInstanceState)
             }
         })
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        viewAsRecyclerView()?.savePositionTo(outState)
+        super.onSaveInstanceState(outState)
+    }
+
     override fun onSelect() {
+        viewModel.stopPlaying()
         val selectedItems = fastAdapter.getSelectExtension().selectedItems
         viewModel.onTotalSelection(selectedItems.mapNotNull {
             (it as? VisibleRingtone)?.ringtone
@@ -121,6 +128,7 @@ internal class SystemRingtoneFragment : Fragment(),
     }
 
     override fun onBack(): Boolean {
+        viewModel.stopPlaying()
         return false
     }
 
@@ -290,13 +298,12 @@ internal class SystemRingtoneFragment : Fragment(),
 
         FastAdapterDiffUtil[itemAdapter] = items
         if (firstIndex != RecyclerView.NO_POSITION) {
-            (view as? RecyclerView)?.scrollToPosition(firstIndex)
+            viewAsRecyclerView()?.scrollToPosition(firstIndex)
         }
     }
 
     override fun onPause() {
         super.onPause()
-        viewModel.stopPlaying()
         viewModel.currentSelectedUris.clear()
         viewModel.currentSelectedUris.addAll(
             fastAdapter.getSelectExtension().selectedItems.mapNotNull {

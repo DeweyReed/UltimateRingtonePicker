@@ -37,6 +37,11 @@ internal class DeviceRingtoneFragment : Fragment(), Navigator.Selector {
         val viewPager = view.findViewById<ViewPager>(R.id.urpDeviceViewPager)
 
         viewPager.adapter = CategoryAdapter(this, viewModel.settings.deviceRingtoneTypes)
+        viewPager.addOnPageChangeListener(object : ViewPager.SimpleOnPageChangeListener() {
+            override fun onPageSelected(position: Int) {
+                viewModel.stopPlaying()
+            }
+        })
         tabLayout.setupWithViewPager(viewPager)
 
         viewModel.ensureDeviceRingtones()
@@ -53,11 +58,6 @@ internal class DeviceRingtoneFragment : Fragment(), Navigator.Selector {
         } else {
             findNavController().popBackStack()
         }
-    }
-
-    override fun onPause() {
-        super.onPause()
-        viewModel.stopPlaying()
     }
 }
 

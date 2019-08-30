@@ -2,6 +2,7 @@ package xyz.aprildown.ultimateringtonepicker.ui
 
 import android.os.Bundle
 import android.os.Parcelable
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.IItem
@@ -59,3 +60,5 @@ internal fun RecyclerView.retrievePositionFrom(savedInstanceState: Bundle?) {
         layoutManager?.onRestoreInstanceState(it)
     }
 }
+
+internal fun Fragment.viewAsRecyclerView(): RecyclerView? = view as? RecyclerView

@@ -74,11 +74,11 @@ internal class CategoryFragment : Fragment() {
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
-        (view as? RecyclerView)?.retrievePositionFrom(savedInstanceState)
+        viewAsRecyclerView()?.retrievePositionFrom(savedInstanceState)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        (view as? RecyclerView)?.savePositionTo(outState)
+        viewAsRecyclerView()?.savePositionTo(outState)
         super.onSaveInstanceState(outState)
     }
 }
