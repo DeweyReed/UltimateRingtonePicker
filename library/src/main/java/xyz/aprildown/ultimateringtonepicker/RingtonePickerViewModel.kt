@@ -89,7 +89,6 @@ internal class RingtonePickerViewModel(
     }
 
     fun startPlaying(uri: Uri) {
-        mediaPlayer.stop()
         mediaPlayer.play(uri, true, settings.streamType)
     }
 

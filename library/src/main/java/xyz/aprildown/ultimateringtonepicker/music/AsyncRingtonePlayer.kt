@@ -71,12 +71,15 @@ internal class AsyncRingtonePlayer(
                 when (msg.what) {
                     EVENT_PLAY -> {
                         val data = msg.data
-                        mPlaybackDelegate.play(
-                            mContext,
-                            data.getParcelable(RINGTONE_URI_KEY),
-                            data.getBoolean(LOOP),
-                            data.getInt(STREAM_TYPE)
-                        )
+                        val uri = data.getParcelable<Uri?>(RINGTONE_URI_KEY)
+                        if (uri != mPlaybackDelegate.currentPlayingUri) {
+                            mPlaybackDelegate.play(
+                                mContext,
+                                uri,
+                                data.getBoolean(LOOP),
+                                data.getInt(STREAM_TYPE)
+                            )
+                        }
                     }
                     EVENT_STOP -> mPlaybackDelegate.stop(mContext)
                 }
@@ -127,6 +130,8 @@ internal class AsyncRingtonePlayer(
      */
     private interface PlaybackDelegate {
 
+        var currentPlayingUri: Uri?
+
         fun play(context: Context, ringtoneUri: Uri?, loop: Boolean, streamType: Int)
 
         fun stop(context: Context)
@@ -150,6 +155,9 @@ internal class AsyncRingtonePlayer(
         /**
          * Starts the actual playback of the ringtone. Executes on ringtone-thread.
          */
+
+        override var currentPlayingUri: Uri? = null
+
         override fun play(context: Context, ringtoneUri: Uri?, loop: Boolean, streamType: Int) {
             checkAsyncRingtonePlayerThread()
             mLoop = loop
@@ -181,10 +189,12 @@ internal class AsyncRingtonePlayer(
                 // If alarmNoise is a custom ringtone on the sd card the app must be granted
                 // android.permission.READ_EXTERNAL_STORAGE. Pre-M this is ensured at app
                 // installation time. M+, this permission can be revoked by the user any time.
+                currentPlayingUri = alarmNoise
                 mMediaPlayer?.setDataSource(context, alarmNoise!!)
 
                 startPlayback(inTelephoneCall)
             } catch (t: Throwable) {
+                currentPlayingUri = null
                 // The alarmNoise may be on the sd card which could be busy right now.
                 try {
                     // Must reset the media player to clear the error state.
@@ -257,6 +267,8 @@ internal class AsyncRingtonePlayer(
          */
         override fun stop(context: Context) {
             checkAsyncRingtonePlayerThread()
+
+            currentPlayingUri = null
 
             // Stop audio playing
             if (mMediaPlayer != null) {
