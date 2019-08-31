@@ -1,5 +1,6 @@
 package xyz.aprildown.ultimateringtonepicker
 
+import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +9,14 @@ import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 
 class RingtonePickerDialog : DialogFragment(), RingtonePickerListener {
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        return object : Dialog(requireContext(), theme) {
+            override fun onBackPressed() {
+                handleBack()
+            }
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,15 +43,19 @@ class RingtonePickerDialog : DialogFragment(), RingtonePickerListener {
             }
         }
         view.findViewById<View>(R.id.urpBtnDialogCancel).setOnClickListener {
-            if ((childFragmentManager.findFragmentByTag(TAG_RINGTONE_PICKER)
-                        as RingtonePickerFragment).onBackClick()
-            ) {
-                dismiss()
-            }
+            handleBack()
         }
         view.findViewById<View>(R.id.urpBtnDialogSelect).setOnClickListener {
             (childFragmentManager.findFragmentByTag(TAG_RINGTONE_PICKER) as RingtonePickerFragment)
                 .onSelectClick()
+        }
+    }
+
+    private fun handleBack() {
+        if ((childFragmentManager.findFragmentByTag(TAG_RINGTONE_PICKER)
+                    as RingtonePickerFragment).onBackClick()
+        ) {
+            dismiss()
         }
     }
 

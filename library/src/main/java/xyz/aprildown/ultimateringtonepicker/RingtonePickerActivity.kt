@@ -43,7 +43,15 @@ class RingtonePickerActivity : AppCompatActivity(), RingtonePickerListener {
         }
     }
 
+    override fun onBackPressed() {
+        handleBack()
+    }
+
     override fun onSupportNavigateUp(): Boolean {
+        return handleBack()
+    }
+
+    private fun handleBack(): Boolean {
         val fragment = supportFragmentManager.findFragmentByTag(TAG_RINGTONE_PICKER)
         return if ((fragment as RingtonePickerFragment).onBackClick()) {
             finish()
