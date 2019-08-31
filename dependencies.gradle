@@ -1,6 +1,6 @@
 ext {
     versions = [
-            agp         : '3.4.2',
+            agp         : '3.5.0',
             kotlin      : '1.3.50',
 
             compile_sdk : 28,
