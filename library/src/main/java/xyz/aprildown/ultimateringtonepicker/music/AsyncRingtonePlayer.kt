@@ -33,10 +33,6 @@ import java.io.IOException
  * Ringtone playback is accomplished using
  * [MediaPlayer]. android.permission.READ_EXTERNAL_STORAGE is required to play custom
  * ringtones located on the SD card using this mechanism.
- *
- * If the [MediaPlayer] fails to play the requested audio, an
- * [in-app fallback][.getFallbackRingtoneUri] is used because playing **some**
- * sort of noise is always preferable to remaining silent.
  */
 internal class AsyncRingtonePlayer(
     /** The context. */
@@ -73,6 +69,7 @@ internal class AsyncRingtonePlayer(
                         val data = msg.data
                         val uri = data.getParcelable<Uri?>(RINGTONE_URI_KEY)
                         if (uri != mPlaybackDelegate.currentPlayingUri) {
+                            mPlaybackDelegate.stop(mContext)
                             mPlaybackDelegate.play(
                                 mContext,
                                 uri,

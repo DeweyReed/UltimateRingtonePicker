@@ -197,6 +197,10 @@ internal class RingtonePickerViewModel(
             liveData
         }
     }
+
+    override fun onCleared() {
+        stopPlaying()
+    }
 }
 
 private fun List<Ringtone>.filterWithType(
