@@ -21,6 +21,7 @@ import com.mikepenz.fastadapter.IItem
 import com.mikepenz.fastadapter.adapters.GenericItemAdapter
 import com.mikepenz.fastadapter.diff.FastAdapterDiffUtil
 import com.mikepenz.fastadapter.listeners.CustomEventHook
+import com.mikepenz.fastadapter.select.SelectExtension
 import com.mikepenz.fastadapter.select.getSelectExtension
 import pub.devrel.easypermissions.EasyPermissions
 import pub.devrel.easypermissions.PermissionRequest
@@ -90,12 +91,14 @@ internal class SystemRingtoneFragment : Fragment(),
 
                                 if (item.isSelected) {
                                     viewModel.stopPlaying()
-                                }
 
-                                viewModel.settings.defaultUri?.let { defaultUri ->
-                                    selectExtension.select(itemAdapter.adapterItems.indexOfFirst {
-                                        it is VisibleRingtone && it.ringtone.uri == defaultUri
-                                    })
+                                    if (selectExtension.selectedItems.size == 1) {
+                                        viewModel.settings.defaultUri?.let { defaultUri ->
+                                            selectExtension.select(itemAdapter.adapterItems.indexOfFirst {
+                                                it is VisibleRingtone && it.ringtone.uri == defaultUri
+                                            })
+                                        }
+                                    }
                                 }
 
                                 itemAdapter.remove(viewHolder.adapterPosition)
@@ -108,15 +111,13 @@ internal class SystemRingtoneFragment : Fragment(),
 
         viewModel.systemRingtoneLoadedEvent.observe(viewLifecycleOwner, Observer<Boolean> {
             if (it == true) {
-                loadRingtonesIntoAdapter(context, itemAdapter)
-                list.retrievePositionFrom(savedInstanceState)
+                loadVisibleRingtones(
+                    context,
+                    itemAdapter,
+                    selectExtension
+                )
             }
         })
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        viewAsRecyclerView()?.savePositionTo(outState)
-        super.onSaveInstanceState(outState)
     }
 
     override fun onSelect() {
@@ -200,7 +201,36 @@ internal class SystemRingtoneFragment : Fragment(),
         }
     }
 
-    private fun loadRingtonesIntoAdapter(context: Context, itemAdapter: GenericItemAdapter) {
+    private fun loadVisibleRingtones(
+        context: Context,
+        itemAdapter: GenericItemAdapter,
+        selectExtension: SelectExtension<*>
+    ) {
+        selectExtension.deleteAllSelectedItems()
+
+        val items = createVisibleItems(context)
+
+        val currentSelection = viewModel.currentSelectedUris
+        var firstIndex = RecyclerView.NO_POSITION
+        items.forEachIndexed { index, item ->
+            if (item is VisibleRingtone && item.ringtone.uri in currentSelection) {
+                if (firstIndex == RecyclerView.NO_POSITION) {
+                    firstIndex = index
+                }
+                item.isSelected = true
+            }
+        }
+
+        FastAdapterDiffUtil[itemAdapter] = items
+
+        // We only want to scroll to the first selected item
+        // when we enter the picker for the first time.
+        if (viewModel.requireFirstLoad() && firstIndex != RecyclerView.NO_POSITION) {
+            viewAsRecyclerView()?.scrollToPosition(firstIndex)
+        }
+    }
+
+    private fun createVisibleItems(context: Context): List<IItem<*>> {
         val items = mutableListOf<IItem<*>>()
         val settings = viewModel.settings
 
@@ -281,25 +311,7 @@ internal class SystemRingtoneFragment : Fragment(),
             }
         }
 
-        // Deselect all
-        val selectExtension = fastAdapter.getSelectExtension()
-        selectExtension.deleteAllSelectedItems()
-
-        val viewModelSelect = viewModel.currentSelectedUris
-        var firstIndex = RecyclerView.NO_POSITION
-        items.forEachIndexed { index, item ->
-            if (item is VisibleRingtone && item.ringtone.uri in viewModelSelect) {
-                if (firstIndex == RecyclerView.NO_POSITION) {
-                    firstIndex = index
-                }
-                item.isSelected = true
-            }
-        }
-
-        FastAdapterDiffUtil[itemAdapter] = items
-        if (firstIndex != RecyclerView.NO_POSITION) {
-            viewAsRecyclerView()?.scrollToPosition(firstIndex)
-        }
+        return items
     }
 
     override fun onPause() {

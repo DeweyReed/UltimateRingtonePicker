@@ -36,10 +36,7 @@ class RingtonePickerActivity : AppCompatActivity(), RingtonePickerListener {
             (fragment as RingtonePickerFragment).onSelectClick()
         }
         btnCancel.setOnClickListener {
-            val fragment = supportFragmentManager.findFragmentByTag(TAG_RINGTONE_PICKER)
-            if ((fragment as RingtonePickerFragment).onBackClick()) {
-                finish()
-            }
+            handleBack()
         }
     }
 

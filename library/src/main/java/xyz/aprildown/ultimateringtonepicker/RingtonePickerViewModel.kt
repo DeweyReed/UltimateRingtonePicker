@@ -39,6 +39,7 @@ internal class RingtonePickerViewModel(
      * Use this event to get [customRingtones] and [systemRingtones].
      */
     val systemRingtoneLoadedEvent = MutableLiveData<Boolean>()
+    private var firstLoad: Boolean = true
 
     val finalSelection = MutableLiveData<List<Ringtone>>()
 
@@ -105,6 +106,10 @@ internal class RingtonePickerViewModel(
     }
 
     fun onDeviceSelection(selectedRingtones: List<Ringtone>) {
+        if (!settings.enableMultiSelect && selectedRingtones.isNotEmpty()) {
+            require(selectedRingtones.size == 1)
+            currentSelectedUris.clear()
+        }
         currentSelectedUris.addAll(selectedRingtones.map { it.uri })
 
         selectedRingtones.forEach {
@@ -117,6 +122,12 @@ internal class RingtonePickerViewModel(
         })
 
         systemRingtoneLoadedEvent.value = true
+    }
+
+    fun requireFirstLoad(): Boolean {
+        val result = firstLoad
+        firstLoad = false
+        return result
     }
 
     fun onSafSelect(contentResolver: ContentResolver, uri: Uri) {

@@ -71,14 +71,4 @@ internal class CategoryFragment : Fragment() {
                 })
             })
     }
-
-    override fun onViewStateRestored(savedInstanceState: Bundle?) {
-        super.onViewStateRestored(savedInstanceState)
-        viewAsRecyclerView()?.retrievePositionFrom(savedInstanceState)
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        viewAsRecyclerView()?.savePositionTo(outState)
-        super.onSaveInstanceState(outState)
-    }
 }

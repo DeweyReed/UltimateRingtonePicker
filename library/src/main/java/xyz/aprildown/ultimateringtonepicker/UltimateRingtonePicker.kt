@@ -33,6 +33,9 @@ class UltimateRingtonePicker {
             require(!(onlyShowDevice && deviceRingtoneTypes.isEmpty())) {
                 "Provide at least one device ringtone type when only show device ringtones"
             }
+            if (!enableMultiSelect && preSelectUris.size > 1) {
+                preSelectUris = preSelectUris.take(1)
+            }
         }
 
         fun createFragment(): RingtonePickerFragment = RingtonePickerFragment().apply {
