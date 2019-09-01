@@ -18,16 +18,28 @@
             style="@style/ExampleButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Standard Activity"
-            android:textAllCaps="false" />
+            android:text="Standard Activity" />
 
         <Button
             android:id="@+id/btnDialog"
             style="@style/ExampleButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Standard Fragment"
-            android:textAllCaps="false" />
+            android:text="Standard Dialog" />
+
+        <Button
+            android:id="@+id/btnSystem"
+            style="@style/ExampleButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="System Ringtone Picker Dialog" />
+
+        <Button
+            android:id="@+id/btnAllDeviceRingtones"
+            style="@style/ExampleButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="All Device Ringtones Dialog" />
 
     </LinearLayout>
 

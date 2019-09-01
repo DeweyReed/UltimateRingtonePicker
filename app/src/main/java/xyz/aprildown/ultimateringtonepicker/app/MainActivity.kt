@@ -39,6 +39,18 @@ class MainActivity : AppCompatActivity(), RingtonePickerListener {
                 "Dialog!"
             ).show(supportFragmentManager, null)
         }
+        btnSystem.setOnClickListener {
+            RingtonePickerDialog.createInstance(
+                createSystemRingtonePickerSettings(),
+                "System Ringtones"
+            ).show(supportFragmentManager, null)
+        }
+        btnAllDeviceRingtones.setOnClickListener {
+            RingtonePickerDialog.createInstance(
+                createDeviceRingtonesSettings(),
+                "All Device Ringtones"
+            ).show(supportFragmentManager, null)
+        }
     }
 
     private fun createStandardSettings(): UltimateRingtonePicker.Settings =
@@ -55,6 +67,19 @@ class MainActivity : AppCompatActivity(), RingtonePickerListener {
             preSelectUris = currentSelectedRingtones.map { it.uri },
             systemRingtoneTypes = UltimateRingtonePicker.Settings.allSystemRingtoneTypes,
             deviceRingtoneTypes = UltimateRingtonePicker.Settings.allDeviceRingtoneTypes
+        )
+
+    private fun createSystemRingtonePickerSettings(): UltimateRingtonePicker.Settings =
+        UltimateRingtonePicker.Settings(
+            showCustomRingtone = false,
+            preSelectUris = currentSelectedRingtones.map { it.uri },
+            systemRingtoneTypes = UltimateRingtonePicker.Settings.allSystemRingtoneTypes
+        )
+
+    private fun createDeviceRingtonesSettings(): UltimateRingtonePicker.Settings =
+        UltimateRingtonePicker.Settings(
+            onlyShowDevice = true,
+            deviceRingtoneTypes = listOf(UltimateRingtonePicker.Settings.DEVICE_RINGTONE_TYPE_ALL)
         )
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
