@@ -21,6 +21,7 @@ import xyz.aprildown.ultimateringtonepicker.RINGTONE_TYPE_ALL
 import xyz.aprildown.ultimateringtonepicker.RINGTONE_TYPE_ARTIST
 import xyz.aprildown.ultimateringtonepicker.RINGTONE_TYPE_FOLDER
 import xyz.aprildown.ultimateringtonepicker.RingtonePickerViewModel
+import xyz.aprildown.ultimateringtonepicker.gone
 
 internal class DeviceRingtoneFragment : Fragment(), Navigator.Selector {
 
@@ -36,12 +37,18 @@ internal class DeviceRingtoneFragment : Fragment(), Navigator.Selector {
         val tabLayout = view.findViewById<TabLayout>(R.id.urpDeviceTabLayout)
         val viewPager = view.findViewById<ViewPager>(R.id.urpDeviceViewPager)
 
-        viewPager.adapter = CategoryAdapter(this, viewModel.settings.deviceRingtoneTypes)
+        val deviceRingtonesTypes = viewModel.settings.deviceRingtoneTypes
+
+        viewPager.adapter = CategoryAdapter(this, deviceRingtonesTypes)
         viewPager.addOnPageChangeListener(object : ViewPager.SimpleOnPageChangeListener() {
             override fun onPageSelected(position: Int) {
                 viewModel.stopPlaying()
             }
         })
+
+        if (deviceRingtonesTypes.size == 1) {
+            tabLayout.gone()
+        }
         tabLayout.setupWithViewPager(viewPager)
 
         viewModel.ensureDeviceRingtones()
