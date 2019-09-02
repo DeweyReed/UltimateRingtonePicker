@@ -167,7 +167,7 @@ internal class RingtonePickerViewModel(
         finalSelection.value = selectedRingtones
     }
 
-    fun ensureDeviceRingtones() = viewModelScope.launch(Dispatchers.Default) {
+    fun ensureDeviceRingtones() = viewModelScope.launch(Dispatchers.IO) {
         if (categories.isEmpty && deviceRingtones.value == null) {
 
             deviceRingtones.postValue(deviceRingtoneModel.getAllDeviceRingtones())
@@ -188,8 +188,8 @@ internal class RingtonePickerViewModel(
         return if (ringtoneType == RINGTONE_TYPE_FOLDER) {
             folderRingtones[extraId] ?: MutableLiveData<List<Ringtone>>().also {
                 folderRingtones[extraId] = it
-                viewModelScope.launch {
-                    it.value = deviceRingtoneModel.getFolderRingtones(extraId)
+                viewModelScope.launch(Dispatchers.IO) {
+                    it.postValue(deviceRingtoneModel.getFolderRingtones(extraId))
                 }
             }
         } else {
@@ -210,6 +210,7 @@ internal class RingtonePickerViewModel(
     }
 
     override fun onCleared() {
+        super.onCleared()
         stopPlaying()
     }
 }

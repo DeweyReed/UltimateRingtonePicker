@@ -124,7 +124,7 @@ internal class DeviceRingtoneModel(private val context: Context) {
 
     // region Folder
 
-    fun getFolders(): List<Category> {
+    private fun getFolders(): List<Category> {
         val data = mutableListOf<Category>()
         // This is hack. Is there any better way?
         context.contentResolver.query(
