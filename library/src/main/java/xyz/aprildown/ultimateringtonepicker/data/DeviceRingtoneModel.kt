@@ -130,10 +130,8 @@ internal class DeviceRingtoneModel(private val context: Context) {
         context.contentResolver.query(
             MediaStore.Files.getContentUri("external"),
             arrayOf(
-                MediaStore.Files.FileColumns._ID,
-                MediaStore.Files.FileColumns.TITLE,
                 MediaStore.Files.FileColumns.PARENT,
-                // MediaStore.Files.FileColumns.DATA,
+                // MediaStore.Files.FileColumns.DISPLAY_NAME,
                 "COUNT(${MediaStore.Files.FileColumns.DATA}) AS dataCount"
             ),
             """
@@ -141,7 +139,7 @@ internal class DeviceRingtoneModel(private val context: Context) {
                 ) GROUP BY (${MediaStore.Files.FileColumns.PARENT}
             """.trimIndent(),
             null,
-            "${MediaStore.MediaColumns.DATE_ADDED} DESC"
+            MediaStore.Files.FileColumns.TITLE
         )?.use {
             it.moveToPosition(-1)
             while (it.moveToNext()) {
@@ -158,17 +156,14 @@ internal class DeviceRingtoneModel(private val context: Context) {
                     null,
                     null
                 )?.use { parentCursor ->
-                    if (parentCursor.count == 1) {
-                        parentCursor.moveToPosition(0)
-                        val parentTitle = parentCursor.getString(0)
+                    parentCursor.moveToPosition(-1)
+                    while (parentCursor.moveToNext()) {
+                        val parentTitle = parentCursor.getString(
+                            parentCursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.TITLE)
+                        )
                         if (parentTitle != null) {
                             data.add(
-                                Category(
-                                    CATEGORY_TYPE_FOLDER,
-                                    parentId,
-                                    parentTitle,
-                                    numOfSongs
-                                )
+                                Category(CATEGORY_TYPE_FOLDER, parentId, parentTitle, numOfSongs)
                             )
                         }
                     }
@@ -188,7 +183,10 @@ internal class DeviceRingtoneModel(private val context: Context) {
             ),
             """
                 ${MediaStore.Files.FileColumns.PARENT} = $folderId AND
-                ${MediaStore.Files.FileColumns.MIME_TYPE} LIKE 'audio%'
+                (
+                    ${MediaStore.Files.FileColumns.MIME_TYPE} LIKE 'audio%' OR
+                    ${MediaStore.Files.FileColumns.MIME_TYPE} LIKE 'application/ogg'
+                )
             """.trimIndent(),
             null,
             MediaStore.Audio.Media.TITLE_KEY
