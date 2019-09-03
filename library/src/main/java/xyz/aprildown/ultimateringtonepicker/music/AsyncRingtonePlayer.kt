@@ -21,6 +21,7 @@ import android.os.Looper
 import android.os.Message
 import android.telephony.TelephonyManager
 import androidx.annotation.RequiresApi
+import xyz.aprildown.ultimateringtonepicker.UltimateRingtonePicker
 import xyz.aprildown.ultimateringtonepicker.isLOrLater
 import xyz.aprildown.ultimateringtonepicker.isOOrLater
 import java.io.IOException
@@ -187,7 +188,27 @@ internal class AsyncRingtonePlayer(
                 // android.permission.READ_EXTERNAL_STORAGE. Pre-M this is ensured at app
                 // installation time. M+, this permission can be revoked by the user any time.
                 currentPlayingUri = alarmNoise
-                mMediaPlayer?.setDataSource(context, alarmNoise!!)
+
+                when {
+                    alarmNoise?.toString()
+                        ?.startsWith(UltimateRingtonePicker.Settings.ASSET_URI_PREFIX) == true -> {
+                        val fileName = alarmNoise.toString().removePrefix(
+                            UltimateRingtonePicker.Settings.ASSET_URI_PREFIX
+                        )
+                        mContext.assets.openFd(fileName).use { afd ->
+                            mMediaPlayer?.setDataSource(
+                                afd.fileDescriptor,
+                                afd.startOffset,
+                                afd.length
+                            )
+                        }
+                    }
+                    else -> {
+                        mMediaPlayer?.setDataSource(context, alarmNoise!!)
+                    }
+
+                }
+
 
                 startPlayback(inTelephoneCall)
             } catch (t: Throwable) {

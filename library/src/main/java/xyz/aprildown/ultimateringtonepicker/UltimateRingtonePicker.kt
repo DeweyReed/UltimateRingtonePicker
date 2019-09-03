@@ -70,6 +70,11 @@ class UltimateRingtonePicker {
                     DEVICE_RINGTONE_TYPE_ALBUM,
                     DEVICE_RINGTONE_TYPE_FOLDER
                 )
+
+            internal const val ASSET_URI_PREFIX = "file:///android_asset/"
+
+            @JvmStatic
+            fun createAssetUri(fileName: String): Uri = Uri.parse("$ASSET_URI_PREFIX$fileName")
         }
     }
 }

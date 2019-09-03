@@ -10,6 +10,7 @@ import xyz.aprildown.ultimateringtonepicker.RingtonePickerDialog
 import xyz.aprildown.ultimateringtonepicker.RingtonePickerEntry
 import xyz.aprildown.ultimateringtonepicker.RingtonePickerListener
 import xyz.aprildown.ultimateringtonepicker.UltimateRingtonePicker
+import java.io.File
 
 class MainActivity : AppCompatActivity(), RingtonePickerListener {
 
@@ -51,6 +52,16 @@ class MainActivity : AppCompatActivity(), RingtonePickerListener {
                 "All Device Ringtones"
             ).show(supportFragmentManager, null)
         }
+        btnAdditionalRingtones.setOnClickListener {
+            startActivityForResult(
+                RingtonePickerActivity.putInfoToLaunchIntent(
+                    Intent(this, RingtonePickerActivity::class.java),
+                    createAdditionalRingtonesSettings(),
+                    "Additional"
+                ),
+                0
+            )
+        }
     }
 
     private fun createStandardSettings(): UltimateRingtonePicker.Settings =
@@ -61,7 +72,7 @@ class MainActivity : AppCompatActivity(), RingtonePickerListener {
             additionalRingtones = listOf(
                 RingtonePickerEntry(
                     getResourceUri(R.raw.short_message),
-                    "Ringtone from raw"
+                    "R.raw.short_message"
                 )
             ),
             preSelectUris = currentSelectedRingtones.map { it.uri },
@@ -80,6 +91,28 @@ class MainActivity : AppCompatActivity(), RingtonePickerListener {
         UltimateRingtonePicker.Settings(
             onlyShowDevice = true,
             deviceRingtoneTypes = listOf(UltimateRingtonePicker.Settings.DEVICE_RINGTONE_TYPE_ALL)
+        )
+
+    private fun createAdditionalRingtonesSettings(): UltimateRingtonePicker.Settings =
+        UltimateRingtonePicker.Settings(
+            showCustomRingtone = false,
+            showDefault = true,
+            defaultUri = getResourceUri(R.raw.default_ringtone),
+            defaultTitle = "Default Ringtone",
+            additionalRingtones = listOf(
+                RingtonePickerEntry(
+                    getResourceUri(R.raw.short_message),
+                    "R.raw.short_message"
+                ), RingtonePickerEntry(
+                    UltimateRingtonePicker.Settings.createAssetUri("asset1.wav"),
+                    "Assets/asset1.mp3"
+                ),
+                RingtonePickerEntry(
+                    UltimateRingtonePicker.Settings.createAssetUri("ringtones${File.separator}asset2.mp3"),
+                    "Assets/ringtones/asset2.mp3"
+                )
+            ),
+            preSelectUris = currentSelectedRingtones.map { it.uri }
         )
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

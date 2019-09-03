@@ -41,6 +41,13 @@
             android:layout_height="wrap_content"
             android:text="All Device Ringtones Dialog" />
 
+        <Button
+            android:id="@+id/btnAdditionalRingtones"
+            style="@style/ExampleButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Additional Ringtones Activity" />
+
     </LinearLayout>
 
 </ScrollView>
