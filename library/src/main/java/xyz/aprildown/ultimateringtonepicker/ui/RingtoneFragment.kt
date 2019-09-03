@@ -48,13 +48,17 @@ internal class RingtoneFragment : Fragment(), Navigator.Selector {
             requireArguments().getInt(KEY_RINGTONE_TYPE),
             requireArguments().getLong(KEY_EXTRA_ID)
         ).observe(viewLifecycleOwner, Observer { ringtones ->
-            itemAdapter.setNewList(ringtones.map { ringtone ->
-                VisibleRingtone(
-                    ringtone = ringtone,
-                    ringtoneType = VisibleRingtone.RINGTONE_TYPE_CUSTOM
-                )
-            })
-            selectExtension?.withSavedInstanceState(savedInstanceState, "")
+            if (ringtones.isNotEmpty()) {
+                itemAdapter.setNewList(ringtones.map { ringtone ->
+                    VisibleRingtone(
+                        ringtone = ringtone,
+                        ringtoneType = VisibleRingtone.RINGTONE_TYPE_CUSTOM
+                    )
+                })
+                selectExtension?.withSavedInstanceState(savedInstanceState, "")
+            } else {
+                itemAdapter.setNewList(listOf(VisibleEmptyView()))
+            }
         })
     }
 

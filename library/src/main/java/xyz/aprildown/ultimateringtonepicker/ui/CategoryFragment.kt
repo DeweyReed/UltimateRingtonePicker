@@ -60,15 +60,21 @@ internal class CategoryFragment : Fragment() {
             addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
         }
 
-        viewModel.getCategoryLiveData(categoryType)
-            .observe(viewLifecycleOwner, Observer { categories ->
-                itemAdapter.add(categories.map { category ->
-                    VisibleCategory(
-                        category = category,
-                        primaryText = category.name,
-                        secondaryText = category.numberOfSongs.toString()
-                    )
-                })
-            })
+        viewModel.getCategoryLiveData(categoryType).observe(
+            viewLifecycleOwner,
+            Observer { categories ->
+                if (categories.isNotEmpty()) {
+                    itemAdapter.setNewList(categories.map { category ->
+                        VisibleCategory(
+                            category = category,
+                            primaryText = category.name,
+                            secondaryText = category.numberOfSongs.toString()
+                        )
+                    })
+                } else {
+                    itemAdapter.setNewList(listOf(VisibleEmptyView()))
+                }
+            }
+        )
     }
 }
