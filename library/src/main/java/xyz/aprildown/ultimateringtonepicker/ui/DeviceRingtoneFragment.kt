@@ -50,8 +50,6 @@ internal class DeviceRingtoneFragment : Fragment(), Navigator.Selector {
             tabLayout.gone()
         }
         tabLayout.setupWithViewPager(viewPager)
-
-        viewModel.ensureDeviceRingtones()
     }
 
     override fun onSelect() {

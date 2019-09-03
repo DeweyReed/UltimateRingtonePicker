@@ -48,13 +48,36 @@ internal class RingtonePickerViewModel(
     /**
      * All device ringtones. Artist and Album ringtones are filtered from this.
      */
-    private val deviceRingtones = MutableLiveData<List<Ringtone>>()
+    private val deviceRingtones by lazy {
+        val result = MutableLiveData<List<Ringtone>>()
+        viewModelScope.launch(Dispatchers.IO) {
+            result.postValue(deviceRingtoneModel.getAllDeviceRingtones())
+        }
+        result
+    }
 
     /**
      * Artists, albums and folders
      * Key: [CATEGORY_TYPE_ARTIST], [CATEGORY_TYPE_ALBUM], [CATEGORY_TYPE_FOLDER] and no more.
      */
-    private val categories = ArrayMap<Int, MutableLiveData<List<Category>>>()
+    private val categories by lazy {
+        ArrayMap<Int, MutableLiveData<List<Category>>>().also { map ->
+            arrayOf(
+                CATEGORY_TYPE_ARTIST,
+                CATEGORY_TYPE_ALBUM,
+                CATEGORY_TYPE_FOLDER
+            ).forEach { categoryType ->
+                map[categoryType] = MutableLiveData()
+            }
+            viewModelScope.launch(Dispatchers.IO) {
+                repeat(map.size) {
+                    val categoryType = map.keyAt(it)
+                    val liveData = map.valueAt(it)
+                    liveData.postValue(deviceRingtoneModel.getCategories(categoryType))
+                }
+            }
+        }
+    }
 
     /**
      * Since folder ringtones have a different load mechanism, we use another map to host them.
@@ -167,23 +190,6 @@ internal class RingtonePickerViewModel(
         finalSelection.value = selectedRingtones
     }
 
-    fun ensureDeviceRingtones() = viewModelScope.launch(Dispatchers.IO) {
-        if (categories.isEmpty && deviceRingtones.value == null) {
-
-            deviceRingtones.postValue(deviceRingtoneModel.getAllDeviceRingtones())
-
-            arrayOf(
-                CATEGORY_TYPE_ARTIST,
-                CATEGORY_TYPE_ALBUM,
-                CATEGORY_TYPE_FOLDER
-            ).forEach { categoryType ->
-                categories[categoryType] = MutableLiveData<List<Category>>().apply {
-                    postValue(deviceRingtoneModel.getCategories(categoryType))
-                }
-            }
-        }
-    }
-
     fun getRingtoneLiveData(ringtoneType: Int, extraId: Long): LiveData<List<Ringtone>> {
         return if (ringtoneType == RINGTONE_TYPE_FOLDER) {
             folderRingtones[extraId] ?: MutableLiveData<List<Ringtone>>().also {
@@ -200,13 +206,7 @@ internal class RingtonePickerViewModel(
     }
 
     fun getCategoryLiveData(categoryType: Int): LiveData<List<Category>> {
-        return if (categories.containsKey(categoryType)) {
-            categories[categoryType]!!
-        } else {
-            val liveData = MutableLiveData<List<Category>>()
-            categories[categoryType] = liveData
-            liveData
-        }
+        return categories[categoryType]!!
     }
 
     override fun onCleared() {
