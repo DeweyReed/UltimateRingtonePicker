@@ -23,7 +23,7 @@ class RingtonePickerActivity : AppCompatActivity(), RingtonePickerListener {
 
         if (savedInstanceState == null) {
             val fragment =
-                intent.getParcelableExtra<UltimateRingtonePicker.Settings>(EXTRA_SETTINGS)
+                intent.getParcelableExtra<UltimateRingtonePicker.Settings>(EXTRA_SETTINGS)!!
                     .createFragment()
             supportFragmentManager.beginTransaction()
                 .add(R.id.layoutRingtonePicker, fragment, TAG_RINGTONE_PICKER)
@@ -84,7 +84,7 @@ class RingtonePickerActivity : AppCompatActivity(), RingtonePickerListener {
 
         @JvmStatic
         fun getPickerResult(intent: Intent): List<RingtonePickerEntry> {
-            return intent.getParcelableArrayListExtra(EXTRA_RESULT)
+            return intent.getParcelableArrayListExtra(EXTRA_RESULT)!!
         }
     }
 }

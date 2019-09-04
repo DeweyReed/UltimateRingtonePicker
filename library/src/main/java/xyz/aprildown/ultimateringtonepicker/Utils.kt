@@ -57,6 +57,8 @@ internal fun isNOrLater(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODE
 
 internal fun isOOrLater(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
 
+internal fun isQOrLater(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
+
 internal fun ImageView.startDrawableAnimation() {
     (drawable as? Animatable)?.start()
 }
