@@ -10,11 +10,19 @@ import xyz.aprildown.ultimateringtonepicker.data.Category
 import xyz.aprildown.ultimateringtonepicker.data.Ringtone
 
 @RequiresApi(Build.VERSION_CODES.Q)
-internal class FolderRetrieverQ(private val context: Context) :
-    IFolderRetriever {
+internal class FolderRetrieverQ(private val context: Context) : IFolderRetriever {
+
+    private data class MutableFolder(
+        val folderId: Long,
+        val folderName: String,
+        var count: Int = 0
+    )
+
+    /**
+     * TODO: There must be something which can be improved but all SQLs I tried fail.
+     */
     override fun getFolders(): List<Category> {
-        val data = mutableListOf<Category>()
-        val allIds = mutableSetOf<Long>()
+        val folders = mutableListOf<MutableFolder>()
         // This is hack. Is there any better way?
         context.contentResolver.query(
             MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
@@ -30,24 +38,19 @@ internal class FolderRetrieverQ(private val context: Context) :
             while (it.moveToNext()) {
                 val bucketId =
                     it.getLong(it.getColumnIndexOrThrow(MediaStore.Files.FileColumns.BUCKET_ID))
-                // TODO
-                // val numOfSongs = it.getInt(it.getColumnIndexOrThrow("dataCount"))
-                val bucketName =
-                    it.getString(it.getColumnIndexOrThrow(MediaStore.Files.FileColumns.BUCKET_DISPLAY_NAME))
-                if (bucketId !in allIds) {
-                    data.add(
-                        Category(
-                            CATEGORY_TYPE_FOLDER,
-                            bucketId,
-                            bucketName,
-                            0
-                        )
-                    )
-                    allIds.add(bucketId)
+                val currentFolder = folders.find { folder -> folder.folderId == bucketId }
+                if (currentFolder == null) {
+                    val bucketName =
+                        it.getString(it.getColumnIndexOrThrow(MediaStore.Files.FileColumns.BUCKET_DISPLAY_NAME))
+                    folders.add(MutableFolder(bucketId, bucketName, count = 1))
+                } else {
+                    currentFolder.count += 1
                 }
             }
         }
-        return data
+        return folders.map {
+            Category(CATEGORY_TYPE_FOLDER, it.folderId, it.folderName, it.count)
+        }
     }
 
     override fun getRingtonesFromFolder(folderId: Long): List<Ringtone> {
