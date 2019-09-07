@@ -34,6 +34,7 @@ internal class VisibleRingtone(
 
             ringtoneImage.setImageResource(
                 when {
+                    !ringtone.isValid -> R.drawable.urp_broken_ringtone
                     ringtoneType == RINGTONE_TYPE_CUSTOM -> R.drawable.urp_custom_music
                     ringtoneType == RINGTONE_TYPE_SILENT -> R.drawable.urp_ringtone_silent
                     isPlaying -> R.drawable.urp_ringtone_active

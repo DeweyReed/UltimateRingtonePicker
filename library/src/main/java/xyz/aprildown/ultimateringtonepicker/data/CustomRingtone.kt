@@ -39,4 +39,6 @@ internal data class CustomRingtone(
      * {@code true} iff the application has permission to read the content of {@code mUri uri}.
      */
     var hasPermissions: Boolean = true
+
+    var exists: Boolean = true
 }

@@ -30,7 +30,9 @@ internal class RingtonePickerViewModel(
 
     val currentSelectedUris = mutableSetOf<Uri>()
 
-    private val customRingtoneModel by lazy { CustomRingtoneModel(application) }
+    private val customRingtoneModel by lazy {
+        CustomRingtoneModel(application, requireUriPermission = settings.useSafSelect)
+    }
     val customRingtones = mutableSetOf<Ringtone>()
     private val systemRingtoneModel by lazy { SystemRingtoneModel(application) }
     val systemRingtones = ArrayMap<Int, List<Ringtone>>()
@@ -91,9 +93,7 @@ internal class RingtonePickerViewModel(
             currentSelectedUris.addAll(settings.preSelectUris)
 
             if (settings.showCustomRingtone) {
-                customRingtones.addAll(customRingtoneModel.getCustomRingtones().map {
-                    Ringtone(it.uri, it.title)
-                })
+                customRingtones.addAll(customRingtoneModel.getCustomRingtones())
             }
 
             val ringtoneTypes = settings.systemRingtoneTypes
@@ -140,9 +140,7 @@ internal class RingtonePickerViewModel(
         }
         // In this way we can keep ringtone order. They're cached anyway.
         customRingtones.clear()
-        customRingtones.addAll(customRingtoneModel.getCustomRingtones().map {
-            Ringtone(it.uri, it.title)
-        })
+        customRingtones.addAll(customRingtoneModel.getCustomRingtones())
 
         systemRingtoneLoadedEvent.value = true
     }
