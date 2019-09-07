@@ -67,11 +67,11 @@ class MainActivity : AppCompatActivity(), RingtonePickerListener {
     private fun createStandardSettings(): UltimateRingtonePicker.Settings =
         UltimateRingtonePicker.Settings(
             showDefault = true,
-            defaultUri = getResourceUri(R.raw.default_ringtone),
+            defaultUri = UltimateRingtonePicker.Settings.createRawUri(this, R.raw.default_ringtone),
             defaultTitle = "Default Ringtone",
             additionalRingtones = listOf(
                 RingtonePickerEntry(
-                    getResourceUri(R.raw.short_message),
+                    UltimateRingtonePicker.Settings.createRawUri(this, R.raw.short_message),
                     "R.raw.short_message"
                 )
             ),
@@ -97,11 +97,11 @@ class MainActivity : AppCompatActivity(), RingtonePickerListener {
         UltimateRingtonePicker.Settings(
             showCustomRingtone = false,
             showDefault = true,
-            defaultUri = getResourceUri(R.raw.default_ringtone),
+            defaultUri = UltimateRingtonePicker.Settings.createRawUri(this, R.raw.default_ringtone),
             defaultTitle = "Default Ringtone",
             additionalRingtones = listOf(
                 RingtonePickerEntry(
-                    getResourceUri(R.raw.short_message),
+                    UltimateRingtonePicker.Settings.createRawUri(this, R.raw.short_message),
                     "R.raw.short_message"
                 ), RingtonePickerEntry(
                     UltimateRingtonePicker.Settings.createAssetUri("asset1.wav"),
