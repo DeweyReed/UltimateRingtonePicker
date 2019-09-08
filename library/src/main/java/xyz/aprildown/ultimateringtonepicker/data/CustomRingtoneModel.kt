@@ -89,7 +89,12 @@ private fun Context.getCustomMusicSharedPrefs(): SharedPreferences {
 }
 
 private fun ContentResolver.canFind(uri: Uri): Boolean {
-    return query(uri, arrayOf(BaseColumns._ID), null, null, null)?.use {
-        it.moveToFirst() && it.count == 1
-    } ?: false
+    return try {
+        query(uri, arrayOf(BaseColumns._ID), null, null, null)?.use {
+            it.moveToFirst() && it.count == 1
+        } ?: false
+    } catch (e: SecurityException) {
+        // We even don't have the permission to query.
+        false
+    }
 }
