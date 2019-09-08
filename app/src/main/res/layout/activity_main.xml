@@ -1,52 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:animateLayoutChanges="true"
     tools:context=".MainActivity"
     tools:ignore="HardcodedText">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="16dp">
 
         <Button
-            android:id="@+id/btnActivity"
             style="@style/ExampleButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:onClick="openPermission"
+            android:text="Manage App Permission"
+            app:backgroundTint="@android:color/holo_red_light" />
+
+        <Button
+            style="@style/ExampleButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="openStandardActivity"
             android:text="Standard Activity" />
 
         <Button
-            android:id="@+id/btnDialog"
             style="@style/ExampleButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:onClick="openStandardDialog"
             android:text="Standard Dialog" />
 
         <Button
-            android:id="@+id/btnSystem"
             style="@style/ExampleButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:onClick="emulateSystemDialog"
             android:text="System Ringtone Picker Dialog" />
 
         <Button
-            android:id="@+id/btnAllDeviceRingtones"
             style="@style/ExampleButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:onClick="showOnlyDeviceRingtones"
             android:text="All Device Ringtones Dialog" />
 
         <Button
-            android:id="@+id/btnAdditionalRingtones"
             style="@style/ExampleButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:onClick="useAdditionalRingtones"
             android:text="Additional Ringtones Activity" />
+
+        <Button
+            style="@style/ExampleButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="enableMultiSelect"
+            android:text="Multi Select Activity" />
+
+        <Button
+            style="@style/ExampleButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="safPick"
+            android:text="Storage Access Framework Dialog" />
 
     </LinearLayout>
 
