@@ -61,10 +61,10 @@ class RingtonePickerFragment : NavHostFragment() {
             }
         }
 
-        viewModel.finalSelection.observe(viewLifecycleOwner, Observer {
-            if (it != null) {
-                pickListener.onRingtonePicked(it.map { ringtone ->
-                    RingtonePickerEntry(ringtone.uri, ringtone.title)
+        viewModel.finalSelection.observe(viewLifecycleOwner, Observer { ringtones ->
+            if (ringtones != null) {
+                pickListener.onRingtonePicked(ringtones.filter { it.isValid }.map {
+                    RingtonePickerEntry(it.uri, it.title)
                 })
             }
         })
