@@ -1,1 +1,4 @@
-include ':app', ':library'
+rootProject.name='UltimateRingtonePicker'
+
+include ':library'
+include ':app'
