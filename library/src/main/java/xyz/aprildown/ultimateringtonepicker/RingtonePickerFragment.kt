@@ -1,7 +1,6 @@
 package xyz.aprildown.ultimateringtonepicker
 
 import android.content.Context
-import android.media.RingtoneManager
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
@@ -31,17 +30,7 @@ class RingtonePickerFragment : NavHostFragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val settings = arguments?.getParcelable(EXTRA_SETTINGS)
-            ?: UltimateRingtonePicker.Settings(
-                showCustomRingtone = true,
-                showDefault = false,
-                showSilent = true,
-                systemRingtoneTypes = listOf(
-                    RingtoneManager.TYPE_RINGTONE,
-                    RingtoneManager.TYPE_NOTIFICATION,
-                    RingtoneManager.TYPE_ALARM
-                )
-            )
+        val settings = arguments?.getParcelable(EXTRA_SETTINGS) ?: UltimateRingtonePicker.Settings()
 
         navController.graph = navController.navInflater.inflate(R.navigation.urp_nav_graph).apply {
             startDestination =
