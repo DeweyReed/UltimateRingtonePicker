@@ -2,10 +2,10 @@
   <img src="https://github.com/DeweyReed/UltimateMusicPicker/blob/master/art/ic_launcher-web.webp?raw=true" height="128" />
 </div>
 
-<h1 align="center">UltimateMusicPicker</h1>
+<h1 align="center">UltimateRingtonePicker</h1>
 
 <div align="center">
-  <strong>Pick ringtone, notification, alarm sound and music files from external storage with an Activity or a dialog</strong>
+  <strong>Pick ringtone, notification, alarm sound and ringtone files from external storage with an activity or a dialog</strong>
 </div>
 </br>
 <div align="center">
@@ -28,35 +28,30 @@
 </div>
 </br>
 
-## Overview
+**3.0 API has been changed completely. Use this library like you never used it before. [Click here to use the deprecated 2.X](./README_OLD.md).**
 
-- Separates music to alarm sound, notification sound, ringtone sound and external music files.
-- Provides interface to specify default item
-- Provides interface to add custom music items
-- Automatically remembers which external music files users picked
-- Music Preview
+## Features
+
+- Respects Scoped Storage(MediaStore is used)
 - Available as an Activity and a Dialog
-- Dark theme support
+- Provides options to pick alarm sound, notification sound, ringtone sound and external ringtones.
+- Ringtone preview
+- Provides interface to set a default entry
+- Provides interface to add custom ringtone entries
+- Sorts external ringtones with artists, albums and folders
+- Automatically remembers which external ringtones users picked
+- Multi Select
+- Dark theme support out of box
 - Permission are handled internally
-- AndroidX support
+- Storage Access Framework support
+
+This library targets Android 29 and uses `appcompat 1.1.0`.
 
 ## Screenshot
 
 ||||
 |:-:|:-:|:-:|
 |![Activity](https://github.com/DeweyReed/UltimateMusicPicker/blob/master/art/activity.webp?raw=true)|![Dialog](https://github.com/DeweyReed/UltimateMusicPicker/blob/master/art/dialog.webp?raw=true)|![Dark](https://github.com/DeweyReed/UltimateMusicPicker/blob/master/art/dark.webp?raw=true)|
-
-# Table of Contents
-
-1. [Sample APK](https://github.com/DeweyReed/UltimateMusicPicker/releases)
-1. [Gradle Dependency](#gradle-dependency)
-1. [Usage](#usage)
-1. [Advanced Usage](#advanced-usage)
-    1. [Custom Activity](#custom-activity)
-    1. [Dark Theme](#dark-theme)
-1. [Todo List](#todo-list)
-1. [Migrate from 1.X](#migrate-from-1x)
-1. [License](#license)
 
 ## Gradle Dependency
 
@@ -85,114 +80,71 @@ dependencies {
 
 ## Usage
 
-1. If you wish to pick external music files, add `READ_EXTERNAL_STORAGE` permission to the `Manifest.xml`.
+Here're some examples:
 
-    `<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />`
-
-1. If you wish to use picker dialog, implement `MusicPickerListener` in the activity or fragment to get pick result.
-
-    ```Kotlin
-    interface MusicPickerListener {
-        fun onMusicPick(uri: Uri, title: String)
-        fun onPickCanceled()
-    }
-    ```
-
-1. If you wish to use predefined activity to pick music, add this to the `Manifest.xml`:
-
-    `<activity android:name="xyz.aprildown.ultimatemusicpicker.MusicPickerActivity" />`
-
-    and receive the pick result in the `onActivityResult`:
-
-    ```Kotlin
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode == Activity.RESULT_OK) {
-            val title = data?.getStringExtra(UltimateMusicPicker.EXTRA_SELECTED_TITLE)
-            val uri = data?.getParcelableExtra<Uri>(UltimateMusicPicker.EXTRA_SELECTED_URI)
-            if (title != null && uri != null) {
-                onMusicPick(uri, title)
-            } else {
-                onPickCanceled()
-            }
-        } else super.onActivityResult(requestCode, resultCode, data)
-    }
-    ```
-
-1. Let's pick some something.
-
-    ```Kotlin
-    UltimateMusicPicker()
-        // Picker activity action bar title or dialog title
-        .windowTitle("UltimateMusicPicker")
-
-        // Add a extra default item
-        .defaultUri(uri)
-        // Add a default item and change the default item name("Default" is used otherwise)
-        .defaultTitleAndUri("My default name", uri)
-
-        // There's a "silent" item by default, use this line to remove it.
-        .removeSilent()
-
-        // Select this uri
-        .selectUri(uri)
-
-        // Add some other music items(from R.raw or app's asset)
-        .additional("Myself Music", uri)
-        .additional("Another Music", uri)
-
-        // Music preview stream type(AudioManager.STREAM_MUSIC is used by default)
-        .streamType(AudioManager.STREAM_ALARM)
-
-        // Show different kinds of system ringtones. Calling order determines their display order.
-        .ringtone()
-        .notification()
-        .alarm()
-        // Show music files from external storage. Requires READ_EXTERNAL_STORAGE permission.
-        .music()
-
-        // Show a picker dialog
-        .goWithDialog(supportFragmentManager)
-        // Or show a picker activity
-        //.goWithActivity(this, 0, MusicPickerActivity::class.java)
-    ```
-
-    **When you launch dialog picker in an fragment, remember to use `childFragmentManager` instead of `fragmentManager` to make sure the child can find his/her parents.**
-
-## Advanced Usage
-
-The picker view is a `Fragment` so it can be easily used in an Activity and a dialog.
-
-### Custom Activity
-
-Simply copy and paste [`MusicPickerActivity`](https://github.com/DeweyReed/UltimateMusicPicker/blob/master/library/src/main/java/xyz/aprildown/ringtone/MusicPickerActivity.kt) or [`MusicPickerDialog`](https://github.com/DeweyReed/UltimateMusicPicker/blob/master/library/src/main/java/xyz/aprildown/ringtone/MusicPickerDialog.kt) and create your own. You may notice it's just a wrapper for `MusicPickerFragment` and it can be used in many places(like in a `ViewPager`?)
-
-What's more, there are two methods in the `UltimateMusicPicker` class to help you.
+### System ringtones dialog(no permission required)
 
 ```Kotlin
-/**
-  * Create a setting [Parcelable]. Useful when customize how to start activity
-  */
-fun buildParcelable(): Parcelable
-
-/**
-  * Put a setting [Parcelable] into a [Intent]. Useful when customize how to start activity
-  */
-fun putSettingIntoIntent(intent: Intent): Intent
+RingtonePickerDialog.createInstance(
+    UltimateRingtonePicker.Settings(
+        showCustomRingtone = false,
+        systemRingtoneTypes = UltimateRingtonePicker.Settings.allSystemRingtoneTypes
+    ),
+    "Dialog Picker"
+).show(supportFragmentManager, null)
 ```
 
-### Dark Theme
+To receive the pick result, implement `RingtonePickerListener` in your activity.
 
-This library supports dark theme with a naive way. It works fine when I use `AppCompatDelegate.setDefaultNightMode` to toggle night theme. If this is not enough, open a issue or send a PR.
+### System and device ringtones activity(Permission is handled internally)
 
-## Todo List
+Add `RingtonePickerActivity` to your `AndroidManifest.xml`: `<activity android:name="xyz.aprildown.ultimateringtonepicker.RingtonePickerActivity" />`
 
-- Use `READ_CONTENT` to select without permission
+```Kotlin
+startActivityForResult(
+    RingtonePickerActivity.putInfoToLaunchIntent(
+        Intent(this, RingtonePickerActivity::class.java),
+            UltimateRingtonePicker.Settings(
+            showDefault = true,
+            defaultUri = UltimateRingtonePicker.Settings.createRawUri(this, R.raw.default_ringtone),
+            defaultTitle = "Default Ringtone",
+            additionalRingtones = listOf(
+                RingtonePickerEntry(
+                    UltimateRingtonePicker.Settings.createAssetUri("asset1.wav"),
+                    "Assets/asset1.mp3"
+                )
+            ),
+            systemRingtoneTypes = UltimateRingtonePicker.Settings.allSystemRingtoneTypes,
+            deviceRingtoneTypes = UltimateRingtonePicker.Settings.allDeviceRingtoneTypes
+        ),
+        "Activity Picker"
+    ),
+    200
+)
+```
 
-## Migrate from 1.X
+To receive the pick result, in your `onActivityResult`:
 
-2.0.0 renames package name from `xyz.aprildown.ringtone.UltimateMusicPicker` to `xyz.aprildown.ultimatemusicpicker.UltimateMusicPicker` to make it more meaningful.
+```Kotlin
+override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    // You must check requestCode here because RingtonePickerFragment may
+    // startActivityForResult internally and require super.onActivityResult here to be called.
+    if (requestCode == 200 && resultCode == Activity.RESULT_OK) {
+        val ringtones: List<RingtonePickerEntry> = RingtonePickerActivity.getPickerResult(data!!)
 
-So after cleaning up imports, everything should work.
+    } else {
+        super.onActivityResult(requestCode, resultCode, data)
+    }
+}
+```
+
+### More examples
+
+You can find many examples in [MainActivity](./app/src/main/java/xyz/aprildown/ultimateringtonepicker/app/MainActivity.kt). Also make sure check [UltimateRingtonePicker](./library/src/main/java/xyz/aprildown/ultimateringtonepicker/UltimateRingtonePicker.kt) to see all parameters.
+
+## BTW
+
+`UltimateRingtonePicker` supports activity pick `RingtonePickerActivity` and dialog pick `RingtonePickerDialog` out of box. Both of them are just wrappers of `RingtonePickerFragment`. Therefore, you can directly wrap `RingtonePickerFragment` into your activity/fragment to provide more customization!
 
 ## License
 
