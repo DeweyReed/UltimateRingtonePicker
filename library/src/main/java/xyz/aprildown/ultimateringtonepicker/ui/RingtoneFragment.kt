@@ -11,7 +11,7 @@ import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.mikepenz.fastadapter.FastAdapter
-import com.mikepenz.fastadapter.IItem
+import com.mikepenz.fastadapter.GenericItem
 import com.mikepenz.fastadapter.adapters.GenericItemAdapter
 import com.mikepenz.fastadapter.select.SelectExtension
 import xyz.aprildown.ultimateringtonepicker.KEY_EXTRA_ID
@@ -23,7 +23,7 @@ internal class RingtoneFragment : Fragment(), Navigator.Selector {
 
     private val viewModel by navGraphViewModels<RingtonePickerViewModel>(R.id.urp_nav_graph)
 
-    private var selectExtension: SelectExtension<IItem<*>>? = null
+    private var selectExtension: SelectExtension<GenericItem>? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,

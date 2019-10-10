@@ -17,7 +17,7 @@ import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.mikepenz.fastadapter.FastAdapter
-import com.mikepenz.fastadapter.IItem
+import com.mikepenz.fastadapter.GenericItem
 import com.mikepenz.fastadapter.adapters.GenericItemAdapter
 import com.mikepenz.fastadapter.diff.FastAdapterDiffUtil
 import com.mikepenz.fastadapter.listeners.CustomEventHook
@@ -36,8 +36,8 @@ internal class SystemRingtoneFragment : Fragment(),
 
     private val viewModel by navGraphViewModels<RingtonePickerViewModel>(R.id.urp_nav_graph)
 
-    private var _fastAdapter: FastAdapter<IItem<*>>? = null
-    private val fastAdapter: FastAdapter<IItem<*>>
+    private var _fastAdapter: FastAdapter<GenericItem>? = null
+    private val fastAdapter: FastAdapter<GenericItem>
         get() = _fastAdapter
             ?: throw IllegalStateException("Accessing _fastAdapter after onDestroyView")
 
@@ -83,7 +83,8 @@ internal class SystemRingtoneFragment : Fragment(),
 
             override fun attachEvent(view: View, viewHolder: RecyclerView.ViewHolder) {
                 view.setOnCreateContextMenuListener { menu, _, _ ->
-                    val item = getItem(viewHolder) ?: return@setOnCreateContextMenuListener
+                    val item = FastAdapter.getHolderAdapterItem<VisibleRingtone>(viewHolder)
+                        ?: return@setOnCreateContextMenuListener
                     if (item.ringtoneType == VisibleRingtone.RINGTONE_TYPE_CUSTOM) {
                         menu.add(Menu.NONE, 0, Menu.NONE, R.string.urp_remove_sound)
                             .setOnMenuItemClickListener {
@@ -204,7 +205,7 @@ internal class SystemRingtoneFragment : Fragment(),
     private fun loadVisibleRingtones(
         context: Context,
         itemAdapter: GenericItemAdapter,
-        selectExtension: SelectExtension<*>
+        selectExtension: SelectExtension<GenericItem>
     ) {
         selectExtension.deleteAllSelectedItems()
 
@@ -230,8 +231,8 @@ internal class SystemRingtoneFragment : Fragment(),
         }
     }
 
-    private fun createVisibleItems(context: Context): List<IItem<*>> {
-        val items = mutableListOf<IItem<*>>()
+    private fun createVisibleItems(context: Context): List<GenericItem> {
+        val items = mutableListOf<GenericItem>()
         val settings = viewModel.settings
 
         if (settings.showCustomRingtone) {
