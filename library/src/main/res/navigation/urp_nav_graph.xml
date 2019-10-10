@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/urp_nav_graph"
+    tools:ignore="InvalidNavigation,UnusedNavigation">
+
+    <fragment
+        android:id="@+id/urp_dest_system"
+        android:name="xyz.aprildown.ultimateringtonepicker.ui.SystemRingtoneFragment"
+        android:label="SystemRingtoneFragment"
+        tools:layout="@layout/urp_recycler_view" />
+
+    <fragment
+        android:id="@+id/urp_dest_device"
+        android:name="xyz.aprildown.ultimateringtonepicker.ui.DeviceRingtoneFragment"
+        android:label="DeviceRingtoneFragment" />
+
+    <fragment
+        android:id="@+id/urp_dest_ringtone_list"
+        android:name="xyz.aprildown.ultimateringtonepicker.ui.RingtoneFragment" />
+</navigation>

@@ -1,12 +1,14 @@
 apply plugin: 'com.android.library'
 
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 
 apply plugin: 'com.github.dcendents.android-maven'
 
 
 android {
     compileSdkVersion versions.compile_sdk
+    buildToolsVersion versions.build_tools
 
     defaultConfig {
         minSdkVersion versions.min_sdk
@@ -14,14 +16,42 @@ android {
         versionCode versions.version_code
         versionName versions.version_name
         vectorDrawables.useSupportLibrary true
+        consumerProguardFiles 'proguard-rules.pro'
+    }
+
+    resourcePrefix 'urp_'
+
+    androidExtensions {
+        experimental = true
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = "1.8"
     }
 }
 
 dependencies {
     implementation libs.kotlin_stdlib_jdk7
+    implementation libs.kotlin_coroutines_core
+    implementation libs.kotlin_coroutines_android
 
     implementation libs.appcompat
     implementation libs.recyclerview
 
+    implementation libs.material
+
     implementation libs.lifecycle_extensions
+    implementation libs.lifecycle_ktx
+
+    implementation libs.androidx_navigation_fragment
+    implementation libs.androidx_navigation_ui
+
+    implementation libs.fastadapter
+    implementation libs.fastadapter_diff
+
+    implementation libs.easy_permission
 }

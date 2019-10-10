@@ -1,19 +1,16 @@
 <resources>
-    <string name="add_new_sound">Add new</string>
-    <string name="silent_ringtone_title">Silent</string>
-    <string name="unknown_ringtone_title">Unknown</string>
-    <string name="your_sounds">Your sounds</string>
-    <string name="device_sounds">Device sounds</string>
-    <string name="remove_sound">Remove</string>
-    <string name="default_ringtone_title">Default</string>
-
-    <string name="music_type_ringtone">Ringtone</string>
-    <string name="music_type_notification">Notification</string>
-    <string name="music_type_alarm">Alarm</string>
-
-    <string name="no_music_found">No Music</string>
-
-    <string name="select_ringtone">Select</string>
-    <!--Permission related-->
-    <string name="permission_external_rational">External Permission is needed to pick custom musics</string>
+    <string name="urp_add_new_sound">Add new</string>
+    <string name="urp_silent_ringtone_title">Silent</string>
+    <string name="urp_unknown_ringtone_title">Unknown</string>
+    <string name="urp_your_sounds">Your sounds</string>
+    <string name="urp_device_sounds">Device sounds</string>
+    <string name="urp_remove_sound">Remove</string>
+    <string name="urp_default_ringtone_title">Default</string>
+    <string name="urp_ringtone">Ringtone</string>
+    <string name="urp_notification">Notification</string>
+    <string name="urp_alarm">Alarm</string>
+    <string name="urp_no_music_found">No Music</string>
+    <string name="urp_select_ringtone">Select</string>
+    <string name="urp_empty">Empty</string>
+    <string name="urp_permission_external_rational">External Permission is needed to pick custom musics</string>
 </resources>

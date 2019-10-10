@@ -4,135 +4,72 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:animateLayoutChanges="true"
     tools:context=".MainActivity"
     tools:ignore="HardcodedText">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <Switch
-            android:id="@+id/switchNightTheme"
-            style="@style/SwitchStyle"
-            android:text="Enable Night Theme" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/inputWindowTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Window Title"
-            android:paddingEnd="?listPreferredItemPaddingRight"
-            android:paddingLeft="?listPreferredItemPaddingLeft"
-            android:paddingRight="?listPreferredItemPaddingRight"
-            android:paddingStart="?listPreferredItemPaddingLeft"
-            app:hintEnabled="true">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="UltimateMusicPicker" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <Switch
-            android:id="@+id/switchUseDefault"
-            style="@style/SwitchStyle"
-            android:text="Add Default Ringtone" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/inputDefaultTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Default Title"
-            android:paddingEnd="?listPreferredItemPaddingRight"
-            android:paddingLeft="?listPreferredItemPaddingLeft"
-            android:paddingRight="?listPreferredItemPaddingRight"
-            android:paddingStart="?listPreferredItemPaddingLeft"
-            android:visibility="gone"
-            app:hintEnabled="true"
-            tools:visibility="visible">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="DefaultDefaultDefault" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <Switch
-            android:id="@+id/switchRemoveSilent"
-            style="@style/SwitchStyle"
-            android:text="Remove Silent" />
-
-        <Switch
-            android:id="@+id/switchPreSelect"
-            style="@style/SwitchStyle"
-            android:checked="true"
-            android:text="Pre Select" />
-
-        <Switch
-            android:id="@+id/switchAddAdditional"
-            style="@style/SwitchStyle"
-            android:checked="true"
-            android:text="Add Additional Uris" />
-
-        <Spinner
-            android:id="@+id/spinnerStreamTypes"
-            android:layout_width="match_parent"
-            android:layout_height="?listPreferredItemHeightSmall"
-            android:paddingEnd="?listPreferredItemPaddingRight"
-            android:paddingLeft="?listPreferredItemPaddingLeft"
-            android:paddingRight="?listPreferredItemPaddingRight"
-            android:paddingStart="?listPreferredItemPaddingLeft" />
-
-        <Switch
-            android:id="@+id/switchAddRingtone"
-            style="@style/SwitchStyle"
-            android:text="Show Ringtone Sounds" />
-
-        <Switch
-            android:id="@+id/switchAddNotification"
-            style="@style/SwitchStyle"
-            android:text="Show Notification Sounds" />
-
-        <Switch
-            android:id="@+id/switchAddAlarm"
-            style="@style/SwitchStyle"
-            android:checked="true"
-            android:text="Show Alarm Sounds" />
-
-        <Switch
-            android:id="@+id/switchAddMusic"
-            style="@style/SwitchStyle"
-            android:checked="true"
-            android:text="Show External Files" />
-
-        <Switch
-            android:id="@+id/switchShowDialog"
-            style="@style/SwitchStyle"
-            android:text="Show Picker Dialog" />
+        android:orientation="vertical"
+        android:padding="16dp">
 
         <Button
-            android:id="@+id/btnLaunch"
-            style="?buttonBarPositiveButtonStyle"
+            style="@style/ExampleButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Launch" />
+            android:onClick="openPermission"
+            android:text="Manage App Permission"
+            app:backgroundTint="@android:color/holo_red_light" />
 
         <Button
-            android:id="@+id/btnCustom"
-            style="?buttonBarPositiveButtonStyle"
+            style="@style/ExampleButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Custom Activity" />
+            android:onClick="openStandardActivity"
+            android:text="Standard Activity" />
 
-        <fragment
-            android:id="@+id/fragmentMain"
-            android:name="xyz.aprildown.ultimatemusicpicker.app.MainFragment"
+        <Button
+            style="@style/ExampleButton"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:onClick="openStandardDialog"
+            android:text="Standard Dialog" />
+
+        <Button
+            style="@style/ExampleButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="emulateSystemDialog"
+            android:text="System Ringtone Picker Dialog" />
+
+        <Button
+            style="@style/ExampleButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="showOnlyDeviceRingtones"
+            android:text="All Device Ringtones Dialog" />
+
+        <Button
+            style="@style/ExampleButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="useAdditionalRingtones"
+            android:text="Additional Ringtones Activity" />
+
+        <Button
+            style="@style/ExampleButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="enableMultiSelect"
+            android:text="Multi Select Activity" />
+
+        <Button
+            style="@style/ExampleButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="safPick"
+            android:text="Storage Access Framework Dialog" />
+
     </LinearLayout>
 
 </ScrollView>
