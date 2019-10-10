@@ -40,12 +40,6 @@
 - Permission are handled internally
 - AndroidX support
 
-## Screenshot
-
-||||
-|:-:|:-:|:-:|
-|![Activity](https://github.com/DeweyReed/UltimateMusicPicker/blob/master/art/activity.webp?raw=true)|![Dialog](https://github.com/DeweyReed/UltimateMusicPicker/blob/master/art/dialog.webp?raw=true)|![Dark](https://github.com/DeweyReed/UltimateMusicPicker/blob/master/art/dark.webp?raw=true)|
-
 # Table of Contents
 
 1. [Sample APK](https://github.com/DeweyReed/UltimateMusicPicker/releases)

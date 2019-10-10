@@ -12,11 +12,11 @@
     <a href="https://android-arsenal.com/details/1/7141">
         <img src="https://img.shields.io/badge/Android%20Arsenal-UltimateMusicPicker-green.svg?style=flat"/>
     </a>
-    <a href="https://travis-ci.org/DeweyReed/UltimateMusicPicker">
-        <img src="https://travis-ci.org/DeweyReed/UltimateMusicPicker.svg?branch=master"/>
+    <a href="https://travis-ci.org/DeweyReed/UltimateRingtonePicker">
+        <img src="https://travis-ci.org/DeweyReed/UltimateRingtonePicker.svg?branch=master"/>
     </a>
-    <a href="https://jitpack.io/#DeweyReed/UltimateMusicPicker">
-        <img src="https://jitpack.io/v/DeweyReed/UltimateMusicPicker.svg"/>
+    <a href="https://jitpack.io/#DeweyReed/UltimateRingtonePicker">
+        <img src="https://jitpack.io/v/DeweyReed/UltimateRingtonePicker.svg"/>
     </a>
     <a href="https://android-arsenal.com/api?level=14">
         <img src="https://img.shields.io/badge/API-14%2B-brightgreen.svg?style=flat" border="0" alt="API">
@@ -49,7 +49,7 @@ This library targets Android 29 and uses `appcompat 1.1.0`.
 
 ||||
 |:-:|:-:|:-:|
-|![Activity](https://github.com/DeweyReed/UltimateMusicPicker/blob/master/art/activity.webp?raw=true)|![Dialog](https://github.com/DeweyReed/UltimateMusicPicker/blob/master/art/dialog.webp?raw=true)|![Dark](https://github.com/DeweyReed/UltimateMusicPicker/blob/master/art/dark.webp?raw=true)|
+|![Activity](./art/activity.webp)|![Dialog](./art/dialog.webp)|![Dark](./art/dark.webp)|
 
 ## Gradle Dependency
 
@@ -68,11 +68,11 @@ allprojects {
 
 Step 2. Add the dependency
 
-[![The Newest Version](https://jitpack.io/v/DeweyReed/UltimateMusicPicker.svg)](https://jitpack.io/#DeweyReed/UltimateMusicPicker)
+[![The Newest Version](https://jitpack.io/v/DeweyReed/UltimateRingtonePicker.svg)](https://jitpack.io/#DeweyReed/UltimateRingtonePicker)
 
 ```Groovy
 dependencies {
-    implementation "com.github.DeweyReed:UltimateMusicPicker:${version}"
+    implementation "com.github.DeweyReed:UltimateRingtonePicker:${version}"
 }
 ```
 
@@ -152,4 +152,4 @@ You can find many examples in [MainActivity](./app/src/main/java/xyz/aprildown/u
 
 ## License
 
-[MIT License](https://github.com/DeweyReed/UltimateMusicPicker/blob/master/LICENSE)
+[MIT License](./LICENSE)
