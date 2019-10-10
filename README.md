@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://github.com/DeweyReed/UltimateMusicPicker/blob/master/art/ic_launcher-web.webp?raw=true" height="128" />
+  <img src="./art/ic_launcher-web.webp" height="128" />
 </div>
 
 <h1 align="center">UltimateRingtonePicker</h1>
@@ -21,14 +21,12 @@
     <a href="https://android-arsenal.com/api?level=14">
         <img src="https://img.shields.io/badge/API-14%2B-brightgreen.svg?style=flat" border="0" alt="API">
     </a>
-    </br>
-    <a href="https://github.com/DeweyReed/UltimateMusicPicker/blob/master/README_ZH.md">
-        <img src="https://img.shields.io/badge/Translation-%E4%B8%AD%E6%96%87-red.svg">
-    </a>
 </div>
 </br>
 
-**3.0 API has been changed completely. Use this library like you never used it before. [Click here to use the deprecated 2.X](./README_OLD.md).**
+**3.0 API has been changed completely. Currently it's in the alpha. Everything may be changed.**
+
+**[Click here to use the deprecated 2.X](./README_OLD.md).**
 
 ## Features
 
@@ -94,11 +92,16 @@ RingtonePickerDialog.createInstance(
 ).show(supportFragmentManager, null)
 ```
 
-To receive the pick result, implement `RingtonePickerListener` in your activity.
+To receive the pick result, implement `RingtonePickerListener` in your activity or fragment.
 
 ### System and device ringtones activity(Permission is handled internally)
 
-Add `RingtonePickerActivity` to your `AndroidManifest.xml`: `<activity android:name="xyz.aprildown.ultimateringtonepicker.RingtonePickerActivity" />`
+Add `RingtonePickerActivity` to your `AndroidManifest.xml`:
+
+```XML
+<activity
+    android:name="xyz.aprildown.ultimateringtonepicker.RingtonePickerActivity" />
+```
 
 ```Kotlin
 startActivityForResult(
@@ -119,18 +122,19 @@ startActivityForResult(
         ),
         "Activity Picker"
     ),
+    // Request Code
     200
 )
 ```
 
-To receive the pick result, in your `onActivityResult`:
+Receive the pick result in your `onActivityResult`:
 
 ```Kotlin
 override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     // You must check requestCode here because RingtonePickerFragment may
     // startActivityForResult internally and require super.onActivityResult here to be called.
-    if (requestCode == 200 && resultCode == Activity.RESULT_OK) {
-        val ringtones: List<RingtonePickerEntry> = RingtonePickerActivity.getPickerResult(data!!)
+    if (requestCode == 200 && resultCode == Activity.RESULT_OK && data != null) {
+        val ringtones: List<RingtonePickerEntry> = RingtonePickerActivity.getPickerResult(data)
 
     } else {
         super.onActivityResult(requestCode, resultCode, data)

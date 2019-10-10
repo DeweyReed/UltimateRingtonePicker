@@ -75,11 +75,9 @@ allprojects {
 
 Step 2. Add the dependency
 
-[![The Newest Version](https://jitpack.io/v/DeweyReed/UltimateMusicPicker.svg)](https://jitpack.io/#DeweyReed/UltimateMusicPicker)
-
 ```Groovy
 dependencies {
-    implementation "com.github.DeweyReed:UltimateMusicPicker:${version}"
+    implementation 'com.github.DeweyReed:UltimateMusicPicker:2.0.6'
 }
 ```
 
