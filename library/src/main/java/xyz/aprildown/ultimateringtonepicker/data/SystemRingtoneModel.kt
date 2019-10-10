@@ -64,7 +64,6 @@ internal class SystemRingtoneModel(private val context: Context) {
             // Cache the title for later use.
             ringtoneTitles[uri] = title
         }
-        requireNotNull(title)
         return title
     }
 
