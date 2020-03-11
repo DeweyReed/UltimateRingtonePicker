@@ -30,7 +30,7 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
 }
 
@@ -44,8 +44,8 @@ dependencies {
 
     implementation libs.material
 
-    implementation libs.lifecycle_extensions
-    implementation libs.lifecycle_ktx
+    implementation libs.lifecycle_livedata
+    implementation libs.lifecycle_viewmodel
 
     implementation libs.androidx_navigation_fragment
     implementation libs.androidx_navigation_ui

@@ -18,7 +18,7 @@ internal fun FastAdapter<GenericItem>.setUpSelectableRingtoneExtension(
     selectExtension.selectWithItemUpdate = true
 
     selectExtension.selectionListener = object : ISelectionListener<GenericItem> {
-        override fun onSelectionChanged(item: GenericItem?, selected: Boolean) {
+        override fun onSelectionChanged(item: GenericItem, selected: Boolean) {
             if (item !is VisibleRingtone) return
 
             // Clicked ringtone item
