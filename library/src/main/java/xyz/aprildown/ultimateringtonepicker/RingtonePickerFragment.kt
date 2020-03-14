@@ -26,7 +26,7 @@ class RingtonePickerFragment : NavHostFragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        pickListener = findRingtonePickerListener()
+        pickListener = requireRingtonePickerListener()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

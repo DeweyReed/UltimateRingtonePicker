@@ -26,7 +26,7 @@ class RingtonePickerActivity : AppCompatActivity(), RingtonePickerListener {
                 intent.getParcelableExtra<UltimateRingtonePicker.Settings>(EXTRA_SETTINGS)!!
                     .createFragment()
             supportFragmentManager.beginTransaction()
-                .add(R.id.layoutRingtonePicker, fragment, TAG_RINGTONE_PICKER)
+                .replace(R.id.layoutRingtonePicker, fragment, TAG_RINGTONE_PICKER)
                 .setPrimaryNavigationFragment(fragment)
                 .commit()
         }

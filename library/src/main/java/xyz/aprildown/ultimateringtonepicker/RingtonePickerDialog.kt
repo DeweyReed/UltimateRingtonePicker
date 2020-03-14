@@ -53,14 +53,14 @@ class RingtonePickerDialog : DialogFragment(), RingtonePickerListener {
 
     private fun handleBack() {
         if ((childFragmentManager.findFragmentByTag(TAG_RINGTONE_PICKER)
-                    as RingtonePickerFragment).onBackClick()
+                as RingtonePickerFragment).onBackClick()
         ) {
             dismiss()
         }
     }
 
     override fun onRingtonePicked(ringtones: List<RingtonePickerEntry>) {
-        findRingtonePickerListener().onRingtonePicked(ringtones)
+        requireRingtonePickerListener().onRingtonePicked(ringtones)
         dismiss()
     }
 

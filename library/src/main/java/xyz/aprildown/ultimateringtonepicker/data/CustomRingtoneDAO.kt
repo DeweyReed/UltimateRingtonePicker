@@ -19,7 +19,7 @@ package xyz.aprildown.ultimateringtonepicker.data
 import android.content.SharedPreferences
 import android.net.Uri
 import xyz.aprildown.ultimateringtonepicker.sortWithCollator
-import java.util.*
+import java.util.ArrayList
 
 /**
  * This class encapsulates the transfer of data between [CustomRingtone] domain objects and

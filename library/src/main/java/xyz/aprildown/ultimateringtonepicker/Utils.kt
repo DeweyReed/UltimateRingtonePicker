@@ -75,8 +75,8 @@ internal inline fun View.gone() {
     visibility = View.GONE
 }
 
-internal fun Fragment.findRingtonePickerListener(): RingtonePickerListener = when {
-    // Check parentFragment first in case using MusicPickerDialog
+internal fun Fragment.requireRingtonePickerListener(): RingtonePickerListener = when {
+    // Check parentFragment first in case we're using MusicPickerDialog
     parentFragment is RingtonePickerListener -> parentFragment as RingtonePickerListener
     context is RingtonePickerListener -> context as RingtonePickerListener
     activity is RingtonePickerListener -> activity as RingtonePickerListener

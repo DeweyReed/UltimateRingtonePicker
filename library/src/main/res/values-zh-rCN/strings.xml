@@ -10,7 +10,6 @@
     <string name="urp_ringtone">铃声</string>
     <string name="urp_notification">通知</string>
     <string name="urp_alarm">闹钟</string>
-    <string name="urp_no_music_found">找不到音乐</string>
     <string name="urp_select_ringtone">选择</string>
     <string name="urp_empty">无内容</string>
     <string name="urp_permission_external_rational">需要读取储存的权限来选择自定义音乐文件</string>

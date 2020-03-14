@@ -110,7 +110,7 @@ internal class SystemRingtoneFragment : Fragment(),
             }
         })
 
-        viewModel.systemRingtoneLoadedEvent.observe(viewLifecycleOwner, Observer<Boolean> {
+        viewModel.systemRingtoneLoadedEvent.observe(viewLifecycleOwner, Observer {
             if (it == true) {
                 loadVisibleRingtones(
                     context,

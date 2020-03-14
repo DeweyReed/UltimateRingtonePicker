@@ -9,7 +9,6 @@
     <string name="urp_ringtone">Ringtone</string>
     <string name="urp_notification">Notification</string>
     <string name="urp_alarm">Alarm</string>
-    <string name="urp_no_music_found">No Music</string>
     <string name="urp_select_ringtone">Select</string>
     <string name="urp_empty">Empty</string>
     <string name="urp_permission_external_rational">External Permission is needed to pick custom musics</string>
