@@ -3,12 +3,8 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
-apply plugin: 'com.github.dcendents.android-maven'
-
-
 android {
     compileSdkVersion versions.compile_sdk
-    buildToolsVersion versions.build_tools
 
     defaultConfig {
         minSdkVersion versions.min_sdk
