@@ -16,24 +16,24 @@ internal class SystemRingtoneModel(private val context: Context) {
      */
     private val ringtoneTitles = ArrayMap<Uri, String>(16)
 
+    /**
+     * @param types a list of of [RingtoneManager.TYPE_RINGTONE], [RingtoneManager.TYPE_NOTIFICATION],
+     * and [RingtoneManager.TYPE_ALARM]
+     */
     fun preloadRingtoneTitles(types: List<Int>) {
         // Early return if the cache is already primed.
         if (!ringtoneTitles.isEmpty) {
             return
         }
 
-        val supportedTypes = listOf(
-            RingtoneManager.TYPE_RINGTONE,
-            RingtoneManager.TYPE_NOTIFICATION,
-            RingtoneManager.TYPE_ALARM
-        )
         for (type in types) {
-            if (type !in supportedTypes) continue
+            if (!type.isValidRingtoneManagerType()) continue
 
             val ringtoneManager = RingtoneManager(context)
             ringtoneManager.setType(type)
             // Cache a title for each system ringtone.
             try {
+                // RingtoneManager.getCursor says we shouldn't close the cursor.
                 val cursor = ringtoneManager.cursor
                 cursor.moveToFirst()
                 while (!cursor.isAfterLast) {
@@ -71,12 +71,7 @@ internal class SystemRingtoneModel(private val context: Context) {
      * Retrieve all system [type] ringtones
      */
     fun getRingtones(type: Int): List<Uri> {
-        if (type !in listOf(
-                RingtoneManager.TYPE_RINGTONE,
-                RingtoneManager.TYPE_NOTIFICATION,
-                RingtoneManager.TYPE_ALARM
-            )
-        ) return emptyList()
+        if (!type.isValidRingtoneManagerType()) return emptyList()
 
         val result = mutableListOf<Uri>()
 
@@ -99,3 +94,8 @@ internal class SystemRingtoneModel(private val context: Context) {
         return result
     }
 }
+
+private fun Int.isValidRingtoneManagerType(): Boolean =
+    this == RingtoneManager.TYPE_RINGTONE ||
+        this == RingtoneManager.TYPE_NOTIFICATION ||
+        this == RingtoneManager.TYPE_ALARM
