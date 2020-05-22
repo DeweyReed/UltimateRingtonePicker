@@ -15,7 +15,7 @@ internal class VisibleAddCustom : AbstractItem<VisibleAddCustom.ViewHolder>() {
     override var identifier: Long = 1
     override var isSelectable: Boolean = false
 
-    override fun bindView(holder: ViewHolder, payloads: MutableList<Any>) {
+    override fun bindView(holder: ViewHolder, payloads: List<Any>) {
         super.bindView(holder, payloads)
         holder.run {
             ringtoneImage.setImageResource(R.drawable.urp_add_custom)

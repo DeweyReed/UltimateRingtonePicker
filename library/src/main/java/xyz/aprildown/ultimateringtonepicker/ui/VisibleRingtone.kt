@@ -24,7 +24,7 @@ internal class VisibleRingtone(
     override var isSelectable: Boolean = true
     var isPlaying: Boolean = false
 
-    override fun bindView(holder: ViewHolder, payloads: MutableList<Any>) {
+    override fun bindView(holder: ViewHolder, payloads: List<Any>) {
         super.bindView(holder, payloads)
         holder.run {
             itemView.setBackgroundColor(

@@ -15,7 +15,7 @@ internal class VisibleSection(
     override var identifier: Long = title.hashCode().toLong()
     override var isSelectable: Boolean = false
 
-    override fun bindView(holder: ViewHolder, payloads: MutableList<Any>) {
+    override fun bindView(holder: ViewHolder, payloads: List<Any>) {
         super.bindView(holder, payloads)
         holder.run {
             holder.titleView.text = title
