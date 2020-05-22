@@ -10,7 +10,7 @@ import xyz.aprildown.ultimateringtonepicker.data.Category
 import xyz.aprildown.ultimateringtonepicker.data.Ringtone
 
 @RequiresApi(Build.VERSION_CODES.Q)
-internal class FolderRetrieverQ(private val context: Context) : IFolderRetriever {
+internal class RingtoneFolderRetrieverQ(private val context: Context) : RingtoneFolderRetriever {
 
     private data class MutableFolder(
         val folderId: Long,
@@ -21,7 +21,7 @@ internal class FolderRetrieverQ(private val context: Context) : IFolderRetriever
     /**
      * TODO: There must be something which can be improved but all SQLs I tried fail.
      */
-    override fun getFolders(): List<Category> {
+    override fun getRingtoneFolders(): List<Category> {
         val folders = mutableListOf<MutableFolder>()
         // This is hack. Is there any better way?
         context.contentResolver.query(

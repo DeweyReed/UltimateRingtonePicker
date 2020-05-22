@@ -6,7 +6,7 @@ import android.provider.MediaStore
 import xyz.aprildown.ultimateringtonepicker.CATEGORY_TYPE_ALBUM
 import xyz.aprildown.ultimateringtonepicker.CATEGORY_TYPE_ARTIST
 import xyz.aprildown.ultimateringtonepicker.CATEGORY_TYPE_FOLDER
-import xyz.aprildown.ultimateringtonepicker.data.folder.FolderRetrieverCompat
+import xyz.aprildown.ultimateringtonepicker.data.folder.RingtoneFolderRetrieverCompat
 
 internal class DeviceRingtoneModel(private val context: Context) {
 
@@ -126,11 +126,11 @@ internal class DeviceRingtoneModel(private val context: Context) {
     // region Folder
 
     private fun getFolders(): List<Category> {
-        return FolderRetrieverCompat(context).getFolders()
+        return RingtoneFolderRetrieverCompat(context).getRingtoneFolders()
     }
 
     fun getFolderRingtones(folderId: Long): List<Ringtone> {
-        return FolderRetrieverCompat(context).getRingtonesFromFolder(folderId)
+        return RingtoneFolderRetrieverCompat(context).getRingtonesFromFolder(folderId)
     }
 
     // endregion Folder

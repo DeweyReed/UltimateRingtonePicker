@@ -7,8 +7,8 @@ import xyz.aprildown.ultimateringtonepicker.CATEGORY_TYPE_FOLDER
 import xyz.aprildown.ultimateringtonepicker.data.Category
 import xyz.aprildown.ultimateringtonepicker.data.Ringtone
 
-internal class FolderRetrieverPreQ(private val context: Context) : IFolderRetriever {
-    override fun getFolders(): List<Category> {
+internal class RingtoneFolderRetrieverPreQ(private val context: Context) : RingtoneFolderRetriever {
+    override fun getRingtoneFolders(): List<Category> {
         val data = mutableListOf<Category>()
         // This is hack. Is there any better way?
         @Suppress("DEPRECATION")
