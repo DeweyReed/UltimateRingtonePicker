@@ -100,31 +100,6 @@ internal class DeviceRingtoneModel(private val context: Context) {
         return data
     }
 
-    // MediaStore.Audio.AudioColumns.GENRE is hidden API and I don't know how to do it.
-    // private fun getGenres(): List<Category> {
-    //     val data = mutableListOf<Category>()
-    //     context.contentResolver.query(
-    //         MediaStore.Audio.Genres.EXTERNAL_CONTENT_URI,
-    //         arrayOf(
-    //             MediaStore.Audio.Genres._ID,
-    //             MediaStore.Audio.Genres.NAME
-    //         ),
-    //         null,
-    //         null,
-    //         MediaStore.Audio.Genres.NAME
-    //     )?.use {
-    //         it.moveToPosition(-1)
-    //         while (it.moveToNext()) {
-    //             val id = it.getLong(it.getColumnIndexOrThrow(MediaStore.Audio.Genres._ID))
-    //             val name = it.getString(it.getColumnIndexOrThrow(MediaStore.Audio.Genres.NAME))
-    //             data.add(Category(CATEGORY_TYPE_ALBUM, id.toString(), name, 0))
-    //         }
-    //     }
-    //     return data
-    // }
-
-    // region Folder
-
     private fun getFolders(): List<Category> {
         return RingtoneFolderRetrieverCompat(context).getRingtoneFolders()
     }
@@ -132,8 +107,6 @@ internal class DeviceRingtoneModel(private val context: Context) {
     fun getFolderRingtones(folderId: Long): List<Ringtone> {
         return RingtoneFolderRetrieverCompat(context).getRingtonesFromFolder(folderId)
     }
-
-    // endregion Folder
 
     fun getCategories(categoryType: Int): List<Category> = when (categoryType) {
         CATEGORY_TYPE_ARTIST -> getArtists()
