@@ -1,5 +1,3 @@
-@file:Suppress("unused", "NOTHING_TO_INLINE")
-
 package xyz.aprildown.ultimateringtonepicker
 
 import android.content.Context
@@ -10,8 +8,6 @@ import android.view.View
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import xyz.aprildown.ultimateringtonepicker.data.CustomRingtone
-import java.text.Collator
 
 internal const val TAG_RINGTONE_PICKER = "ringtone_picker"
 internal const val EXTRA_SETTINGS = "settings"
@@ -39,21 +35,12 @@ internal fun Int.categoryTypeToRingtoneType(): Int = when (this) {
     else -> throw IllegalArgumentException("No ringtone type for category type $this")
 }
 
-internal fun MutableList<CustomRingtone>.sortWithCollator() {
-    val collator = Collator.getInstance()
-    sortWith(Comparator { o1, o2 ->
-        collator.compare(o1.title, o2.title)
-    })
-}
-
 internal fun Context.safeContext(): Context =
     takeIf { Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && !isDeviceProtectedStorage }?.let {
         ContextCompat.createDeviceProtectedStorageContext(it) ?: it
     } ?: this
 
 internal fun isLOrLater(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
-
-internal fun isNOrLater(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
 
 internal fun isOOrLater(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
 
@@ -63,15 +50,7 @@ internal fun ImageView.startDrawableAnimation() {
     (drawable as? Animatable)?.start()
 }
 
-internal inline fun View.show() {
-    visibility = View.VISIBLE
-}
-
-internal inline fun View.hide() {
-    visibility = View.INVISIBLE
-}
-
-internal inline fun View.gone() {
+internal fun View.gone() {
     visibility = View.GONE
 }
 

@@ -6,7 +6,6 @@ import android.content.SharedPreferences
 import android.net.Uri
 import android.provider.BaseColumns
 import xyz.aprildown.ultimateringtonepicker.safeContext
-import xyz.aprildown.ultimateringtonepicker.sortWithCollator
 
 internal class CustomRingtoneModel(
     private val context: Context,
@@ -49,7 +48,6 @@ internal class CustomRingtoneModel(
         val ringtone = customMusicDAO.addCustomRingtone(uri, title)
         localCustomRingtones.add(ringtone)
 
-        localCustomRingtones.sortWithCollator()
         return ringtone
     }
 
