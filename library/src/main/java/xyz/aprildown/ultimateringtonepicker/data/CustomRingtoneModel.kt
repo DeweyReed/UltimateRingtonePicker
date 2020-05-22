@@ -15,13 +15,13 @@ internal class CustomRingtoneModel(
     /**
      * Stores all custom ringtones that users select
      */
-    private val customMusicDAO = CustomRingtoneDAO(context.getCustomMusicSharedPrefs())
+    private val customRingtoneDAO = CustomRingtoneDAO(context.getCustomRingtoneSharedPrefs())
 
     /**
      * A mutable copy of the custom ringtones.
      */
-    private val localCustomRingtones: MutableList<CustomRingtone> by lazy {
-        customMusicDAO.getCustomRingtones().apply {
+    private val ringtoneCache: MutableList<CustomRingtone> by lazy {
+        customRingtoneDAO.getCustomRingtones().apply {
             val cr = context.contentResolver
             forEach {
                 it.exists = cr.canFind(it.uri)
@@ -36,39 +36,44 @@ internal class CustomRingtoneModel(
     }
 
     /**
-     * User selects a custom music and we store it in both shared preference and cache
+     * User selects a custom ringtone and we store it in both shared preference and cache
      */
-    fun addCustomMusic(uri: Uri, title: String): CustomRingtone {
+    fun addCustomRingtone(uri: Uri, title: String): CustomRingtone {
         // If the uri is already present in an existing ringtone, do nothing.
         val existing = getCustomRingtone(uri)
         if (existing != null) {
             return existing
         }
 
-        val ringtone = customMusicDAO.addCustomRingtone(uri, title)
-        localCustomRingtones.add(ringtone)
+        val ringtone = customRingtoneDAO.addCustomRingtone(uri, title)
+        ringtoneCache.add(ringtone)
 
         return ringtone
     }
 
     /**
-     * Delete a custom music in both shared preference and cache
+     * Delete a custom ringtone in both shared preference and cache
      */
-    fun removeCustomMusic(uri: Uri) {
+    fun removeCustomRingtone(uri: Uri) {
         getCustomRingtone(uri)?.let {
-            customMusicDAO.removeCustomRingtone(it.id)
-            localCustomRingtones.remove(it)
+            customRingtoneDAO.removeCustomRingtone(it.id)
+            ringtoneCache.remove(it)
         }
     }
 
     /**
-     * Get all custom musics selected by users
-     * @return an immutable list of musics that users select
+     * Get all custom ringtones selected by users
+     * @return an immutable list of ringtones that users select
      */
-    fun getCustomRingtones(): List<Ringtone> = localCustomRingtones.map {
+    fun getCustomRingtones(): List<Ringtone> = ringtoneCache.map {
         Ringtone(
             it.uri,
             it.title,
+            /**
+             * If it exists, it means you have READ_EXTERNAL_STORAGE permission and we've found it.
+             * Otherwise, we may use SAF and don't have READ_EXTERNAL_STORAGE permission, but
+             * we can still access it if we have Uri permission.
+             */
             isValid = it.exists && if (requireUriPermission) {
                 it.hasPermissions
             } else {
@@ -77,10 +82,10 @@ internal class CustomRingtoneModel(
         )
     }
 
-    private fun getCustomRingtone(uri: Uri) = localCustomRingtones.find { it.uri == uri }
+    private fun getCustomRingtone(uri: Uri) = ringtoneCache.find { it.uri == uri }
 }
 
-private fun Context.getCustomMusicSharedPrefs(): SharedPreferences {
+private fun Context.getCustomRingtoneSharedPrefs(): SharedPreferences {
     return safeContext().getSharedPreferences(
         "music_picker_prefs", Context.MODE_PRIVATE
     )
@@ -93,6 +98,7 @@ private fun ContentResolver.canFind(uri: Uri): Boolean {
         } ?: false
     } catch (e: SecurityException) {
         // We even don't have the permission to query.
+        e.printStackTrace()
         false
     }
 }

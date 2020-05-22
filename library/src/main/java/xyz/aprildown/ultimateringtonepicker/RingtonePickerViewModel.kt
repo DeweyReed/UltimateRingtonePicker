@@ -121,11 +121,11 @@ internal class RingtonePickerViewModel(
     }
 
     private fun addCustomRingtone(title: String, uri: Uri) {
-        customRingtoneModel.addCustomMusic(uri, title)
+        customRingtoneModel.addCustomRingtone(uri, title)
     }
 
     fun deleteCustomRingtone(uri: Uri) {
-        customRingtoneModel.removeCustomMusic(uri)
+        customRingtoneModel.removeCustomRingtone(uri)
     }
 
     fun onDeviceSelection(selectedRingtones: List<Ringtone>) {
