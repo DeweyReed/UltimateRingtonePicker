@@ -1,32 +1,28 @@
 package xyz.aprildown.ultimateringtonepicker.ui
 
+import android.view.LayoutInflater
 import android.view.View
-import android.widget.ImageView
-import android.widget.TextView
-import androidx.recyclerview.widget.RecyclerView
-import com.mikepenz.fastadapter.items.AbstractItem
+import android.view.ViewGroup
+import com.mikepenz.fastadapter.binding.AbstractBindingItem
 import xyz.aprildown.ultimateringtonepicker.R
+import xyz.aprildown.ultimateringtonepicker.databinding.UrpRingtoneBinding
 
-internal class VisibleAddCustom : AbstractItem<VisibleAddCustom.ViewHolder>() {
+internal class VisibleAddCustom : AbstractBindingItem<UrpRingtoneBinding>() {
 
-    override val layoutRes: Int = R.layout.urp_ringtone
     override val type: Int = R.id.urp_item_add_custom
-    override fun getViewHolder(v: View): ViewHolder = ViewHolder(v)
     override var identifier: Long = 1
     override var isSelectable: Boolean = false
 
-    override fun bindView(holder: ViewHolder, payloads: List<Any>) {
-        super.bindView(holder, payloads)
-        holder.run {
-            ringtoneImage.setImageResource(R.drawable.urp_add_custom)
-            nameView.setText(R.string.urp_add_new_sound)
-            selectedImage.visibility = View.GONE
+    override fun bindView(binding: UrpRingtoneBinding, payloads: List<Any>) {
+        super.bindView(binding, payloads)
+        binding.run {
+            urpImageRingtone.setImageResource(R.drawable.urp_add_custom)
+            urpTextRingtoneName.setText(R.string.urp_add_new_sound)
+            urpImageSelected.visibility = View.GONE
         }
     }
 
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val ringtoneImage: ImageView = view.findViewById(R.id.urpImageRingtone)
-        val nameView: TextView = view.findViewById(R.id.urpTextRingtoneName)
-        val selectedImage: ImageView = view.findViewById(R.id.urpImageSelected)
+    override fun createBinding(inflater: LayoutInflater, parent: ViewGroup?): UrpRingtoneBinding {
+        return UrpRingtoneBinding.inflate(inflater, parent, false)
     }
 }

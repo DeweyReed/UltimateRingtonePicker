@@ -5,7 +5,7 @@ import android.content.Context
 import android.os.Build
 import android.provider.MediaStore
 import androidx.annotation.RequiresApi
-import xyz.aprildown.ultimateringtonepicker.CATEGORY_TYPE_FOLDER
+import xyz.aprildown.ultimateringtonepicker.UltimateRingtonePicker
 import xyz.aprildown.ultimateringtonepicker.data.Category
 import xyz.aprildown.ultimateringtonepicker.data.Ringtone
 
@@ -49,7 +49,12 @@ internal class RingtoneFolderRetrieverQ(private val context: Context) : Ringtone
             }
         }
         return folders.map {
-            Category(CATEGORY_TYPE_FOLDER, it.folderId, it.folderName, it.count)
+            Category(
+                type = UltimateRingtonePicker.RingtoneCategoryType.Folder,
+                id = it.folderId,
+                name = it.folderName,
+                numberOfSongs = it.count
+            )
         }
     }
 

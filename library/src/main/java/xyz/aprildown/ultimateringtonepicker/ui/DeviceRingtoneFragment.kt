@@ -1,43 +1,30 @@
 package xyz.aprildown.ultimateringtonepicker.ui
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
-import xyz.aprildown.ultimateringtonepicker.CATEGORY_TYPE_ALBUM
-import xyz.aprildown.ultimateringtonepicker.CATEGORY_TYPE_ARTIST
-import xyz.aprildown.ultimateringtonepicker.CATEGORY_TYPE_FOLDER
-import xyz.aprildown.ultimateringtonepicker.KEY_CATEGORY_TYPE
-import xyz.aprildown.ultimateringtonepicker.KEY_RINGTONE_TYPE
+import xyz.aprildown.ultimateringtonepicker.EXTRA_CATEGORY_TYPE
 import xyz.aprildown.ultimateringtonepicker.R
-import xyz.aprildown.ultimateringtonepicker.RINGTONE_TYPE_ALBUM
-import xyz.aprildown.ultimateringtonepicker.RINGTONE_TYPE_ALL
-import xyz.aprildown.ultimateringtonepicker.RINGTONE_TYPE_ARTIST
-import xyz.aprildown.ultimateringtonepicker.RINGTONE_TYPE_FOLDER
 import xyz.aprildown.ultimateringtonepicker.RingtonePickerViewModel
+import xyz.aprildown.ultimateringtonepicker.UltimateRingtonePicker
 import xyz.aprildown.ultimateringtonepicker.gone
 
-internal class DeviceRingtoneFragment : Fragment(), Navigator.Selector {
+internal class DeviceRingtoneFragment :
+    Fragment(R.layout.urp_fragment_device_ringtone), EventHandler {
 
     private val viewModel by navGraphViewModels<RingtonePickerViewModel>(R.id.urp_nav_graph)
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? = inflater.inflate(R.layout.urp_fragment_device_ringtone, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val tabLayout = view.findViewById<TabLayout>(R.id.urpDeviceTabLayout)
         val viewPager = view.findViewById<ViewPager>(R.id.urpDeviceViewPager)
 
-        val deviceRingtonesTypes = viewModel.settings.deviceRingtoneTypes
+        val deviceRingtonesTypes =
+            viewModel.settings.deviceRingtonePicker?.deviceRingtoneTypes ?: emptyList()
 
         viewPager.adapter = CategoryAdapter(this, deviceRingtonesTypes)
         viewPager.addOnPageChangeListener(object : ViewPager.SimpleOnPageChangeListener() {
@@ -58,7 +45,7 @@ internal class DeviceRingtoneFragment : Fragment(), Navigator.Selector {
 
     override fun onBack(): Boolean {
         viewModel.stopPlaying()
-        return if (viewModel.settings.onlyShowDevice) {
+        return if (viewModel.settings.systemRingtonePicker == null) {
             false
         } else {
             findNavController().popBackStack()
@@ -68,7 +55,7 @@ internal class DeviceRingtoneFragment : Fragment(), Navigator.Selector {
 
 private class CategoryAdapter(
     fragment: Fragment,
-    private val deviceRingtoneTypes: List<Int>
+    private val deviceRingtoneTypes: List<UltimateRingtonePicker.RingtoneCategoryType>
 ) : FragmentStatePagerAdapter(
     fragment.childFragmentManager,
     BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT
@@ -77,25 +64,25 @@ private class CategoryAdapter(
     override fun getCount(): Int = deviceRingtoneTypes.size
 
     override fun getItem(position: Int): Fragment {
-        return when (deviceRingtoneTypes[position]) {
-            RINGTONE_TYPE_ALL -> RingtoneFragment().apply {
+        return when (val type = deviceRingtoneTypes[position]) {
+            UltimateRingtonePicker.RingtoneCategoryType.All -> RingtoneFragment().apply {
                 arguments = Bundle().apply {
-                    putInt(KEY_RINGTONE_TYPE, RINGTONE_TYPE_ALL)
+                    putSerializable(EXTRA_CATEGORY_TYPE, type)
                 }
             }
-            RINGTONE_TYPE_ARTIST -> CategoryFragment().apply {
+            UltimateRingtonePicker.RingtoneCategoryType.Artist -> CategoryFragment().apply {
                 arguments = Bundle().apply {
-                    putInt(KEY_CATEGORY_TYPE, CATEGORY_TYPE_ARTIST)
+                    putSerializable(EXTRA_CATEGORY_TYPE, type)
                 }
             }
-            RINGTONE_TYPE_ALBUM -> CategoryFragment().apply {
+            UltimateRingtonePicker.RingtoneCategoryType.Album -> CategoryFragment().apply {
                 arguments = Bundle().apply {
-                    putInt(KEY_CATEGORY_TYPE, CATEGORY_TYPE_ALBUM)
+                    putSerializable(EXTRA_CATEGORY_TYPE, type)
                 }
             }
-            RINGTONE_TYPE_FOLDER -> CategoryFragment().apply {
+            UltimateRingtonePicker.RingtoneCategoryType.Folder -> CategoryFragment().apply {
                 arguments = Bundle().apply {
-                    putInt(KEY_CATEGORY_TYPE, CATEGORY_TYPE_FOLDER)
+                    putSerializable(EXTRA_CATEGORY_TYPE, type)
                 }
             }
             else -> throw IllegalArgumentException("Too bing position: $position")

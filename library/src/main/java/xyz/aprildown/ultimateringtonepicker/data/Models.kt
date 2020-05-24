@@ -1,6 +1,7 @@
 package xyz.aprildown.ultimateringtonepicker.data
 
 import android.net.Uri
+import xyz.aprildown.ultimateringtonepicker.UltimateRingtonePicker
 
 internal data class Ringtone(
     val uri: Uri,
@@ -11,8 +12,8 @@ internal data class Ringtone(
 )
 
 internal data class Category(
-    val type: Int,
-    val categoryId: Long,
+    val type: UltimateRingtonePicker.RingtoneCategoryType,
+    val id: Long,
     val name: String,
     val numberOfSongs: Int
 )

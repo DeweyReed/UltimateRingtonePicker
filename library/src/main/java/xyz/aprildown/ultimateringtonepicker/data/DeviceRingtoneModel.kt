@@ -3,9 +3,7 @@ package xyz.aprildown.ultimateringtonepicker.data
 import android.content.ContentUris
 import android.content.Context
 import android.provider.MediaStore
-import xyz.aprildown.ultimateringtonepicker.CATEGORY_TYPE_ALBUM
-import xyz.aprildown.ultimateringtonepicker.CATEGORY_TYPE_ARTIST
-import xyz.aprildown.ultimateringtonepicker.CATEGORY_TYPE_FOLDER
+import xyz.aprildown.ultimateringtonepicker.UltimateRingtonePicker
 import xyz.aprildown.ultimateringtonepicker.data.folder.RingtoneFolderRetrieverCompat
 
 internal class DeviceRingtoneModel(private val context: Context) {
@@ -69,7 +67,14 @@ internal class DeviceRingtoneModel(private val context: Context) {
                 val name = it.getString(it.getColumnIndexOrThrow(MediaStore.Audio.Artists.ARTIST))
                 val numOfTracks =
                     it.getInt(it.getColumnIndexOrThrow(MediaStore.Audio.Artists.NUMBER_OF_TRACKS))
-                data.add(Category(CATEGORY_TYPE_ARTIST, id, name, numOfTracks))
+                data.add(
+                    Category(
+                        type = UltimateRingtonePicker.RingtoneCategoryType.Artist,
+                        id = id,
+                        name = name,
+                        numberOfSongs = numOfTracks
+                    )
+                )
             }
         }
         return data
@@ -94,7 +99,14 @@ internal class DeviceRingtoneModel(private val context: Context) {
                 val name = it.getString(it.getColumnIndexOrThrow(MediaStore.Audio.Albums.ALBUM))
                 val numOfSongs =
                     it.getInt(it.getColumnIndexOrThrow(MediaStore.Audio.Albums.NUMBER_OF_SONGS))
-                data.add(Category(CATEGORY_TYPE_ALBUM, id, name, numOfSongs))
+                data.add(
+                    Category(
+                        type = UltimateRingtonePicker.RingtoneCategoryType.Album,
+                        id = id,
+                        name = name,
+                        numberOfSongs = numOfSongs
+                    )
+                )
             }
         }
         return data
@@ -108,10 +120,12 @@ internal class DeviceRingtoneModel(private val context: Context) {
         return RingtoneFolderRetrieverCompat(context).getRingtonesFromFolder(folderId)
     }
 
-    fun getCategories(categoryType: Int): List<Category> = when (categoryType) {
-        CATEGORY_TYPE_ARTIST -> getArtists()
-        CATEGORY_TYPE_ALBUM -> getAlbums()
-        CATEGORY_TYPE_FOLDER -> getFolders()
+    fun getCategories(
+        categoryType: UltimateRingtonePicker.RingtoneCategoryType
+    ): List<Category> = when (categoryType) {
+        UltimateRingtonePicker.RingtoneCategoryType.Artist -> getArtists()
+        UltimateRingtonePicker.RingtoneCategoryType.Album -> getAlbums()
+        UltimateRingtonePicker.RingtoneCategoryType.Folder -> getFolders()
         else -> throw IllegalArgumentException("Wrong category categoryType: $categoryType")
     }
 }

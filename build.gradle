@@ -9,9 +9,8 @@ buildscript {
     dependencies {
         classpath "com.android.tools.build:gradle:${versions.agp}"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.kotlin}"
-        classpath "org.jetbrains.kotlin:kotlin-serialization:${versions.kotlin}"
 
-        classpath 'com.github.ben-manes:gradle-versions-plugin:0.28.0'
+        classpath "com.github.ben-manes:gradle-versions-plugin:${versions.versions}"
     }
 }
 

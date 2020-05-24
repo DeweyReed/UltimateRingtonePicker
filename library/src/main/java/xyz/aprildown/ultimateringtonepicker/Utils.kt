@@ -9,31 +9,16 @@ import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 
-internal const val TAG_RINGTONE_PICKER = "ringtone_picker"
-internal const val EXTRA_SETTINGS = "settings"
-
 internal val RINGTONE_URI_SILENT: Uri = Uri.EMPTY
 internal val RINGTONE_URI_NULL: Uri = Uri.EMPTY
 
-internal const val KEY_RINGTONE_TYPE = "ringtone_type"
-internal const val KEY_CATEGORY_TYPE = "category_type"
-internal const val KEY_EXTRA_ID = "category_id"
+internal const val TAG_RINGTONE_PICKER = "ringtone_picker"
+internal const val EXTRA_SETTINGS = "settings"
 
-internal const val RINGTONE_TYPE_ALL = 0
-internal const val RINGTONE_TYPE_ARTIST = 10
-internal const val RINGTONE_TYPE_ALBUM = 11
-internal const val RINGTONE_TYPE_FOLDER = 13
+internal const val ASSET_URI_PREFIX = "file:///android_asset/"
 
-internal const val CATEGORY_TYPE_ARTIST = 1
-internal const val CATEGORY_TYPE_ALBUM = 2
-internal const val CATEGORY_TYPE_FOLDER = 3
-
-internal fun Int.categoryTypeToRingtoneType(): Int = when (this) {
-    CATEGORY_TYPE_ARTIST -> RINGTONE_TYPE_ARTIST
-    CATEGORY_TYPE_ALBUM -> RINGTONE_TYPE_ALBUM
-    CATEGORY_TYPE_FOLDER -> RINGTONE_TYPE_FOLDER
-    else -> throw IllegalArgumentException("No ringtone type for category type $this")
-}
+internal const val EXTRA_CATEGORY_TYPE = "category_type"
+internal const val EXTRA_CATEGORY_ID = "category_id"
 
 internal fun Context.safeContext(): Context =
     takeIf { Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && !isDeviceProtectedStorage }?.let {
@@ -54,10 +39,10 @@ internal fun View.gone() {
     visibility = View.GONE
 }
 
-internal fun Fragment.requireRingtonePickerListener(): RingtonePickerListener = when {
-    // Check parentFragment first in case we're using MusicPickerDialog
-    parentFragment is RingtonePickerListener -> parentFragment as RingtonePickerListener
-    context is RingtonePickerListener -> context as RingtonePickerListener
-    activity is RingtonePickerListener -> activity as RingtonePickerListener
+internal fun Fragment.requireRingtonePickerListener(): UltimateRingtonePicker.RingtonePickerListener =
+    when {
+        parentFragment is UltimateRingtonePicker.RingtonePickerListener -> parentFragment as UltimateRingtonePicker.RingtonePickerListener
+        context is UltimateRingtonePicker.RingtonePickerListener -> context as UltimateRingtonePicker.RingtonePickerListener
+        activity is UltimateRingtonePicker.RingtonePickerListener -> activity as UltimateRingtonePicker.RingtonePickerListener
     else -> throw IllegalStateException("Cannot find RingtonePickerListener")
 }

@@ -16,6 +16,7 @@ android {
     }
 
     resourcePrefix 'urp_'
+    viewBinding.enabled = true
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -24,6 +25,10 @@ android {
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
+}
+
+androidExtensions {
+    features = ["parcelize"]
 }
 
 dependencies {
@@ -43,6 +48,7 @@ dependencies {
     implementation libs.androidx_navigation_ui
 
     implementation libs.fastadapter
+    implementation libs.fastadapter_binding
     implementation libs.fastadapter_diff
 
     implementation libs.easy_permission

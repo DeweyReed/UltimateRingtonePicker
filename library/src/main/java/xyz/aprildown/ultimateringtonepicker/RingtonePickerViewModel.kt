@@ -14,6 +14,7 @@ import androidx.lifecycle.Transformations
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import xyz.aprildown.ultimateringtonepicker.data.Category
 import xyz.aprildown.ultimateringtonepicker.data.CustomRingtoneModel
 import xyz.aprildown.ultimateringtonepicker.data.DeviceRingtoneModel
@@ -31,9 +32,13 @@ internal class RingtonePickerViewModel(
     val currentSelectedUris = mutableSetOf<Uri>()
 
     private val customRingtoneModel by lazy {
-        CustomRingtoneModel(application, requireUriPermission = settings.useSafSelect)
+        CustomRingtoneModel(
+            context = application,
+            requireUriPermission = settings.systemRingtonePicker?.customSection?.useSafSelect == true
+        )
     }
     val customRingtones = mutableSetOf<Ringtone>()
+
     private val systemRingtoneModel by lazy { SystemRingtoneModel(application) }
     val systemRingtones = ArrayMap<Int, List<Ringtone>>()
 
@@ -58,23 +63,19 @@ internal class RingtonePickerViewModel(
         result
     }
 
-    /**
-     * Artists, albums and folders
-     * Key: [CATEGORY_TYPE_ARTIST], [CATEGORY_TYPE_ALBUM], [CATEGORY_TYPE_FOLDER] and no more.
-     */
     private val categories by lazy {
-        ArrayMap<Int, MutableLiveData<List<Category>>>().also { map ->
+        ArrayMap<UltimateRingtonePicker.RingtoneCategoryType, MutableLiveData<List<Category>>>().also { map ->
             arrayOf(
-                CATEGORY_TYPE_ARTIST,
-                CATEGORY_TYPE_ALBUM,
-                CATEGORY_TYPE_FOLDER
+                UltimateRingtonePicker.RingtoneCategoryType.Artist,
+                UltimateRingtonePicker.RingtoneCategoryType.Album,
+                UltimateRingtonePicker.RingtoneCategoryType.Folder
             ).forEach { categoryType ->
                 map[categoryType] = MutableLiveData()
             }
             viewModelScope.launch(Dispatchers.IO) {
-                repeat(map.size) {
-                    val categoryType = map.keyAt(it)
-                    val liveData = map.valueAt(it)
+                repeat(map.size) { index ->
+                    val categoryType = map.keyAt(index)
+                    val liveData = map.valueAt(index)
                     liveData.postValue(deviceRingtoneModel.getCategories(categoryType))
                 }
             }
@@ -88,23 +89,31 @@ internal class RingtonePickerViewModel(
     private val folderRingtones = ArrayMap<Long, MutableLiveData<List<Ringtone>>>()
 
     init {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
 
             currentSelectedUris.addAll(settings.preSelectUris)
 
-            if (settings.showCustomRingtone) {
-                customRingtones.addAll(customRingtoneModel.getCustomRingtones())
+            val systemRingtonePicker =
+                settings.systemRingtonePicker
+            val customSection =
+                systemRingtonePicker?.customSection
+
+            if (customSection != null) {
+                withContext(Dispatchers.IO) {
+                    customRingtones.addAll(customRingtoneModel.getCustomRingtones())
+                }
             }
 
-            val ringtoneTypes = settings.systemRingtoneTypes
-            // System ringtones doesn't change so we don't repeat loading.
-            if (systemRingtones.isEmpty && ringtoneTypes.isNotEmpty()) {
-                systemRingtoneModel.preloadRingtoneTitles(ringtoneTypes)
-                settings.systemRingtoneTypes.forEach { ringtoneType ->
-                    systemRingtones[ringtoneType] =
-                        systemRingtoneModel.getRingtones(ringtoneType).map {
-                            Ringtone(it, systemRingtoneModel.getRingtoneTitle(it))
-                        }
+            val ringtoneTypes = systemRingtonePicker?.ringtoneTypes
+            if (ringtoneTypes?.isNotEmpty() == true) {
+                withContext(Dispatchers.IO) {
+                    systemRingtoneModel.preloadRingtoneTitles(ringtoneTypes)
+                    ringtoneTypes.forEach { ringtoneType ->
+                        systemRingtones[ringtoneType] =
+                            systemRingtoneModel.getRingtones(ringtoneType).map {
+                                Ringtone(it, systemRingtoneModel.getRingtoneTitle(it))
+                            }
+                    }
                 }
             }
 
@@ -145,7 +154,7 @@ internal class RingtonePickerViewModel(
         systemRingtoneLoadedEvent.value = true
     }
 
-    fun requireFirstLoad(): Boolean {
+    fun consumeFirstLoad(): Boolean {
         val result = firstLoad
         firstLoad = false
         return result
@@ -184,41 +193,41 @@ internal class RingtonePickerViewModel(
         }
     }
 
-    fun onTotalSelection(selectedRingtones: List<Ringtone>) {
+    fun onFinalSelection(selectedRingtones: List<Ringtone>) {
         finalSelection.value = selectedRingtones
     }
 
-    fun getRingtoneLiveData(ringtoneType: Int, extraId: Long): LiveData<List<Ringtone>> {
-        return if (ringtoneType == RINGTONE_TYPE_FOLDER) {
-            folderRingtones[extraId] ?: MutableLiveData<List<Ringtone>>().also {
-                folderRingtones[extraId] = it
+    fun getRingtoneLiveData(
+        categoryType: UltimateRingtonePicker.RingtoneCategoryType,
+        categoryId: Long
+    ): LiveData<List<Ringtone>> {
+        return if (categoryType == UltimateRingtonePicker.RingtoneCategoryType.Folder) {
+            folderRingtones[categoryId] ?: MutableLiveData<List<Ringtone>>().also {
+                folderRingtones[categoryId] = it
                 viewModelScope.launch(Dispatchers.IO) {
-                    it.postValue(deviceRingtoneModel.getFolderRingtones(extraId))
+                    it.postValue(deviceRingtoneModel.getFolderRingtones(categoryId))
                 }
             }
         } else {
-            Transformations.map(deviceRingtones) {
-                it.filterWithType(ringtoneType, extraId)
+            Transformations.map(deviceRingtones) { allRingtones ->
+                when (categoryType) {
+                    UltimateRingtonePicker.RingtoneCategoryType.All -> allRingtones
+                    UltimateRingtonePicker.RingtoneCategoryType.Artist ->
+                        allRingtones.filter { it.artistId == categoryId }
+                    UltimateRingtonePicker.RingtoneCategoryType.Album ->
+                        allRingtones.filter { it.albumId == categoryId }
+                    else -> throw IllegalStateException()
+                }
             }
         }
     }
 
-    fun getCategoryLiveData(categoryType: Int): LiveData<List<Category>> {
-        return categories[categoryType]!!
+    fun getCategoryLiveData(categoryType: UltimateRingtonePicker.RingtoneCategoryType): LiveData<List<Category>>? {
+        return categories[categoryType]
     }
 
     override fun onCleared() {
         super.onCleared()
         stopPlaying()
     }
-}
-
-private fun List<Ringtone>.filterWithType(
-    ringtoneType: Int,
-    extraId: Long
-): List<Ringtone> = when (ringtoneType) {
-    RINGTONE_TYPE_ALL -> this
-    RINGTONE_TYPE_ARTIST -> this.filter { it.artistId == extraId }
-    RINGTONE_TYPE_ALBUM -> this.filter { it.albumId == extraId }
-    else -> throw IllegalArgumentException()
 }

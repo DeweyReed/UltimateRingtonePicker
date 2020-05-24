@@ -3,6 +3,7 @@ package xyz.aprildown.ultimateringtonepicker.app
 import android.Manifest
 import android.app.Activity
 import android.content.Intent
+import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
@@ -13,15 +14,13 @@ import pub.devrel.easypermissions.EasyPermissions
 import pub.devrel.easypermissions.PermissionRequest
 import xyz.aprildown.ultimateringtonepicker.RingtonePickerActivity
 import xyz.aprildown.ultimateringtonepicker.RingtonePickerDialog
-import xyz.aprildown.ultimateringtonepicker.RingtonePickerEntry
-import xyz.aprildown.ultimateringtonepicker.RingtonePickerListener
 import xyz.aprildown.ultimateringtonepicker.UltimateRingtonePicker
 import java.io.File
 
 @Suppress("UNUSED_PARAMETER")
-class MainActivity : AppCompatActivity(), RingtonePickerListener {
+class MainActivity : AppCompatActivity(), UltimateRingtonePicker.RingtonePickerListener {
 
-    private var currentSelectedRingtones = listOf<RingtonePickerEntry>()
+    private var currentSelectedRingtones = listOf<UltimateRingtonePicker.RingtoneEntry>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,10 +36,10 @@ class MainActivity : AppCompatActivity(), RingtonePickerListener {
 
     fun openStandardActivity(view: View) {
         startActivityForResult(
-            RingtonePickerActivity.putInfoToLaunchIntent(
-                Intent(this, RingtonePickerActivity::class.java),
-                createStandardSettings(),
-                "Picker Picker"
+            RingtonePickerActivity.getIntent(
+                context = this,
+                settings = createStandardSettings(),
+                windowTitle = "Picker Picker"
             ),
             REQUEST_CODE_ACTIVITY
         )
@@ -56,9 +55,14 @@ class MainActivity : AppCompatActivity(), RingtonePickerListener {
     fun emulateSystemDialog(view: View) {
         RingtonePickerDialog.createInstance(
             UltimateRingtonePicker.Settings(
-                showCustomRingtone = false,
                 preSelectUris = currentSelectedRingtones.map { it.uri },
-                systemRingtoneTypes = UltimateRingtonePicker.Settings.allSystemRingtoneTypes
+                systemRingtonePicker = UltimateRingtonePicker.SystemRingtonePicker(
+                    ringtoneTypes = listOf(
+                        RingtoneManager.TYPE_RINGTONE,
+                        RingtoneManager.TYPE_NOTIFICATION,
+                        RingtoneManager.TYPE_ALARM
+                    )
+                )
             ),
             "System Ringtones"
         ).show(supportFragmentManager, null)
@@ -93,8 +97,15 @@ class MainActivity : AppCompatActivity(), RingtonePickerListener {
     private fun pickDeviceRingtones() {
         RingtonePickerDialog.createInstance(
             UltimateRingtonePicker.Settings(
-                onlyShowDevice = true,
-                deviceRingtoneTypes = listOf(UltimateRingtonePicker.Settings.DEVICE_RINGTONE_TYPE_ALL)
+                preSelectUris = currentSelectedRingtones.map { it.uri },
+                deviceRingtonePicker = UltimateRingtonePicker.DeviceRingtonePicker(
+                    deviceRingtoneTypes = listOf(
+                        UltimateRingtonePicker.RingtoneCategoryType.All,
+                        UltimateRingtonePicker.RingtoneCategoryType.Artist,
+                        UltimateRingtonePicker.RingtoneCategoryType.Album,
+                        UltimateRingtonePicker.RingtoneCategoryType.Folder
+                    )
+                )
             ),
             "All Device Ringtones"
         ).show(supportFragmentManager, null)
@@ -102,35 +113,39 @@ class MainActivity : AppCompatActivity(), RingtonePickerListener {
 
     fun useAdditionalRingtones(view: View) {
         startActivityForResult(
-            RingtonePickerActivity.putInfoToLaunchIntent(
-                Intent(this, RingtonePickerActivity::class.java),
-                UltimateRingtonePicker.Settings(
-                    showCustomRingtone = false,
-                    showDefault = true,
-                    defaultUri = UltimateRingtonePicker.Settings.createRawUri(
-                        this,
-                        R.raw.default_ringtone
-                    ),
-                    defaultTitle = "Default Ringtone",
-                    additionalRingtones = listOf(
-                        RingtonePickerEntry(
-                            UltimateRingtonePicker.Settings.createRawUri(
+            RingtonePickerActivity.getIntent(
+                context = this,
+                settings = UltimateRingtonePicker.Settings(
+                    preSelectUris = currentSelectedRingtones.map { it.uri },
+                    systemRingtonePicker = UltimateRingtonePicker.SystemRingtonePicker(
+                        defaultSection = UltimateRingtonePicker.SystemRingtonePicker.DefaultSection(
+                            defaultUri = UltimateRingtonePicker.createRawRingtoneUri(
                                 this,
-                                R.raw.short_message
+                                R.raw.default_ringtone
                             ),
-                            "R.raw.short_message"
-                        ), RingtonePickerEntry(
-                            UltimateRingtonePicker.Settings.createAssetUri("asset1.wav"),
-                            "Assets/asset1.mp3"
-                        ),
-                        RingtonePickerEntry(
-                            UltimateRingtonePicker.Settings.createAssetUri("ringtones${File.separator}asset2.mp3"),
-                            "Assets/ringtones/asset2.mp3"
+                            defaultTitle = "Default Ringtone",
+                            additionalRingtones = listOf(
+                                UltimateRingtonePicker.RingtoneEntry(
+                                    UltimateRingtonePicker.createRawRingtoneUri(
+                                        this,
+                                        R.raw.short_message
+                                    ),
+                                    "R.raw.short_message"
+                                ),
+                                UltimateRingtonePicker.RingtoneEntry(
+                                    UltimateRingtonePicker.createAssetRingtoneUri("asset1.wav"),
+                                    "Assets/asset1.mp3"
+                                ),
+                                UltimateRingtonePicker.RingtoneEntry(
+                                    UltimateRingtonePicker.createAssetRingtoneUri("ringtones${File.separator}asset2.mp3"),
+                                    "Assets/ringtones/asset2.mp3"
+                                )
+                            )
                         )
-                    ),
-                    preSelectUris = currentSelectedRingtones.map { it.uri }
+                    )
+
                 ),
-                "Additional"
+                windowTitle = "Additional"
             ),
             REQUEST_CODE_ACTIVITY
         )
@@ -138,19 +153,34 @@ class MainActivity : AppCompatActivity(), RingtonePickerListener {
 
     fun enableMultiSelect(view: View) {
         startActivityForResult(
-            RingtonePickerActivity.putInfoToLaunchIntent(
-                Intent(this, RingtonePickerActivity::class.java),
-                UltimateRingtonePicker.Settings(
-                    defaultUri = UltimateRingtonePicker.Settings.createRawUri(
-                        this,
-                        R.raw.default_ringtone
-                    ),
+            RingtonePickerActivity.getIntent(
+                context = this,
+                settings = UltimateRingtonePicker.Settings(
                     preSelectUris = currentSelectedRingtones.map { it.uri },
                     enableMultiSelect = true,
-                    systemRingtoneTypes = UltimateRingtonePicker.Settings.allSystemRingtoneTypes,
-                    deviceRingtoneTypes = UltimateRingtonePicker.Settings.allDeviceRingtoneTypes
+                    systemRingtonePicker = UltimateRingtonePicker.SystemRingtonePicker(
+                        defaultSection = UltimateRingtonePicker.SystemRingtonePicker.DefaultSection(
+                            defaultUri = UltimateRingtonePicker.createRawRingtoneUri(
+                                this,
+                                R.raw.default_ringtone
+                            )
+                        ),
+                        ringtoneTypes = listOf(
+                            RingtoneManager.TYPE_RINGTONE,
+                            RingtoneManager.TYPE_NOTIFICATION,
+                            RingtoneManager.TYPE_ALARM
+                        )
+                    ),
+                    deviceRingtonePicker = UltimateRingtonePicker.DeviceRingtonePicker(
+                        deviceRingtoneTypes = listOf(
+                            UltimateRingtonePicker.RingtoneCategoryType.All,
+                            UltimateRingtonePicker.RingtoneCategoryType.Artist,
+                            UltimateRingtonePicker.RingtoneCategoryType.Album,
+                            UltimateRingtonePicker.RingtoneCategoryType.Folder
+                        )
+                    )
                 ),
-                "Multi Select"
+                windowTitle = "Multi Select"
             ),
             REQUEST_CODE_ACTIVITY
         )
@@ -160,8 +190,16 @@ class MainActivity : AppCompatActivity(), RingtonePickerListener {
         RingtonePickerDialog.createInstance(
             UltimateRingtonePicker.Settings(
                 preSelectUris = currentSelectedRingtones.map { it.uri },
-                useSafSelect = true,
-                systemRingtoneTypes = UltimateRingtonePicker.Settings.allSystemRingtoneTypes
+                systemRingtonePicker = UltimateRingtonePicker.SystemRingtonePicker(
+                    customSection = UltimateRingtonePicker.SystemRingtonePicker.CustomSection(
+                        useSafSelect = true
+                    ),
+                    ringtoneTypes = listOf(
+                        RingtoneManager.TYPE_RINGTONE,
+                        RingtoneManager.TYPE_NOTIFICATION,
+                        RingtoneManager.TYPE_ALARM
+                    )
+                )
             ),
             "All Device Ringtones"
         ).show(supportFragmentManager, null)
@@ -169,18 +207,37 @@ class MainActivity : AppCompatActivity(), RingtonePickerListener {
 
     private fun createStandardSettings(): UltimateRingtonePicker.Settings =
         UltimateRingtonePicker.Settings(
-            showDefault = true,
-            defaultUri = UltimateRingtonePicker.Settings.createRawUri(this, R.raw.default_ringtone),
-            defaultTitle = "Default Ringtone",
-            additionalRingtones = listOf(
-                RingtonePickerEntry(
-                    UltimateRingtonePicker.Settings.createRawUri(this, R.raw.short_message),
-                    "R.raw.short_message"
+            preSelectUris = currentSelectedRingtones.map { it.uri },
+            systemRingtonePicker = UltimateRingtonePicker.SystemRingtonePicker(
+                customSection = UltimateRingtonePicker.SystemRingtonePicker.CustomSection(),
+                defaultSection = UltimateRingtonePicker.SystemRingtonePicker.DefaultSection(
+                    showSilent = true,
+                    defaultUri = UltimateRingtonePicker.createRawRingtoneUri(
+                        this,
+                        R.raw.default_ringtone
+                    ),
+                    defaultTitle = "Default Ringtone",
+                    additionalRingtones = listOf(
+                        UltimateRingtonePicker.RingtoneEntry(
+                            UltimateRingtonePicker.createRawRingtoneUri(this, R.raw.short_message),
+                            "R.raw.short_message"
+                        )
+                    )
+                ),
+                ringtoneTypes = listOf(
+                    RingtoneManager.TYPE_RINGTONE,
+                    RingtoneManager.TYPE_NOTIFICATION,
+                    RingtoneManager.TYPE_ALARM
                 )
             ),
-            preSelectUris = currentSelectedRingtones.map { it.uri },
-            systemRingtoneTypes = UltimateRingtonePicker.Settings.allSystemRingtoneTypes,
-            deviceRingtoneTypes = UltimateRingtonePicker.Settings.allDeviceRingtoneTypes
+            deviceRingtonePicker = UltimateRingtonePicker.DeviceRingtonePicker(
+                deviceRingtoneTypes = listOf(
+                    UltimateRingtonePicker.RingtoneCategoryType.All,
+                    UltimateRingtonePicker.RingtoneCategoryType.Artist,
+                    UltimateRingtonePicker.RingtoneCategoryType.Album,
+                    UltimateRingtonePicker.RingtoneCategoryType.Folder
+                )
+            )
         )
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -193,11 +250,11 @@ class MainActivity : AppCompatActivity(), RingtonePickerListener {
         }
     }
 
-    override fun onRingtonePicked(ringtones: List<RingtonePickerEntry>) {
+    override fun onRingtonePicked(ringtones: List<UltimateRingtonePicker.RingtoneEntry>) {
         handleResult(ringtones)
     }
 
-    private fun handleResult(ringtones: List<RingtonePickerEntry>) {
+    private fun handleResult(ringtones: List<UltimateRingtonePicker.RingtoneEntry>) {
         currentSelectedRingtones = ringtones
         toast(ringtones.joinToString(separator = "\n") { it.name })
     }

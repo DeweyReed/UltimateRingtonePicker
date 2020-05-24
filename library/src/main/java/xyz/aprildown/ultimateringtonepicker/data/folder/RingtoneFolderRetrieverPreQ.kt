@@ -3,7 +3,7 @@ package xyz.aprildown.ultimateringtonepicker.data.folder
 import android.content.ContentUris
 import android.content.Context
 import android.provider.MediaStore
-import xyz.aprildown.ultimateringtonepicker.CATEGORY_TYPE_FOLDER
+import xyz.aprildown.ultimateringtonepicker.UltimateRingtonePicker
 import xyz.aprildown.ultimateringtonepicker.data.Category
 import xyz.aprildown.ultimateringtonepicker.data.Ringtone
 
@@ -49,10 +49,10 @@ internal class RingtoneFolderRetrieverPreQ(private val context: Context) : Ringt
                         if (parentTitle != null) {
                             data.add(
                                 Category(
-                                    CATEGORY_TYPE_FOLDER,
-                                    parentId,
-                                    parentTitle,
-                                    numOfSongs
+                                    type = UltimateRingtonePicker.RingtoneCategoryType.Folder,
+                                    id = parentId,
+                                    name = parentTitle,
+                                    numberOfSongs = numOfSongs
                                 )
                             )
                         }

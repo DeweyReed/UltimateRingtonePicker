@@ -1,19 +1,21 @@
 package xyz.aprildown.ultimateringtonepicker
 
-import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.activity.addCallback
 import androidx.fragment.app.DialogFragment
 
-class RingtonePickerDialog : DialogFragment(), RingtonePickerListener {
+class RingtonePickerDialog : DialogFragment(), UltimateRingtonePicker.RingtonePickerListener {
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return object : Dialog(requireContext(), theme) {
-            override fun onBackPressed() {
-                handleBack()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
+            if (!getRingtonePickerFragment().onBackClick()) {
+                remove()
+                dismiss()
             }
         }
     }
@@ -26,8 +28,9 @@ class RingtonePickerDialog : DialogFragment(), RingtonePickerListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         if (savedInstanceState == null) {
-            val fragment = arguments?.getParcelable<UltimateRingtonePicker.Settings>(EXTRA_SETTINGS)
-                ?.createFragment()!!
+            val fragment =
+                requireArguments().getParcelable<UltimateRingtonePicker.Settings>(EXTRA_SETTINGS)!!
+                    .createFragment()
             childFragmentManager.beginTransaction()
                 .add(R.id.urpFrameDialog, fragment, TAG_RINGTONE_PICKER)
                 .setPrimaryNavigationFragment(fragment)
@@ -43,25 +46,20 @@ class RingtonePickerDialog : DialogFragment(), RingtonePickerListener {
             }
         }
         view.findViewById<View>(R.id.urpBtnDialogCancel).setOnClickListener {
-            handleBack()
+            requireActivity().onBackPressedDispatcher.onBackPressed()
         }
         view.findViewById<View>(R.id.urpBtnDialogSelect).setOnClickListener {
-            (childFragmentManager.findFragmentByTag(TAG_RINGTONE_PICKER) as RingtonePickerFragment)
-                .onSelectClick()
+            getRingtonePickerFragment().onSelectClick()
         }
     }
 
-    private fun handleBack() {
-        if ((childFragmentManager.findFragmentByTag(TAG_RINGTONE_PICKER)
-                as RingtonePickerFragment).onBackClick()
-        ) {
-            dismiss()
-        }
-    }
-
-    override fun onRingtonePicked(ringtones: List<RingtonePickerEntry>) {
+    override fun onRingtonePicked(ringtones: List<UltimateRingtonePicker.RingtoneEntry>) {
         requireRingtonePickerListener().onRingtonePicked(ringtones)
         dismiss()
+    }
+
+    private fun getRingtonePickerFragment(): RingtonePickerFragment {
+        return childFragmentManager.findFragmentByTag(TAG_RINGTONE_PICKER) as RingtonePickerFragment
     }
 
     companion object {

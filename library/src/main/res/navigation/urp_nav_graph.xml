@@ -13,10 +13,12 @@
     <fragment
         android:id="@+id/urp_dest_device"
         android:name="xyz.aprildown.ultimateringtonepicker.ui.DeviceRingtoneFragment"
-        android:label="DeviceRingtoneFragment" />
+        android:label="DeviceRingtoneFragment"
+        tools:layout="@layout/urp_fragment_device_ringtone" />
 
     <fragment
         android:id="@+id/urp_dest_ringtone_list"
-        android:name="xyz.aprildown.ultimateringtonepicker.ui.RingtoneFragment" />
+        android:name="xyz.aprildown.ultimateringtonepicker.ui.RingtoneFragment"
+        tools:layout="@layout/urp_recycler_view" />
 
 </navigation>

@@ -21,7 +21,7 @@ import android.os.Looper
 import android.os.Message
 import android.telephony.TelephonyManager
 import androidx.annotation.RequiresApi
-import xyz.aprildown.ultimateringtonepicker.UltimateRingtonePicker
+import xyz.aprildown.ultimateringtonepicker.ASSET_URI_PREFIX
 import xyz.aprildown.ultimateringtonepicker.isLOrLater
 import xyz.aprildown.ultimateringtonepicker.isOOrLater
 import java.io.IOException
@@ -190,11 +190,8 @@ internal class AsyncRingtonePlayer(
                 currentPlayingUri = alarmNoise
 
                 when {
-                    alarmNoise?.toString()
-                        ?.startsWith(UltimateRingtonePicker.Settings.ASSET_URI_PREFIX) == true -> {
-                        val fileName = alarmNoise.toString().removePrefix(
-                            UltimateRingtonePicker.Settings.ASSET_URI_PREFIX
-                        )
+                    alarmNoise?.toString()?.startsWith(ASSET_URI_PREFIX) == true -> {
+                        val fileName = alarmNoise.toString().removePrefix(ASSET_URI_PREFIX)
                         mContext.assets.openFd(fileName).use { afd ->
                             mMediaPlayer?.setDataSource(
                                 afd.fileDescriptor,
