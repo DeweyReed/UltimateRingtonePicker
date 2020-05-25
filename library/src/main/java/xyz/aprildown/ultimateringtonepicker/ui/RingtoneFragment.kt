@@ -53,16 +53,18 @@ internal class RingtoneFragment : Fragment(R.layout.urp_recycler_view), EventHan
     }
 
     override fun onSelect() {
-        viewModel.stopPlaying()
         val ringtones =
             rootFastAdapter?.getSelectExtension()?.selectedItems?.mapNotNull { (it as? VisibleRingtone)?.ringtone }
         if (ringtones?.isNotEmpty() == true) {
             if (viewModel.settings.systemRingtonePicker == null) {
+                viewModel.stopPlaying()
                 viewModel.onFinalSelection(ringtones)
             } else {
                 viewModel.onDeviceSelection(ringtones)
                 findNavController().popBackStack(R.id.urp_dest_system, false)
             }
+        } else {
+            viewModel.stopPlaying()
         }
     }
 
