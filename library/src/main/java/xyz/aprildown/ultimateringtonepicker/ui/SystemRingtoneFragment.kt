@@ -75,8 +75,9 @@ internal class SystemRingtoneFragment : Fragment(R.layout.urp_recycler_view),
 
             override fun attachEvent(view: View, viewHolder: RecyclerView.ViewHolder) {
                 view.setOnCreateContextMenuListener { menu, _, _ ->
-                    val item = FastAdapter.getHolderAdapterItem<VisibleRingtone>(viewHolder)
+                    val item = FastAdapter.getHolderAdapterItem<GenericItem>(viewHolder)
                         ?: return@setOnCreateContextMenuListener
+                    if (item !is VisibleRingtone) return@setOnCreateContextMenuListener
                     if (item.ringtoneType == VisibleRingtone.RINGTONE_TYPE_CUSTOM) {
                         menu.add(Menu.NONE, 0, Menu.NONE, R.string.urp_remove_sound)
                             .setOnMenuItemClickListener {
