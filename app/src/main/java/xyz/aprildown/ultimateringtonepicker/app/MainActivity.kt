@@ -205,6 +205,21 @@ class MainActivity : AppCompatActivity(), UltimateRingtonePicker.RingtonePickerL
         ).show(supportFragmentManager, null)
     }
 
+    fun onlySafPick(view: View) {
+        startActivityForResult(
+            RingtonePickerActivity.getIntent(
+                context = this,
+                settings = UltimateRingtonePicker.Settings(
+                    deviceRingtonePicker = UltimateRingtonePicker.DeviceRingtonePicker(
+                        alwaysUseSaf = true
+                    )
+                ),
+                windowTitle = "SAF!"
+            ),
+            REQUEST_CODE_ACTIVITY
+        )
+    }
+
     private fun createStandardSettings(): UltimateRingtonePicker.Settings =
         UltimateRingtonePicker.Settings(
             preSelectUris = currentSelectedRingtones.map { it.uri },

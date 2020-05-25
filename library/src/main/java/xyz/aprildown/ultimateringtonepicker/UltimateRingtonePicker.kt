@@ -79,7 +79,8 @@ class UltimateRingtonePicker {
 
     @Parcelize
     data class DeviceRingtonePicker(
-        val deviceRingtoneTypes: List<RingtoneCategoryType> = emptyList()
+        val deviceRingtoneTypes: List<RingtoneCategoryType> = emptyList(),
+        val alwaysUseSaf: Boolean = false
     ) : Parcelable
 
     @Parcelize

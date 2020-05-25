@@ -26,18 +26,22 @@ internal class DeviceRingtoneFragment :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel.allDeviceRingtones.observe(
-            this,
-            object : Observer<List<Ringtone>> {
-                override fun onChanged(t: List<Ringtone>?) {
-                    if (t == null) return
-                    viewModel.allDeviceRingtones.removeObserver(this)
-                    if (t.isEmpty()) {
-                        launchSaf()
+        if (viewModel.settings.deviceRingtonePicker?.alwaysUseSaf == true) {
+            launchSaf()
+        } else {
+            viewModel.allDeviceRingtones.observe(
+                this,
+                object : Observer<List<Ringtone>> {
+                    override fun onChanged(t: List<Ringtone>?) {
+                        if (t == null) return
+                        viewModel.allDeviceRingtones.removeObserver(this)
+                        if (t.isEmpty()) {
+                            launchSaf()
+                        }
                     }
                 }
-            }
-        )
+            )
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -61,7 +65,7 @@ internal class DeviceRingtoneFragment :
     }
 
     /**
-     * MediaStore returns nothing, so we launch SAF.
+     * MediaStore returns nothing or we request it, launch SAF.
      */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         val hasSystemPicker = viewModel.settings.systemRingtonePicker != null

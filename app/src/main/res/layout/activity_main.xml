@@ -70,6 +70,13 @@
             android:onClick="safPick"
             android:text="Storage Access Framework Dialog" />
 
+        <Button
+            style="@style/ExampleButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onlySafPick"
+            android:text="Only Storage Access Framework" />
+
     </LinearLayout>
 
 </ScrollView>
