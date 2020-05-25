@@ -25,22 +25,22 @@ internal fun FastAdapter<GenericItem>.setUpSelectableRingtoneExtension(
             if (item !is VisibleRingtone) return
 
             // Clicked ringtone item
+            val itemPosition = getPosition(item)
             if (selected) {
                 if (item.ringtone.uri != RINGTONE_URI_SILENT) {
                     item.isPlaying = true
-                    notifyItemChanged(getPosition(item))
+                    notifyItemChanged(itemPosition)
                     viewModel.startPlaying(item.ringtone.uri)
                 }
                 // Stop other playing items
                 if (selectExtension.multiSelect) {
-                    for (index in 0 until itemCount) {
-                        val currentItem = getItem(index) ?: continue
+                    forEachIndexed { currentItem, position ->
                         if (currentItem.isSelected &&
                             currentItem is VisibleRingtone &&
                             currentItem != item
                         ) {
                             currentItem.isPlaying = false
-                            notifyItemChanged(index)
+                            notifyItemChanged(position)
                         }
                     }
                 }
@@ -48,6 +48,7 @@ internal fun FastAdapter<GenericItem>.setUpSelectableRingtoneExtension(
                 onSelectionChanged?.invoke(item, selected)
             } else {
                 item.isPlaying = false
+                notifyItemChanged(itemPosition)
                 viewModel.stopPlaying()
             }
         }
@@ -59,3 +60,9 @@ internal val Fragment.rootRecyclerView: RecyclerView? get() = view as? RecyclerV
 @Suppress("UNCHECKED_CAST")
 internal val Fragment.rootFastAdapter: GenericFastAdapter?
     get() = rootRecyclerView?.adapter as? GenericFastAdapter
+
+internal fun <Item : GenericItem> FastAdapter<Item>.forEachIndexed(f: (item: Item, position: Int) -> Unit) {
+    for (index in 0 until itemCount) {
+        f.invoke(getItem(index) ?: continue, index)
+    }
+}

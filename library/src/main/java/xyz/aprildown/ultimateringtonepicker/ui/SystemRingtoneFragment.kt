@@ -90,11 +90,15 @@ internal class SystemRingtoneFragment : Fragment(R.layout.urp_recycler_view),
                                         viewModel.settings.systemRingtonePicker
                                             ?.defaultSection?.defaultUri
                                             ?.let { defaultUri ->
-                                                selectExtension.select(
-                                                    itemAdapter.adapterItems.indexOfFirst {
-                                                        it is VisibleRingtone && it.ringtone.uri == defaultUri
+                                                fastAdapter.forEachIndexed { currentItem, position ->
+                                                    if (!currentItem.isSelected &&
+                                                        currentItem is VisibleRingtone &&
+                                                        currentItem.ringtone.uri == defaultUri
+                                                    ) {
+                                                        currentItem.isSelected = true
+                                                        fastAdapter.notifyItemChanged(position)
                                                     }
-                                                )
+                                                }
                                             }
                                     }
                                 }
