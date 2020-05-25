@@ -1,21 +1,30 @@
 package xyz.aprildown.ultimateringtonepicker
 
+import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.activity.addCallback
+import android.view.Window
+import androidx.appcompat.app.AppCompatDialog
 import androidx.fragment.app.DialogFragment
 
 class RingtonePickerDialog : DialogFragment(), UltimateRingtonePicker.RingtonePickerListener {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        requireActivity().onBackPressedDispatcher.addCallback(this) {
-            if (!getRingtonePickerFragment().onBackClick()) {
-                remove()
-                dismiss()
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        return object : AppCompatDialog(requireContext()) {
+            init {
+                val title = arguments?.getCharSequence(EXTRA_TITLE)
+                if (title.isNullOrBlank()) {
+                    supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
+                } else {
+                    setTitle(title)
+                }
+            }
+
+            override fun onBackPressed() {
+                // World miracle: requireActivity().onBackPressedDispatcher doesn't work here.
+                handleBack()
             }
         }
     }
@@ -37,16 +46,8 @@ class RingtonePickerDialog : DialogFragment(), UltimateRingtonePicker.RingtonePi
                 .commit()
         }
 
-        view.findViewById<TextView>(R.id.urpTextDialogTitle).run {
-            val title = arguments?.getCharSequence(EXTRA_TITLE)
-            if (title.isNullOrBlank()) {
-                gone()
-            } else {
-                text = title
-            }
-        }
         view.findViewById<View>(R.id.urpBtnDialogCancel).setOnClickListener {
-            requireActivity().onBackPressedDispatcher.onBackPressed()
+            handleBack()
         }
         view.findViewById<View>(R.id.urpBtnDialogSelect).setOnClickListener {
             getRingtonePickerFragment().onSelectClick()
@@ -56,6 +57,12 @@ class RingtonePickerDialog : DialogFragment(), UltimateRingtonePicker.RingtonePi
     override fun onRingtonePicked(ringtones: List<UltimateRingtonePicker.RingtoneEntry>) {
         requireRingtonePickerListener().onRingtonePicked(ringtones)
         dismiss()
+    }
+
+    private fun handleBack() {
+        if (!getRingtonePickerFragment().onBackClick()) {
+            dismiss()
+        }
     }
 
     private fun getRingtonePickerFragment(): RingtonePickerFragment {
@@ -68,7 +75,7 @@ class RingtonePickerDialog : DialogFragment(), UltimateRingtonePicker.RingtonePi
         @JvmStatic
         fun createInstance(
             settings: UltimateRingtonePicker.Settings,
-            dialogTitle: CharSequence
+            dialogTitle: CharSequence?
         ): RingtonePickerDialog = RingtonePickerDialog().apply {
             arguments = Bundle().apply {
                 putParcelable(EXTRA_SETTINGS, settings)
