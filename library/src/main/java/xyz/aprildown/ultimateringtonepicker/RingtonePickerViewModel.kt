@@ -62,6 +62,7 @@ internal class RingtonePickerViewModel(
         }
         result
     }
+    val allDeviceRingtones: LiveData<List<Ringtone>> get() = deviceRingtones
 
     private val categories by lazy {
         ArrayMap<UltimateRingtonePicker.RingtoneCategoryType, MutableLiveData<List<Category>>>().also { map ->
@@ -160,7 +161,16 @@ internal class RingtonePickerViewModel(
         return result
     }
 
-    fun onSafSelect(contentResolver: ContentResolver, uri: Uri) {
+    fun onSafSelect(contentResolver: ContentResolver, data: Intent): Ringtone? {
+        val uri = data.data
+        if (uri == null || uri == RINGTONE_URI_SILENT) return null
+        // Bail if the permission to read (playback) the audio at the uri was not granted.
+        if (data.flags and Intent.FLAG_GRANT_READ_URI_PERMISSION
+            != Intent.FLAG_GRANT_READ_URI_PERMISSION
+        ) {
+            return null
+        }
+
         // Take the long-term permission to read (playback) the audio at the uri.
         contentResolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
 
@@ -188,9 +198,10 @@ internal class RingtonePickerViewModel(
             }
 
             if (title != null) {
-                onDeviceSelection(listOf(Ringtone(uri, title)))
+                return Ringtone(uri, title)
             }
         }
+        return null
     }
 
     fun onFinalSelection(selectedRingtones: List<Ringtone>) {

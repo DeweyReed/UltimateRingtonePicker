@@ -26,6 +26,7 @@ import xyz.aprildown.ultimateringtonepicker.R
 import xyz.aprildown.ultimateringtonepicker.RINGTONE_URI_SILENT
 import xyz.aprildown.ultimateringtonepicker.RingtonePickerViewModel
 import xyz.aprildown.ultimateringtonepicker.data.Ringtone
+import xyz.aprildown.ultimateringtonepicker.launchSaf
 
 internal class SystemRingtoneFragment : Fragment(R.layout.urp_recycler_view),
     EventHandler,
@@ -173,16 +174,6 @@ internal class SystemRingtoneFragment : Fragment(R.layout.urp_recycler_view),
         }
     }
 
-    private fun launchSaf() {
-        startActivityForResult(
-            Intent(Intent.ACTION_OPEN_DOCUMENT)
-                .addCategory(Intent.CATEGORY_OPENABLE)
-                .setType("audio/*")
-                .addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION),
-            0
-        )
-    }
-
     private fun launchDevicePick() {
         findNavController().navigate(R.id.urp_dest_device)
     }
@@ -191,15 +182,10 @@ internal class SystemRingtoneFragment : Fragment(R.layout.urp_recycler_view),
      * Receive [Intent.ACTION_OPEN_DOCUMENT] result.
      */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        val uri = data?.data
-        if (resultCode == Activity.RESULT_OK && uri != null && uri != RINGTONE_URI_SILENT) {
-            // Bail if the permission to read (playback) the audio at the uri was not granted.
-            if (data.flags and Intent.FLAG_GRANT_READ_URI_PERMISSION
-                != Intent.FLAG_GRANT_READ_URI_PERMISSION
-            ) {
-                return
+        if (resultCode == Activity.RESULT_OK && data != null) {
+            viewModel.onSafSelect(requireContext().contentResolver, data)?.let {
+                viewModel.onDeviceSelection(listOf(it))
             }
-            viewModel.onSafSelect(requireContext().contentResolver, uri)
         }
     }
 

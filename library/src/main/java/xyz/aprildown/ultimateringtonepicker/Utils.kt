@@ -1,6 +1,7 @@
 package xyz.aprildown.ultimateringtonepicker
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.drawable.Animatable
 import android.net.Uri
 import android.os.Build
@@ -45,4 +46,14 @@ internal fun Fragment.requireRingtonePickerListener(): UltimateRingtonePicker.Ri
         context is UltimateRingtonePicker.RingtonePickerListener -> context as UltimateRingtonePicker.RingtonePickerListener
         activity is UltimateRingtonePicker.RingtonePickerListener -> activity as UltimateRingtonePicker.RingtonePickerListener
     else -> throw IllegalStateException("Cannot find RingtonePickerListener")
+}
+
+internal fun Fragment.launchSaf() {
+    startActivityForResult(
+        Intent(Intent.ACTION_OPEN_DOCUMENT)
+            .addCategory(Intent.CATEGORY_OPENABLE)
+            .setType("audio/*")
+            .addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION),
+        0
+    )
 }
