@@ -12,7 +12,6 @@ android {
         versionCode versions.version_code
         versionName versions.version_name
         vectorDrawables.useSupportLibrary true
-        consumerProguardFiles 'proguard-rules.pro'
     }
 
     resourcePrefix 'urp_'
