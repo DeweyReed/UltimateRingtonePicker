@@ -69,12 +69,7 @@ internal class SystemRingtoneFragment : Fragment(R.layout.urp_recycler_view),
 
         fastAdapter.addEventHook(object : CustomEventHook<VisibleRingtone>() {
             override fun onBind(viewHolder: RecyclerView.ViewHolder): View? {
-                // TODO: (2020-05-24): Doesn't work.
-                return if (FastAdapter.getHolderAdapterItemTag<VisibleRingtone>(viewHolder) is VisibleRingtone) {
-                    viewHolder.itemView
-                } else {
-                    null
-                }
+                return viewHolder.itemView
             }
 
             override fun attachEvent(view: View, viewHolder: RecyclerView.ViewHolder) {
