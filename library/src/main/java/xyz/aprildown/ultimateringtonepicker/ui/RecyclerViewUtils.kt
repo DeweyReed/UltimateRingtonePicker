@@ -28,14 +28,19 @@ internal fun FastAdapter<GenericItem>.setUpSelectableRingtoneExtension(
             if (selected) {
                 if (item.ringtone.uri != RINGTONE_URI_SILENT) {
                     item.isPlaying = true
+                    notifyItemChanged(getPosition(item))
                     viewModel.startPlaying(item.ringtone.uri)
                 }
                 // Stop other playing items
                 if (selectExtension.multiSelect) {
-                    selectExtension.selectedItems.forEach { selectedItem ->
-                        if (selectedItem is VisibleRingtone && selectedItem != item) {
-                            selectedItem.isPlaying = false
-                            notifyItemChanged(getPosition(selectedItem))
+                    for (index in 0 until itemCount) {
+                        val currentItem = getItem(index) ?: continue
+                        if (currentItem.isSelected &&
+                            currentItem is VisibleRingtone &&
+                            currentItem != item
+                        ) {
+                            currentItem.isPlaying = false
+                            notifyItemChanged(index)
                         }
                     }
                 }
