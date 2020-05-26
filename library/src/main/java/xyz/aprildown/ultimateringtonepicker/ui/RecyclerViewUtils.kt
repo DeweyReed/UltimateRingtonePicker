@@ -44,13 +44,13 @@ internal fun FastAdapter<GenericItem>.setUpSelectableRingtoneExtension(
                         }
                     }
                 }
-
-                onSelectionChanged?.invoke(item, selected)
             } else {
                 item.isPlaying = false
                 notifyItemChanged(itemPosition)
                 viewModel.stopPlaying()
             }
+
+            onSelectionChanged?.invoke(item, selected)
         }
     }
 }
