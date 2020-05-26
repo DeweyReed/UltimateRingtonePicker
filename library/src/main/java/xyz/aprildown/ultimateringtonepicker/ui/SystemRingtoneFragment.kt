@@ -227,7 +227,10 @@ internal class SystemRingtoneFragment : Fragment(R.layout.urp_recycler_view),
         // We only want to scroll to the first selected item
         // when we enter the picker for the first time.
         if (viewModel.consumeFirstLoad() && firstIndex != RecyclerView.NO_POSITION) {
-            rootRecyclerView?.scrollToPosition(firstIndex)
+            // To reveal items above.
+            rootRecyclerView?.scrollToPosition(
+                (firstIndex - 1).coerceAtMost((rootFastAdapter?.itemCount ?: 0) - 1)
+            )
         }
     }
 
