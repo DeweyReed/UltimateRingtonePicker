@@ -41,6 +41,8 @@ internal class RingtoneFragment : Fragment(R.layout.urp_recycler_view), EventHan
                         ringtoneType = VisibleRingtone.RINGTONE_TYPE_CUSTOM
                     )
                 })
+                fastAdapter.getSelectExtension()
+                    .withSavedInstanceState(savedInstanceState, KEY_SELECTION)
             } else {
                 itemAdapter.setNewList(listOf(VisibleEmptyView()))
             }
@@ -50,6 +52,11 @@ internal class RingtoneFragment : Fragment(R.layout.urp_recycler_view), EventHan
     override fun onResume() {
         super.onResume()
         myself = this
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        rootFastAdapter?.getSelectExtension()?.saveInstanceState(outState, KEY_SELECTION)
     }
 
     override fun onSelect() {
@@ -80,6 +87,8 @@ internal class RingtoneFragment : Fragment(R.layout.urp_recycler_view), EventHan
     }
 
     companion object {
+        private const val KEY_SELECTION = "selection"
+
         /**
          * I can't find a way to get current fragment in ViewPager so I use this way.
          */
