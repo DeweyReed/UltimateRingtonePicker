@@ -212,10 +212,12 @@ internal class SystemRingtoneFragment : Fragment(R.layout.urp_recycler_view),
         val items = createVisibleItems(context)
 
         val currentSelection = viewModel.currentSelectedUris
+        var firstItem: VisibleRingtone? = null
         var firstIndex = RecyclerView.NO_POSITION
         items.forEachIndexed { index, item ->
             if (item is VisibleRingtone && item.ringtone.uri in currentSelection) {
                 if (firstIndex == RecyclerView.NO_POSITION) {
+                    firstItem = item
                     firstIndex = index
                 }
                 item.isSelected = true
@@ -225,12 +227,26 @@ internal class SystemRingtoneFragment : Fragment(R.layout.urp_recycler_view),
         FastAdapterDiffUtil[itemAdapter] = items
 
         // We only want to scroll to the first selected item
-        // when we enter the picker for the first time.
-        if (viewModel.consumeFirstLoad() && firstIndex != RecyclerView.NO_POSITION) {
-            // To reveal items above.
-            rootRecyclerView?.scrollToPosition(
-                (firstIndex - 1).coerceAtMost((rootFastAdapter?.itemCount ?: 0) - 1)
-            )
+        // when we open the picker for the first time.
+        if (viewModel.consumeFirstLoad()) {
+            if (firstIndex != RecyclerView.NO_POSITION) {
+                // To reveal items above.
+                rootRecyclerView?.scrollToPosition(
+                    (firstIndex - 1).coerceAtMost((rootFastAdapter?.itemCount ?: 0) - 1)
+                )
+            }
+        } else {
+            // We pick a ringtone from SAF and play it here.
+            if (currentSelection.size == 1 &&
+                firstIndex != RecyclerView.NO_POSITION &&
+                !viewModel.isPlaying
+            ) {
+                firstItem?.let { targetItem ->
+                    viewModel.startPlaying(targetItem.ringtone.uri)
+                    targetItem.isPlaying = true
+                    rootFastAdapter?.notifyItemChanged(firstIndex)
+                }
+            }
         }
     }
 

@@ -1,6 +1,5 @@
 package xyz.aprildown.ultimateringtonepicker.music
 
-import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.content.Context
 import android.media.AudioAttributes
@@ -61,7 +60,6 @@ internal class AsyncRingtonePlayer(
     }
 
     /** Handler running on the ringtone thread.  */
-    @SuppressLint("StaticFieldLeak")
     private val mHandler: Handler =
         object : Handler(HandlerThread("ringtone-player").apply { start() }.looper) {
             override fun handleMessage(msg: Message) {
@@ -95,6 +93,8 @@ internal class AsyncRingtonePlayer(
     fun stop() {
         postMessage(EVENT_STOP, null, false, 0)
     }
+
+    val isPlaying: Boolean get() = mPlaybackDelegate.currentPlayingUri != null
 
     /**
      * Posts a message to the ringtone-thread handler.

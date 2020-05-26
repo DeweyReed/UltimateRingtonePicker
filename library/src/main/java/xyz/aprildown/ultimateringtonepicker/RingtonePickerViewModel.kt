@@ -117,6 +117,8 @@ internal class RingtonePickerViewModel(
         }
     }
 
+    val isPlaying: Boolean get() = mediaPlayer.isPlaying
+
     fun startPlaying(uri: Uri) {
         mediaPlayer.play(uri, true, settings.streamType)
     }
