@@ -174,8 +174,16 @@ internal class SystemRingtoneFragment : Fragment(R.layout.urp_recycler_view),
     }
 
     override fun onPermissionsDenied(requestCode: Int, perms: MutableList<String>) {
-        if (EasyPermissions.permissionPermanentlyDenied(this, perms[0])) {
-            launchSaf()
+        val customSection =
+            viewModel.settings.systemRingtonePicker?.customSection ?: return
+        when {
+            customSection.launchSafOnPermissionDenied -> {
+                launchSaf()
+            }
+            EasyPermissions.permissionPermanentlyDenied(this, perms[0]) &&
+                customSection.launchSafOnPermissionPermanentlyDenied -> {
+                launchSaf()
+            }
         }
     }
 

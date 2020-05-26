@@ -44,7 +44,13 @@ class UltimateRingtonePicker {
              * ringtones, set this to true to use Storage Access Framework which doesn't require
              * the permission.
              */
-            val useSafSelect: Boolean = false
+            val useSafSelect: Boolean = false,
+
+            /**
+             * Only used when [useSafSelect] is false.
+             */
+            val launchSafOnPermissionDenied: Boolean = true,
+            val launchSafOnPermissionPermanentlyDenied: Boolean = true
         ) : Parcelable
 
         @Parcelize
