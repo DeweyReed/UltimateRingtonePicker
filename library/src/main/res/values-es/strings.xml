@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="urp_add_new_sound">Añadir nuevo</string>
+    <string name="urp_silent_ringtone_title">Silencio</string>
+    <string name="urp_unknown_ringtone_title">Desconocido</string>
+    <string name="urp_your_sounds">Tus sonidos</string>
+    <string name="urp_device_sounds">Sonidos del dispositivo</string>
+    <string name="urp_remove_sound">Quitar</string>
+    <string name="urp_default_ringtone_title">Defecto</string>
+    <string name="urp_ringtone">Tono de llamada</string>
+    <string name="urp_notification">Notificación</string>
+    <string name="urp_alarm">Alarma</string>
+    <string name="urp_empty">Vacío</string>
+    <string name="urp_permission_external_rational">Se necesita un permiso de almacenamiento externo para elegir un tono de llamada personalizado.</string>
+</resources>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="urp_add_new_sound">新しく追加</string>
+    <string name="urp_silent_ringtone_title">マナーモード</string>
+    <string name="urp_unknown_ringtone_title">不明</string>
+    <string name="urp_your_sounds">マイサウンド</string>
+    <string name="urp_device_sounds">端末のサウンド</string>
+    <string name="urp_remove_sound">削除</string>
+    <string name="urp_default_ringtone_title">デフォルト</string>
+    <string name="urp_ringtone">着信音</string>
+    <string name="urp_notification">通知</string>
+    <string name="urp_alarm">アラーム</string>
+    <string name="urp_empty">空の</string>
+    <string name="urp_permission_external_rational">カスタム着信音を選択するには、外部ストレージのアクセス許可が必要です。</string>
+</resources>

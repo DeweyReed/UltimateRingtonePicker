@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="urp_add_new_sound">नया जोड़ें</string>
+    <string name="urp_silent_ringtone_title">मौन</string>
+    <string name="urp_unknown_ringtone_title">अज्ञात</string>
+    <string name="urp_your_sounds">आपकी ध्वनियां</string>
+    <string name="urp_device_sounds">डिवाइस की ध्वनियां</string>
+    <string name="urp_remove_sound">निकालें</string>
+    <string name="urp_default_ringtone_title">चूक</string>
+    <string name="urp_ringtone">रिंगटोन</string>
+    <string name="urp_notification">अधिसूचना</string>
+    <string name="urp_alarm">अलार्म</string>
+    <string name="urp_empty">खाली</string>
+    <string name="urp_permission_external_rational">कस्टम रिंगटोन लेने के लिए एक्सटर्नल स्टोरेज परमिशन की जरूरत होती है।</string>
+</resources>

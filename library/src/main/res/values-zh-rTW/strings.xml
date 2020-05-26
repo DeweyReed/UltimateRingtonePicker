@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="urp_add_new_sound">新增</string>
+    <string name="urp_silent_ringtone_title">靜音</string>
+    <string name="urp_unknown_ringtone_title">不明</string>
+    <string name="urp_your_sounds">你的音效</string>
+    <string name="urp_device_sounds">裝置音效</string>
+    <string name="urp_remove_sound">移除</string>
+    <string name="urp_default_ringtone_title">預設提示音</string>
+    <string name="urp_ringtone">鈴聲</string>
+    <string name="urp_notification">通知</string>
+    <string name="urp_alarm">鬧鐘</string>
+    <string name="urp_empty">無內容</string>
+    <string name="urp_permission_external_rational">需要讀取儲存的許可權來選擇自定義鈴聲檔案。</string>
+</resources>
