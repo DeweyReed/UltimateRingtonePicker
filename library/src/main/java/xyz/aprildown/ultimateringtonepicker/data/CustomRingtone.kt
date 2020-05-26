@@ -40,5 +40,5 @@ internal data class CustomRingtone(
      */
     var hasPermissions: Boolean = true
 
-    var exists: Boolean = true
+    var canBeQueried: Boolean = true
 }

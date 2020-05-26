@@ -31,12 +31,7 @@ internal class RingtonePickerViewModel(
 
     val currentSelectedUris = mutableSetOf<Uri>()
 
-    private val customRingtoneModel by lazy {
-        CustomRingtoneModel(
-            context = application,
-            requireUriPermission = settings.systemRingtonePicker?.customSection?.useSafSelect == true
-        )
-    }
+    private val customRingtoneModel by lazy { CustomRingtoneModel(application) }
     val customRingtones = mutableSetOf<Ringtone>()
 
     private val systemRingtoneModel by lazy { SystemRingtoneModel(application) }

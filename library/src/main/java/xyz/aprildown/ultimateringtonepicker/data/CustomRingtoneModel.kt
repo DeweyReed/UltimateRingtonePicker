@@ -7,10 +7,7 @@ import android.net.Uri
 import android.provider.BaseColumns
 import xyz.aprildown.ultimateringtonepicker.safeContext
 
-internal class CustomRingtoneModel(
-    private val context: Context,
-    private val requireUriPermission: Boolean
-) {
+internal class CustomRingtoneModel(private val context: Context) {
 
     /**
      * Stores all custom ringtones that users select
@@ -24,13 +21,11 @@ internal class CustomRingtoneModel(
         customRingtoneDAO.getCustomRingtones().apply {
             val cr = context.contentResolver
             forEach {
-                it.exists = cr.canFind(it.uri)
+                it.canBeQueried = cr.canFind(it.uri)
             }
-            if (requireUriPermission) {
-                val allPermissions = cr.persistedUriPermissions.mapNotNull { it?.uri }
-                forEach {
-                    it.hasPermissions = it.uri in allPermissions
-                }
+            val allPermissions = cr.persistedUriPermissions.mapNotNull { it?.uri }
+            forEach {
+                it.hasPermissions = it.uri in allPermissions
             }
         }
     }
@@ -70,15 +65,10 @@ internal class CustomRingtoneModel(
             it.uri,
             it.title,
             /**
-             * If it exists, it means you have READ_EXTERNAL_STORAGE permission and we've found it.
-             * Otherwise, we may use SAF and don't have READ_EXTERNAL_STORAGE permission, but
-             * we can still access it if we have Uri permission.
+             * If it canBeQueried, we have READ_EXTERNAL_STORAGE.
+             * If it hasPermissions, it's from SAF.
              */
-            isValid = it.exists && if (requireUriPermission) {
-                it.hasPermissions
-            } else {
-                true
-            }
+            isValid = it.canBeQueried || it.hasPermissions
         )
     }
 
