@@ -88,7 +88,6 @@ private fun ContentResolver.canFind(uri: Uri): Boolean {
         } ?: false
     } catch (e: SecurityException) {
         // We even don't have the permission to query.
-        e.printStackTrace()
         false
     }
 }
