@@ -7,6 +7,7 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import androidx.viewpager.widget.ViewPager
@@ -24,23 +25,25 @@ internal class DeviceRingtoneFragment :
 
     private val viewModel by navGraphViewModels<RingtonePickerViewModel>(R.id.urp_nav_graph)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        if (viewModel.settings.deviceRingtonePicker?.alwaysUseSaf == true) {
-            launchSaf()
-        } else {
-            viewModel.allDeviceRingtones.observe(
-                this,
-                object : Observer<List<Ringtone>> {
-                    override fun onChanged(t: List<Ringtone>?) {
-                        if (t == null) return
-                        viewModel.allDeviceRingtones.removeObserver(this)
-                        if (t.isEmpty()) {
-                            launchSaf()
+    init {
+        lifecycleScope.launchWhenResumed {
+            // viewModel may not be available in onCreate.
+            if (viewModel.settings.deviceRingtonePicker?.alwaysUseSaf == true) {
+                launchSaf()
+            } else {
+                viewModel.allDeviceRingtones.observe(
+                    this@DeviceRingtoneFragment,
+                    object : Observer<List<Ringtone>> {
+                        override fun onChanged(t: List<Ringtone>?) {
+                            if (t == null) return
+                            viewModel.allDeviceRingtones.removeObserver(this)
+                            if (t.isEmpty()) {
+                                launchSaf()
+                            }
                         }
                     }
-                }
-            )
+                )
+            }
         }
     }
 
