@@ -231,9 +231,7 @@ internal class SystemRingtoneFragment : Fragment(R.layout.urp_recycler_view),
         if (viewModel.consumeFirstLoad()) {
             if (firstIndex != RecyclerView.NO_POSITION) {
                 // To reveal items above.
-                rootRecyclerView?.scrollToPosition(
-                    (firstIndex - 1).coerceAtMost((rootFastAdapter?.itemCount ?: 0) - 1)
-                )
+                rootRecyclerView?.scrollToPosition((firstIndex - 1).coerceAtLeast(0))
             }
         } else {
             // We pick a ringtone from SAF and play it here.
