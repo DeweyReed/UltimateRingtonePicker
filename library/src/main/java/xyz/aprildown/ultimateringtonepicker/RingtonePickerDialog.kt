@@ -11,6 +11,8 @@ import androidx.fragment.app.DialogFragment
 
 class RingtonePickerDialog : DialogFragment(), UltimateRingtonePicker.RingtonePickerListener {
 
+    private var directListener: UltimateRingtonePicker.RingtonePickerListener? = null
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return object : AppCompatDialog(requireContext()) {
             init {
@@ -54,8 +56,15 @@ class RingtonePickerDialog : DialogFragment(), UltimateRingtonePicker.RingtonePi
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+        if (directListener != null) {
+            dismiss()
+        }
+    }
+
     override fun onRingtonePicked(ringtones: List<UltimateRingtonePicker.RingtoneEntry>) {
-        requireRingtonePickerListener().onRingtonePicked(ringtones)
+        (directListener ?: requireRingtonePickerListener()).onRingtonePicked(ringtones)
         dismiss()
     }
 
@@ -81,6 +90,22 @@ class RingtonePickerDialog : DialogFragment(), UltimateRingtonePicker.RingtonePi
                 putParcelable(EXTRA_SETTINGS, settings)
                 putCharSequence(EXTRA_TITLE, dialogTitle)
             }
+        }
+
+        /**
+         * The dialog will be dismissed in onPause but give you the result directly in the [listener].
+         */
+        @JvmStatic
+        fun createEphemeralInstance(
+            settings: UltimateRingtonePicker.Settings,
+            dialogTitle: CharSequence?,
+            listener: UltimateRingtonePicker.RingtonePickerListener
+        ): RingtonePickerDialog = RingtonePickerDialog().apply {
+            arguments = Bundle().apply {
+                putParcelable(EXTRA_SETTINGS, settings)
+                putCharSequence(EXTRA_TITLE, dialogTitle)
+            }
+            directListener = listener
         }
     }
 }

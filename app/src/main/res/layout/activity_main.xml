@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="16dp"
     tools:context=".MainActivity"
     tools:ignore="HardcodedText">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:orientation="vertical">
 
         <Button
             style="@style/ExampleButton"
@@ -76,6 +76,13 @@
             android:layout_height="wrap_content"
             android:onClick="onlySafPick"
             android:text="Only Storage Access Framework" />
+
+        <Button
+            style="@style/ExampleButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="ephemeralDialog"
+            android:text="Ephemeral Dialog\n(Doesn't survive configuration changes but gives you result directly)" />
 
     </LinearLayout>
 

@@ -6,6 +6,7 @@ import android.content.Intent
 import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
 import android.provider.Settings
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -218,6 +219,21 @@ class MainActivity : AppCompatActivity(), UltimateRingtonePicker.RingtonePickerL
             ),
             REQUEST_CODE_ACTIVITY
         )
+    }
+
+    fun ephemeralDialog(view: View) {
+        RingtonePickerDialog.createEphemeralInstance(
+            createStandardSettings(),
+            "Ephemeral Dialog",
+            object : UltimateRingtonePicker.RingtonePickerListener {
+                override fun onRingtonePicked(ringtones: List<UltimateRingtonePicker.RingtoneEntry>) {
+                    toast("Ephemeral!")
+                    Handler().postDelayed({
+                        handleResult(ringtones)
+                    }, 1000)
+                }
+            }
+        ).show(supportFragmentManager, null)
     }
 
     private fun createStandardSettings(): UltimateRingtonePicker.Settings =
