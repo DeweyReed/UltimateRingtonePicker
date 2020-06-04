@@ -15,8 +15,8 @@
     <a href="https://travis-ci.org/DeweyReed/UltimateRingtonePicker">
         <img src="https://travis-ci.org/DeweyReed/UltimateRingtonePicker.svg?branch=master"/>
     </a>
-    <a href="https://jitpack.io/#DeweyReed/UltimateRingtonePicker">
-        <img src="https://jitpack.io/v/DeweyReed/UltimateRingtonePicker.svg"/>
+    <a href="https://jitpack.io/#xyz.aprildown/UltimateRingtonePicker">
+        <img src="https://jitpack.io/v/xyz.aprildown/UltimateRingtonePicker.svg"/>
     </a>
     <a href="https://android-arsenal.com/api?level=14">
         <img src="https://img.shields.io/badge/API-14%2B-brightgreen.svg?style=flat" border="0" alt="API">
@@ -66,7 +66,7 @@ allprojects {
 
 Step 2. Add the dependency
 
-[![The Newest Version](https://jitpack.io/v/DeweyReed/UltimateRingtonePicker.svg)](https://jitpack.io/#DeweyReed/UltimateRingtonePicker)
+[![The Newest Version](https://jitpack.io/v/xyz.aprildown/UltimateRingtonePicker.svg)](https://jitpack.io/#xyz.aprildown/UltimateRingtonePicker)
 
 ```Groovy
 dependencies {
