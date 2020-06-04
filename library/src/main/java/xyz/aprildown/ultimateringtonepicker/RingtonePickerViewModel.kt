@@ -39,10 +39,9 @@ internal class RingtonePickerViewModel(
 
     /**
      * Use this event to get [customRingtones] and [systemRingtones].
-     * Value: True if we pick ringtones from the device picker.
      */
-    private val _systemRingtoneLoadedEvent = MutableLiveData<Boolean>()
-    val systemRingtoneLoadedEvent: LiveData<Boolean> = _systemRingtoneLoadedEvent
+    private val _systemRingtoneLoadedEvent = MutableLiveData<Unit>()
+    val systemRingtoneLoadedEvent: LiveData<Unit> = _systemRingtoneLoadedEvent
     private var firstLoad: Boolean = true
 
     val finalSelection = MutableLiveData<List<Ringtone>>()
@@ -121,7 +120,7 @@ internal class RingtonePickerViewModel(
                 }
             }
 
-            _systemRingtoneLoadedEvent.postValue(false)
+            _systemRingtoneLoadedEvent.value = Unit
         }
     }
 
@@ -157,7 +156,7 @@ internal class RingtonePickerViewModel(
         customRingtones.clear()
         customRingtones.addAll(customRingtoneModel.getCustomRingtones())
 
-        _systemRingtoneLoadedEvent.value = selectedRingtones.isNotEmpty()
+        _systemRingtoneLoadedEvent.value = Unit
     }
 
     fun consumeFirstLoad(): Boolean {

@@ -32,6 +32,7 @@ internal class SystemRingtoneFragment : Fragment(R.layout.urp_recycler_view),
     EasyPermissions.PermissionCallbacks {
 
     private val viewModel by navGraphViewModels<RingtonePickerViewModel>(R.id.urp_nav_graph)
+    private var isRingtoneFromSaf = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val context = view.context
@@ -111,9 +112,7 @@ internal class SystemRingtoneFragment : Fragment(R.layout.urp_recycler_view),
         })
 
         viewModel.systemRingtoneLoadedEvent.observe(viewLifecycleOwner, Observer {
-            if (it != null) {
-                loadVisibleRingtones(context, itemAdapter, it)
-            }
+            loadVisibleRingtones(context, itemAdapter)
         })
     }
 
@@ -192,6 +191,7 @@ internal class SystemRingtoneFragment : Fragment(R.layout.urp_recycler_view),
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK && data != null) {
             viewModel.onSafSelect(requireContext().contentResolver, data)?.let {
+                isRingtoneFromSaf = true
                 viewModel.onDeviceSelection(listOf(it))
             }
         }
@@ -199,8 +199,7 @@ internal class SystemRingtoneFragment : Fragment(R.layout.urp_recycler_view),
 
     private fun loadVisibleRingtones(
         context: Context,
-        itemAdapter: GenericItemAdapter,
-        isFromDevicePicker: Boolean
+        itemAdapter: GenericItemAdapter
     ) {
         val items = createVisibleItems(context)
 
@@ -228,11 +227,12 @@ internal class SystemRingtoneFragment : Fragment(R.layout.urp_recycler_view),
             }
         } else {
             // We pick a ringtone from SAF and play it here.
-            if (currentSelection.size == 1 &&
+            if (isRingtoneFromSaf &&
+                currentSelection.size == 1 &&
                 firstIndex != RecyclerView.NO_POSITION &&
-                viewModel.currentPlayingUri != currentSelection.first() &&
-                isFromDevicePicker
+                viewModel.currentPlayingUri != currentSelection.first()
             ) {
+                isRingtoneFromSaf = false
                 firstItem?.let { targetItem ->
                     viewModel.startPlaying(targetItem.ringtone.uri)
                     targetItem.isPlaying = true
