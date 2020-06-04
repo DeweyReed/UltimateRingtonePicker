@@ -15,7 +15,6 @@ internal class VisibleCategory(
 ) : AbstractBindingItem<UrpTwoLinesBinding>() {
 
     override val type: Int = R.id.urp_item_two_lines
-    override var identifier: Long = category.hashCode().toLong()
     override var isSelectable: Boolean = false
 
     override fun bindView(binding: UrpTwoLinesBinding, payloads: List<Any>) {
