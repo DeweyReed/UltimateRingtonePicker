@@ -87,7 +87,13 @@ internal class RingtonePickerViewModel(
     init {
         viewModelScope.launch {
 
-            currentSelectedUris.addAll(settings.preSelectUris)
+            settings.preSelectUris.let { preSelect ->
+                currentSelectedUris += if (!settings.enableMultiSelect && preSelect.size > 1) {
+                    preSelect.take(1)
+                } else {
+                    preSelect
+                }
+            }
 
             val systemRingtonePicker =
                 settings.systemRingtonePicker
