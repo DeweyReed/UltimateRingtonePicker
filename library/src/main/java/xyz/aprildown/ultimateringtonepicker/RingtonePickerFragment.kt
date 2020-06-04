@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.navGraphViewModels
-import xyz.aprildown.ultimateringtonepicker.ui.Navigator
+import xyz.aprildown.ultimateringtonepicker.ui.EventHandler
 
 /**
  * Structure:
@@ -22,7 +22,7 @@ import xyz.aprildown.ultimateringtonepicker.ui.Navigator
  */
 class RingtonePickerFragment : NavHostFragment() {
 
-    private lateinit var pickListener: RingtonePickerListener
+    private lateinit var pickListener: UltimateRingtonePicker.RingtonePickerListener
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -33,8 +33,11 @@ class RingtonePickerFragment : NavHostFragment() {
         val settings = arguments?.getParcelable(EXTRA_SETTINGS) ?: UltimateRingtonePicker.Settings()
 
         navController.graph = navController.navInflater.inflate(R.navigation.urp_nav_graph).apply {
-            startDestination =
-                if (settings.onlyShowDevice) R.id.urp_dest_device else R.id.urp_dest_system
+            startDestination = if (settings.systemRingtonePicker == null) {
+                R.id.urp_dest_device
+            } else {
+                R.id.urp_dest_system
+            }
         }
 
         val viewModel by navGraphViewModels<RingtonePickerViewModel>(R.id.urp_nav_graph) {
@@ -52,32 +55,29 @@ class RingtonePickerFragment : NavHostFragment() {
 
         viewModel.finalSelection.observe(viewLifecycleOwner, Observer { ringtones ->
             if (ringtones != null) {
-                pickListener.onRingtonePicked(ringtones.filter { it.isValid }.map {
-                    RingtonePickerEntry(it.uri, it.title)
-                })
+                pickListener.onRingtonePicked(
+                    ringtones.filter { it.isValid }
+                        .map {
+                            UltimateRingtonePicker.RingtoneEntry(uri = it.uri, name = it.title)
+                        }
+                )
             }
         })
     }
 
-    private fun findOurTopFragment(): Fragment? = childFragmentManager.primaryNavigationFragment
+    private fun getTopFragment(): Fragment? {
+        return childFragmentManager.primaryNavigationFragment
+    }
 
     fun onSelectClick() {
-        val topFragment = findOurTopFragment()
-        if (topFragment is Navigator.Selector) {
-            topFragment.onSelect()
-        }
+        (getTopFragment() as? EventHandler)?.onSelect()
     }
 
     /**
-     * @return True if the back stack is empty and you should close the activity or dialog.
-     *         False if the back stack is popped up once and you should do nothing.
+     * @return If the back event is consumed.
+     *         If it isn't consumed(false), you can finish the activity or the dialog.
      */
     fun onBackClick(): Boolean {
-        val topFragment = findOurTopFragment()
-        return if (topFragment is Navigator.Selector) {
-            !topFragment.onBack()
-        } else {
-            true
-        }
+        return (getTopFragment() as? EventHandler)?.onBack() == true
     }
 }

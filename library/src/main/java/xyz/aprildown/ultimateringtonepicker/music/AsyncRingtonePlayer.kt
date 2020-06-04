@@ -1,6 +1,5 @@
 package xyz.aprildown.ultimateringtonepicker.music
 
-import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.content.Context
 import android.media.AudioAttributes
@@ -21,7 +20,7 @@ import android.os.Looper
 import android.os.Message
 import android.telephony.TelephonyManager
 import androidx.annotation.RequiresApi
-import xyz.aprildown.ultimateringtonepicker.UltimateRingtonePicker
+import xyz.aprildown.ultimateringtonepicker.ASSET_URI_PREFIX
 import xyz.aprildown.ultimateringtonepicker.isLOrLater
 import xyz.aprildown.ultimateringtonepicker.isOOrLater
 import java.io.IOException
@@ -61,7 +60,6 @@ internal class AsyncRingtonePlayer(
     }
 
     /** Handler running on the ringtone thread.  */
-    @SuppressLint("StaticFieldLeak")
     private val mHandler: Handler =
         object : Handler(HandlerThread("ringtone-player").apply { start() }.looper) {
             override fun handleMessage(msg: Message) {
@@ -95,6 +93,8 @@ internal class AsyncRingtonePlayer(
     fun stop() {
         postMessage(EVENT_STOP, null, false, 0)
     }
+
+    val currentPlayingUri: Uri? get() = mPlaybackDelegate.currentPlayingUri
 
     /**
      * Posts a message to the ringtone-thread handler.
@@ -190,11 +190,8 @@ internal class AsyncRingtonePlayer(
                 currentPlayingUri = alarmNoise
 
                 when {
-                    alarmNoise?.toString()
-                        ?.startsWith(UltimateRingtonePicker.Settings.ASSET_URI_PREFIX) == true -> {
-                        val fileName = alarmNoise.toString().removePrefix(
-                            UltimateRingtonePicker.Settings.ASSET_URI_PREFIX
-                        )
+                    alarmNoise?.toString()?.startsWith(ASSET_URI_PREFIX) == true -> {
+                        val fileName = alarmNoise.toString().removePrefix(ASSET_URI_PREFIX)
                         mContext.assets.openFd(fileName).use { afd ->
                             mMediaPlayer?.setDataSource(
                                 afd.fileDescriptor,

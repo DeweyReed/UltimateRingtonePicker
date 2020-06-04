@@ -13,12 +13,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.adapters.GenericItemAdapter
-import xyz.aprildown.ultimateringtonepicker.KEY_CATEGORY_TYPE
-import xyz.aprildown.ultimateringtonepicker.KEY_EXTRA_ID
-import xyz.aprildown.ultimateringtonepicker.KEY_RINGTONE_TYPE
+import xyz.aprildown.ultimateringtonepicker.EXTRA_CATEGORY_ID
+import xyz.aprildown.ultimateringtonepicker.EXTRA_CATEGORY_TYPE
 import xyz.aprildown.ultimateringtonepicker.R
 import xyz.aprildown.ultimateringtonepicker.RingtonePickerViewModel
-import xyz.aprildown.ultimateringtonepicker.categoryTypeToRingtoneType
+import xyz.aprildown.ultimateringtonepicker.UltimateRingtonePicker
 
 internal class CategoryFragment : Fragment() {
 
@@ -34,7 +33,8 @@ internal class CategoryFragment : Fragment() {
         val context = view.context
         val recyclerView = view as RecyclerView
 
-        val categoryType = requireArguments().getInt(KEY_CATEGORY_TYPE)
+        val categoryType =
+            requireArguments().getSerializable(EXTRA_CATEGORY_TYPE) as UltimateRingtonePicker.RingtoneCategoryType
 
         val itemAdapter = GenericItemAdapter()
         val fastAdapter = FastAdapter.with(itemAdapter)
@@ -44,8 +44,8 @@ internal class CategoryFragment : Fragment() {
                     findNavController().navigate(
                         R.id.urp_dest_ringtone_list,
                         Bundle().apply {
-                            putInt(KEY_RINGTONE_TYPE, categoryType.categoryTypeToRingtoneType())
-                            putLong(KEY_EXTRA_ID, item.category.categoryId)
+                            putSerializable(EXTRA_CATEGORY_TYPE, categoryType)
+                            putLong(EXTRA_CATEGORY_ID, item.category.id)
                         }
                     )
                     true
@@ -60,7 +60,7 @@ internal class CategoryFragment : Fragment() {
             addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
         }
 
-        viewModel.getCategoryLiveData(categoryType).observe(
+        viewModel.getCategoryLiveData(categoryType)?.observe(
             viewLifecycleOwner,
             Observer { categories ->
                 if (categories.isNotEmpty()) {

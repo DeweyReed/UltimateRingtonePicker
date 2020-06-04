@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="urp_add_new_sound">Nieuw toevoegen</string>
+    <string name="urp_silent_ringtone_title">Stil</string>
+    <string name="urp_unknown_ringtone_title">Onbekend</string>
+    <string name="urp_your_sounds">Jouw geluiden</string>
+    <string name="urp_device_sounds">Apparaatgeluiden</string>
+    <string name="urp_remove_sound">Verwijderen</string>
+    <string name="urp_default_ringtone_title">Standaard</string>
+    <string name="urp_ringtone">Beltoon</string>
+    <string name="urp_notification">Meldings</string>
+    <string name="urp_alarm">Alarm</string>
+    <string name="urp_empty">Leeg</string>
+    <string name="urp_permission_external_rational">Externe opslagtoestemming is nodig om een aangepaste beltoon te kiezen.</string>
+</resources>

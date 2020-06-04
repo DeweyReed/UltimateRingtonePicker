@@ -18,7 +18,6 @@ package xyz.aprildown.ultimateringtonepicker.data
 
 import android.content.SharedPreferences
 import android.net.Uri
-import xyz.aprildown.ultimateringtonepicker.sortWithCollator
 import java.util.ArrayList
 
 /**
@@ -80,7 +79,6 @@ internal class CustomRingtoneDAO(private val prefs: SharedPreferences) {
             ringtones.add(CustomRingtone(idLong, uri, title))
         }
 
-        ringtones.sortWithCollator()
         return ringtones
     }
 

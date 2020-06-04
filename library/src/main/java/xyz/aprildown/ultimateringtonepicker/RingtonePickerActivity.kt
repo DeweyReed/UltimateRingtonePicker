@@ -1,21 +1,24 @@
 package xyz.aprildown.ultimateringtonepicker
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.urp_activity_ringtone_picker.*
+import xyz.aprildown.ultimateringtonepicker.databinding.UrpActivityRingtonePickerBinding
 import java.util.ArrayList
 
 /**
  * Created on 2018/6/7.
  */
 
-class RingtonePickerActivity : AppCompatActivity(), RingtonePickerListener {
+class RingtonePickerActivity : AppCompatActivity(), UltimateRingtonePicker.RingtonePickerListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.urp_activity_ringtone_picker)
+        val binding = UrpActivityRingtonePickerBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         supportActionBar?.run {
             setDisplayHomeAsUpEnabled(true)
             title = intent.getStringExtra(EXTRA_TITLE)
@@ -31,40 +34,35 @@ class RingtonePickerActivity : AppCompatActivity(), RingtonePickerListener {
                 .commit()
         }
 
-        btnSelect.setOnClickListener {
-            val fragment = supportFragmentManager.findFragmentByTag(TAG_RINGTONE_PICKER)
-            (fragment as RingtonePickerFragment).onSelectClick()
+        binding.btnSelect.setOnClickListener {
+            getRingtonePickerFragment().onSelectClick()
         }
-        btnCancel.setOnClickListener {
-            handleBack()
+        binding.btnCancel.setOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
         }
-    }
 
-    override fun onBackPressed() {
-        handleBack()
+        onBackPressedDispatcher.addCallback(this) {
+            if (!getRingtonePickerFragment().onBackClick()) {
+                finish()
+            }
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        return handleBack()
+        onBackPressedDispatcher.onBackPressed()
+        return true
     }
 
-    private fun handleBack(): Boolean {
-        val fragment = supportFragmentManager.findFragmentByTag(TAG_RINGTONE_PICKER)
-        return if ((fragment as RingtonePickerFragment).onBackClick()) {
-            finish()
-            true
-        } else {
-            false
-        }
-    }
-
-    override fun onRingtonePicked(ringtones: List<RingtonePickerEntry>) {
+    override fun onRingtonePicked(ringtones: List<UltimateRingtonePicker.RingtoneEntry>) {
         setResult(
             Activity.RESULT_OK,
-            Intent()
-                .putParcelableArrayListExtra(EXTRA_RESULT, ArrayList(ringtones))
+            Intent().putParcelableArrayListExtra(EXTRA_RESULT, ArrayList(ringtones))
         )
         finish()
+    }
+
+    private fun getRingtonePickerFragment(): RingtonePickerFragment {
+        return supportFragmentManager.findFragmentByTag(TAG_RINGTONE_PICKER) as RingtonePickerFragment
     }
 
     companion object {
@@ -73,17 +71,17 @@ class RingtonePickerActivity : AppCompatActivity(), RingtonePickerListener {
         private const val EXTRA_RESULT = "result"
 
         @JvmStatic
-        fun putInfoToLaunchIntent(
-            launchIntent: Intent,
+        fun getIntent(
+            context: Context,
             settings: UltimateRingtonePicker.Settings,
             windowTitle: CharSequence
-        ): Intent = launchIntent.apply {
+        ): Intent = Intent(context, RingtonePickerActivity::class.java).apply {
             putExtra(EXTRA_SETTINGS, settings)
             putExtra(EXTRA_TITLE, windowTitle)
         }
 
         @JvmStatic
-        fun getPickerResult(intent: Intent): List<RingtonePickerEntry> {
+        fun getPickerResult(intent: Intent): List<UltimateRingtonePicker.RingtoneEntry> {
             return intent.getParcelableArrayListExtra(EXTRA_RESULT)!!
         }
     }

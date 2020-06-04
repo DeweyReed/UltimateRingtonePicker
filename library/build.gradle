@@ -3,12 +3,8 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
-apply plugin: 'com.github.dcendents.android-maven'
-
-
 android {
     compileSdkVersion versions.compile_sdk
-    buildToolsVersion versions.build_tools
 
     defaultConfig {
         minSdkVersion versions.min_sdk
@@ -16,14 +12,10 @@ android {
         versionCode versions.version_code
         versionName versions.version_name
         vectorDrawables.useSupportLibrary true
-        consumerProguardFiles 'proguard-rules.pro'
     }
 
     resourcePrefix 'urp_'
-
-    androidExtensions {
-        experimental = true
-    }
+    viewBinding.enabled = true
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -32,6 +24,10 @@ android {
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
+}
+
+androidExtensions {
+    features = ["parcelize"]
 }
 
 dependencies {
@@ -51,6 +47,7 @@ dependencies {
     implementation libs.androidx_navigation_ui
 
     implementation libs.fastadapter
+    implementation libs.fastadapter_binding
     implementation libs.fastadapter_diff
 
     implementation libs.easy_permission

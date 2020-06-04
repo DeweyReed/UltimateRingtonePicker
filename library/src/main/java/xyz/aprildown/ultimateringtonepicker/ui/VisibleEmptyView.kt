@@ -1,15 +1,17 @@
 package xyz.aprildown.ultimateringtonepicker.ui
 
-import android.view.View
-import androidx.recyclerview.widget.RecyclerView
-import com.mikepenz.fastadapter.items.AbstractItem
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import com.mikepenz.fastadapter.binding.AbstractBindingItem
 import xyz.aprildown.ultimateringtonepicker.R
+import xyz.aprildown.ultimateringtonepicker.databinding.UrpEmptyBinding
 
-internal class VisibleEmptyView : AbstractItem<VisibleEmptyView.ViewHolder>() {
+internal class VisibleEmptyView : AbstractBindingItem<UrpEmptyBinding>() {
 
-    override val layoutRes: Int = R.layout.urp_empty
     override val type: Int = R.layout.urp_empty
-    override fun getViewHolder(v: View): ViewHolder = ViewHolder(v)
+    override var isSelectable: Boolean = false
 
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view)
+    override fun createBinding(inflater: LayoutInflater, parent: ViewGroup?): UrpEmptyBinding {
+        return UrpEmptyBinding.inflate(inflater, parent, false)
+    }
 }

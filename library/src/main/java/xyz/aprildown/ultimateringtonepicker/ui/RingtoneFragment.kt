@@ -1,52 +1,38 @@
 package xyz.aprildown.ultimateringtonepicker.ui
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.mikepenz.fastadapter.FastAdapter
-import com.mikepenz.fastadapter.GenericItem
 import com.mikepenz.fastadapter.adapters.GenericItemAdapter
-import com.mikepenz.fastadapter.select.SelectExtension
-import xyz.aprildown.ultimateringtonepicker.KEY_EXTRA_ID
-import xyz.aprildown.ultimateringtonepicker.KEY_RINGTONE_TYPE
+import com.mikepenz.fastadapter.select.getSelectExtension
+import xyz.aprildown.ultimateringtonepicker.EXTRA_CATEGORY_ID
+import xyz.aprildown.ultimateringtonepicker.EXTRA_CATEGORY_TYPE
 import xyz.aprildown.ultimateringtonepicker.R
 import xyz.aprildown.ultimateringtonepicker.RingtonePickerViewModel
+import xyz.aprildown.ultimateringtonepicker.UltimateRingtonePicker
 
-internal class RingtoneFragment : Fragment(), Navigator.Selector {
+internal class RingtoneFragment : Fragment(R.layout.urp_recycler_view), EventHandler {
 
     private val viewModel by navGraphViewModels<RingtonePickerViewModel>(R.id.urp_nav_graph)
 
-    private var selectExtension: SelectExtension<GenericItem>? = null
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? = inflater.inflate(R.layout.urp_recycler_view, container, false)
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val context = view.context
         val recyclerView = view as RecyclerView
 
         val itemAdapter = GenericItemAdapter()
         val fastAdapter = FastAdapter.with(itemAdapter)
-        selectExtension = fastAdapter.setUpSelectableRingtoneExtension(viewModel)
+        fastAdapter.setUpSelectableRingtoneExtension(viewModel)
 
-        recyclerView.run {
-            layoutManager = LinearLayoutManager(context)
-            adapter = fastAdapter
-        }
+        recyclerView.adapter = fastAdapter
 
+        val arguments = requireArguments()
         viewModel.getRingtoneLiveData(
-            requireArguments().getInt(KEY_RINGTONE_TYPE),
-            requireArguments().getLong(KEY_EXTRA_ID)
+            categoryType = arguments.getSerializable(EXTRA_CATEGORY_TYPE) as UltimateRingtonePicker.RingtoneCategoryType,
+            categoryId = arguments.getLong(EXTRA_CATEGORY_ID)
         ).observe(viewLifecycleOwner, Observer { ringtones ->
             if (ringtones.isNotEmpty()) {
                 itemAdapter.setNewList(ringtones.map { ringtone ->
@@ -55,7 +41,8 @@ internal class RingtoneFragment : Fragment(), Navigator.Selector {
                         ringtoneType = VisibleRingtone.RINGTONE_TYPE_CUSTOM
                     )
                 })
-                selectExtension?.withSavedInstanceState(savedInstanceState, "")
+                fastAdapter.getSelectExtension()
+                    .withSavedInstanceState(savedInstanceState, KEY_SELECTION)
             } else {
                 itemAdapter.setNewList(listOf(VisibleEmptyView()))
             }
@@ -68,28 +55,29 @@ internal class RingtoneFragment : Fragment(), Navigator.Selector {
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        selectExtension?.saveInstanceState(outState, "")
         super.onSaveInstanceState(outState)
+        rootFastAdapter?.getSelectExtension()?.saveInstanceState(outState, KEY_SELECTION)
     }
 
     override fun onSelect() {
-        viewModel.stopPlaying()
-        @Suppress("UNCHECKED_CAST")
         val ringtones =
-            selectExtension?.selectedItems?.mapNotNull { (it as? VisibleRingtone)?.ringtone }
+            rootFastAdapter?.getSelectExtension()?.selectedItems?.mapNotNull { (it as? VisibleRingtone)?.ringtone }
         if (ringtones?.isNotEmpty() == true) {
-            if (viewModel.settings.onlyShowDevice) {
-                viewModel.onTotalSelection(ringtones)
+            if (viewModel.settings.systemRingtonePicker == null) {
+                viewModel.stopPlaying()
+                viewModel.onFinalSelection(ringtones)
             } else {
                 viewModel.onDeviceSelection(ringtones)
                 findNavController().popBackStack(R.id.urp_dest_system, false)
             }
+        } else {
+            viewModel.stopPlaying()
         }
     }
 
     override fun onBack(): Boolean {
         viewModel.stopPlaying()
-        // TODO: If we pop back to DeviceRingtoneFragment, the scroll position is lost.
+        // If we pop back to DeviceRingtoneFragment, the scroll position is lost.
         return findNavController().popBackStack()
     }
 
@@ -98,14 +86,11 @@ internal class RingtoneFragment : Fragment(), Navigator.Selector {
         myself = null
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        selectExtension = null
-    }
-
     companion object {
+        private const val KEY_SELECTION = "selection"
+
         /**
-         * I can't find a way to get current fragment in ViewPager2 so I use this way.
+         * I can't find a way to get current fragment in ViewPager so I use this way.
          */
         internal var myself: RingtoneFragment? = null
     }

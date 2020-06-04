@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="urp_add_new_sound">Hinzufügen</string>
+    <string name="urp_silent_ringtone_title">Lautlos</string>
+    <string name="urp_unknown_ringtone_title">Unbekannt</string>
+    <string name="urp_your_sounds">Meine Töne</string>
+    <string name="urp_device_sounds">Gerätetöne</string>
+    <string name="urp_remove_sound">Entfernen</string>
+    <string name="urp_default_ringtone_title">Standard</string>
+    <string name="urp_ringtone">Klingelton</string>
+    <string name="urp_notification">Benachrichtigung</string>
+    <string name="urp_alarm">Alarm</string>
+    <string name="urp_empty">Leeren</string>
+    <string name="urp_permission_external_rational">Für die Auswahl eines benutzerdefinierten Klingeltons ist eine externe Speicherberechtigung erforderlich.</string>
+</resources>

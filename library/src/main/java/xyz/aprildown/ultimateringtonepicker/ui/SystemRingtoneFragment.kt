@@ -6,22 +6,18 @@ import android.content.Context
 import android.content.Intent
 import android.media.RingtoneManager
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.GenericItem
 import com.mikepenz.fastadapter.adapters.GenericItemAdapter
 import com.mikepenz.fastadapter.diff.FastAdapterDiffUtil
 import com.mikepenz.fastadapter.listeners.CustomEventHook
-import com.mikepenz.fastadapter.select.SelectExtension
 import com.mikepenz.fastadapter.select.getSelectExtension
 import pub.devrel.easypermissions.EasyPermissions
 import pub.devrel.easypermissions.PermissionRequest
@@ -29,32 +25,34 @@ import xyz.aprildown.ultimateringtonepicker.R
 import xyz.aprildown.ultimateringtonepicker.RINGTONE_URI_SILENT
 import xyz.aprildown.ultimateringtonepicker.RingtonePickerViewModel
 import xyz.aprildown.ultimateringtonepicker.data.Ringtone
+import xyz.aprildown.ultimateringtonepicker.launchSaf
 
-internal class SystemRingtoneFragment : Fragment(),
-    Navigator.Selector,
+internal class SystemRingtoneFragment : Fragment(R.layout.urp_recycler_view),
+    EventHandler,
     EasyPermissions.PermissionCallbacks {
 
     private val viewModel by navGraphViewModels<RingtonePickerViewModel>(R.id.urp_nav_graph)
-
-    private var _fastAdapter: FastAdapter<GenericItem>? = null
-    private val fastAdapter: FastAdapter<GenericItem>
-        get() = _fastAdapter
-            ?: throw IllegalStateException("Accessing _fastAdapter after onDestroyView")
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? = inflater.inflate(R.layout.urp_recycler_view, container, false)
+    private var isRingtoneFromSaf = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val context = view.context
         val list = view as RecyclerView
 
         val itemAdapter = GenericItemAdapter()
-        _fastAdapter = FastAdapter.with(itemAdapter)
+        val fastAdapter = FastAdapter.with(itemAdapter)
 
-        val selectExtension = fastAdapter.setUpSelectableRingtoneExtension(viewModel)
+        val selectExtension =
+            fastAdapter.setUpSelectableRingtoneExtension(
+                viewModel = viewModel,
+                onSelectionChanged = { item, selected ->
+                    val uri = item.ringtone.uri
+                    if (selected) {
+                        viewModel.currentSelectedUris.add(uri)
+                    } else {
+                        viewModel.currentSelectedUris.remove(uri)
+                    }
+                }
+            )
 
         fastAdapter.onClickListener = { _, _, item, _ ->
             when (item) {
@@ -66,25 +64,20 @@ internal class SystemRingtoneFragment : Fragment(),
             }
         }
 
-        list.run {
-            layoutManager = LinearLayoutManager(context)
-            adapter = fastAdapter
-        }
+        list.adapter = fastAdapter
+
         registerForContextMenu(list)
 
         fastAdapter.addEventHook(object : CustomEventHook<VisibleRingtone>() {
             override fun onBind(viewHolder: RecyclerView.ViewHolder): View? {
-                return if (viewHolder is VisibleRingtone.ViewHolder) {
-                    viewHolder.itemView
-                } else {
-                    null
-                }
+                return viewHolder.itemView
             }
 
             override fun attachEvent(view: View, viewHolder: RecyclerView.ViewHolder) {
                 view.setOnCreateContextMenuListener { menu, _, _ ->
-                    val item = FastAdapter.getHolderAdapterItem<VisibleRingtone>(viewHolder)
+                    val item = FastAdapter.getHolderAdapterItem<GenericItem>(viewHolder)
                         ?: return@setOnCreateContextMenuListener
+                    if (item !is VisibleRingtone) return@setOnCreateContextMenuListener
                     if (item.ringtoneType == VisibleRingtone.RINGTONE_TYPE_CUSTOM) {
                         menu.add(Menu.NONE, 0, Menu.NONE, R.string.urp_remove_sound)
                             .setOnMenuItemClickListener {
@@ -94,11 +87,19 @@ internal class SystemRingtoneFragment : Fragment(),
                                     viewModel.stopPlaying()
 
                                     if (selectExtension.selectedItems.size == 1) {
-                                        viewModel.settings.defaultUri?.let { defaultUri ->
-                                            selectExtension.select(itemAdapter.adapterItems.indexOfFirst {
-                                                it is VisibleRingtone && it.ringtone.uri == defaultUri
-                                            })
-                                        }
+                                        viewModel.settings.systemRingtonePicker
+                                            ?.defaultSection?.defaultUri
+                                            ?.let { defaultUri ->
+                                                fastAdapter.forEachIndexed { currentItem, position ->
+                                                    if (!currentItem.isSelected &&
+                                                        currentItem is VisibleRingtone &&
+                                                        currentItem.ringtone.uri == defaultUri
+                                                    ) {
+                                                        currentItem.isSelected = true
+                                                        fastAdapter.notifyItemChanged(position)
+                                                    }
+                                                }
+                                            }
                                     }
                                 }
 
@@ -111,22 +112,22 @@ internal class SystemRingtoneFragment : Fragment(),
         })
 
         viewModel.systemRingtoneLoadedEvent.observe(viewLifecycleOwner, Observer {
-            if (it == true) {
-                loadVisibleRingtones(
-                    context,
-                    itemAdapter,
-                    selectExtension
-                )
-            }
+            loadVisibleRingtones(context, itemAdapter)
         })
     }
 
     override fun onSelect() {
         viewModel.stopPlaying()
-        val selectedItems = fastAdapter.getSelectExtension().selectedItems
-        viewModel.onTotalSelection(selectedItems.mapNotNull {
-            (it as? VisibleRingtone)?.ringtone
-        })
+        val selectedItems = rootFastAdapter?.getSelectExtension()?.selectedItems
+        if (selectedItems != null) {
+            viewModel.onFinalSelection(
+                selectedItems.mapNotNull {
+                    (it as? VisibleRingtone)?.ringtone
+                }
+            )
+        } else {
+            viewModel.onFinalSelection(emptyList())
+        }
     }
 
     override fun onBack(): Boolean {
@@ -136,7 +137,7 @@ internal class SystemRingtoneFragment : Fragment(),
 
     private fun pickCustom() {
         viewModel.stopPlaying()
-        if (viewModel.settings.useSafSelect) {
+        if (viewModel.settings.systemRingtonePicker?.customSection?.useSafSelect == true) {
             launchSaf()
         } else {
             val permission = Manifest.permission.READ_EXTERNAL_STORAGE
@@ -167,19 +168,17 @@ internal class SystemRingtoneFragment : Fragment(),
     }
 
     override fun onPermissionsDenied(requestCode: Int, perms: MutableList<String>) {
-        if (EasyPermissions.permissionPermanentlyDenied(this, perms[0])) {
-            launchSaf()
+        val customSection =
+            viewModel.settings.systemRingtonePicker?.customSection ?: return
+        when {
+            customSection.launchSafOnPermissionDenied -> {
+                launchSaf()
+            }
+            EasyPermissions.permissionPermanentlyDenied(this, perms[0]) &&
+                customSection.launchSafOnPermissionPermanentlyDenied -> {
+                launchSaf()
+            }
         }
-    }
-
-    private fun launchSaf() {
-        startActivityForResult(
-            Intent(Intent.ACTION_OPEN_DOCUMENT)
-                .addCategory(Intent.CATEGORY_OPENABLE)
-                .setType("audio/*")
-                .addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION),
-            0
-        )
     }
 
     private fun launchDevicePick() {
@@ -190,32 +189,27 @@ internal class SystemRingtoneFragment : Fragment(),
      * Receive [Intent.ACTION_OPEN_DOCUMENT] result.
      */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        val uri = data?.data
-        if (resultCode == Activity.RESULT_OK && uri != null && uri != RINGTONE_URI_SILENT) {
-            // Bail if the permission to read (playback) the audio at the uri was not granted.
-            if (data.flags and Intent.FLAG_GRANT_READ_URI_PERMISSION
-                != Intent.FLAG_GRANT_READ_URI_PERMISSION
-            ) {
-                return
+        if (resultCode == Activity.RESULT_OK && data != null) {
+            viewModel.onSafSelect(requireContext().contentResolver, data)?.let {
+                isRingtoneFromSaf = true
+                viewModel.onDeviceSelection(listOf(it))
             }
-            viewModel.onSafSelect(requireContext().contentResolver, uri)
         }
     }
 
     private fun loadVisibleRingtones(
         context: Context,
-        itemAdapter: GenericItemAdapter,
-        selectExtension: SelectExtension<GenericItem>
+        itemAdapter: GenericItemAdapter
     ) {
-        selectExtension.deleteAllSelectedItems()
-
         val items = createVisibleItems(context)
 
         val currentSelection = viewModel.currentSelectedUris
+        var firstItem: VisibleRingtone? = null
         var firstIndex = RecyclerView.NO_POSITION
         items.forEachIndexed { index, item ->
             if (item is VisibleRingtone && item.ringtone.uri in currentSelection) {
                 if (firstIndex == RecyclerView.NO_POSITION) {
+                    firstItem = item
                     firstIndex = index
                 }
                 item.isSelected = true
@@ -225,9 +219,26 @@ internal class SystemRingtoneFragment : Fragment(),
         FastAdapterDiffUtil[itemAdapter] = items
 
         // We only want to scroll to the first selected item
-        // when we enter the picker for the first time.
-        if (viewModel.requireFirstLoad() && firstIndex != RecyclerView.NO_POSITION) {
-            viewAsRecyclerView()?.scrollToPosition(firstIndex)
+        // when we open the picker for the first time.
+        if (viewModel.consumeFirstLoad()) {
+            if (firstIndex != RecyclerView.NO_POSITION) {
+                // To reveal items above.
+                rootRecyclerView?.scrollToPosition((firstIndex - 1).coerceAtLeast(0))
+            }
+        } else {
+            // We pick a ringtone from SAF and play it here.
+            if (isRingtoneFromSaf &&
+                currentSelection.size == 1 &&
+                firstIndex != RecyclerView.NO_POSITION &&
+                viewModel.currentPlayingUri != currentSelection.first()
+            ) {
+                isRingtoneFromSaf = false
+                firstItem?.let { targetItem ->
+                    viewModel.startPlaying(targetItem.ringtone.uri)
+                    targetItem.isPlaying = true
+                    rootFastAdapter?.notifyItemChanged(firstIndex)
+                }
+            }
         }
     }
 
@@ -235,7 +246,9 @@ internal class SystemRingtoneFragment : Fragment(),
         val items = mutableListOf<GenericItem>()
         val settings = viewModel.settings
 
-        if (settings.showCustomRingtone) {
+        val systemRingtonePicker = settings.systemRingtonePicker
+
+        if (systemRingtonePicker?.customSection != null) {
             items.add(VisibleSection(context.getString(R.string.urp_your_sounds)))
             viewModel.customRingtones.forEach {
                 items.add(
@@ -248,10 +261,17 @@ internal class SystemRingtoneFragment : Fragment(),
             items.add(VisibleAddCustom())
         }
 
-        if (settings.showSilent || settings.showDefault || settings.additionalRingtones.isNotEmpty()) {
+        val defaultSection = systemRingtonePicker?.defaultSection
+        val defaultUri = defaultSection?.defaultUri
+        if (defaultSection != null && (
+                defaultSection.showSilent ||
+                    defaultUri != null ||
+                    defaultSection.additionalRingtones.isNotEmpty()
+                )
+        ) {
             items.add(VisibleSection(context.getString(R.string.urp_device_sounds)))
 
-            if (settings.showSilent) {
+            if (defaultSection.showSilent) {
                 items.add(
                     VisibleRingtone(
                         ringtone = Ringtone(
@@ -263,14 +283,12 @@ internal class SystemRingtoneFragment : Fragment(),
                 )
             }
 
-            if (settings.showDefault) {
-                val defaultUri = settings.defaultUri
-                    ?: throw IllegalArgumentException("Please provide a default uri")
+            if (defaultUri != null) {
                 items.add(
                     VisibleRingtone(
                         ringtone = Ringtone(
                             defaultUri,
-                            settings.defaultTitle
+                            defaultSection.defaultTitle
                                 ?: context.getString(R.string.urp_default_ringtone_title)
                         ),
                         ringtoneType = VisibleRingtone.RINGTONE_TYPE_SYSTEM
@@ -278,7 +296,7 @@ internal class SystemRingtoneFragment : Fragment(),
                 )
             }
 
-            settings.additionalRingtones.forEach {
+            defaultSection.additionalRingtones.forEach {
                 items.add(
                     VisibleRingtone(
                         ringtone = Ringtone(it.uri, it.name),
@@ -313,20 +331,5 @@ internal class SystemRingtoneFragment : Fragment(),
         }
 
         return items
-    }
-
-    override fun onPause() {
-        super.onPause()
-        viewModel.currentSelectedUris.clear()
-        viewModel.currentSelectedUris.addAll(
-            fastAdapter.getSelectExtension().selectedItems.mapNotNull {
-                (it as? VisibleRingtone)?.ringtone?.uri
-            }
-        )
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _fastAdapter = null
     }
 }

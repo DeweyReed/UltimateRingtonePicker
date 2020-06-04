@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="urp_add_new_sound">Add new</string>
     <string name="urp_silent_ringtone_title">Silent</string>
@@ -9,7 +10,6 @@
     <string name="urp_ringtone">Ringtone</string>
     <string name="urp_notification">Notification</string>
     <string name="urp_alarm">Alarm</string>
-    <string name="urp_select_ringtone">Select</string>
     <string name="urp_empty">Empty</string>
-    <string name="urp_permission_external_rational">External Permission is needed to pick custom musics</string>
+    <string name="urp_permission_external_rational">External Storage Permission is needed to pick custom ringtone.</string>
 </resources>

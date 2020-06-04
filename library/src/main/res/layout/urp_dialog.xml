@@ -4,32 +4,28 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!--Use a RelativeLayout to keep dialog height stable-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         tools:ignore="UselessParent">
 
-        <TextView
-            android:id="@+id/urpTextDialogTitle"
-            style="@style/TextAppearance.MaterialComponents.Headline6"
+        <View
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginEnd="24dp"
-            android:gravity="center_vertical"
-            android:minHeight="64dp"
-            tools:text="@tools:sample/lorem" />
+            android:layout_height="1dp"
+            android:background="#14000000" />
 
-        <!--<include layout="@layout/urp_horizontal_divider" />-->
-
-        <FrameLayout
+        <androidx.fragment.app.FragmentContainerView
             android:id="@+id/urpFrameDialog"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1" />
 
-        <include layout="@layout/urp_horizontal_divider" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#14000000" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -42,7 +38,6 @@
                 style="@style/Widget.MaterialComponents.Button.TextButton.Dialog"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="4dp"
                 android:text="@android:string/cancel" />
 
             <Button
@@ -50,10 +45,11 @@
                 style="@style/Widget.MaterialComponents.Button.TextButton.Dialog"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                android:text="@string/urp_select_ringtone" />
+                android:layout_marginEnd="8dp"
+                android:text="@android:string/ok" />
 
         </LinearLayout>
 
     </LinearLayout>
+
 </RelativeLayout>

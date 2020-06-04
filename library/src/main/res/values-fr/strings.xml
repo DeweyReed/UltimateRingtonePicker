@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="urp_add_new_sound">Ajouter</string>
+    <string name="urp_silent_ringtone_title">Silencieux</string>
+    <string name="urp_unknown_ringtone_title">Inconnue</string>
+    <string name="urp_your_sounds">Vos sons</string>
+    <string name="urp_device_sounds">Sons de l\'appareil</string>
+    <string name="urp_remove_sound">Supprimer</string>
+    <string name="urp_default_ringtone_title">Défaut</string>
+    <string name="urp_ringtone">Sonnerie</string>
+    <string name="urp_notification">Notification</string>
+    <string name="urp_alarm">Alarme</string>
+    <string name="urp_empty">Vide</string>
+    <string name="urp_permission_external_rational">Une autorisation de stockage externe est nécessaire pour choisir une sonnerie personnalisée.</string>
+</resources>

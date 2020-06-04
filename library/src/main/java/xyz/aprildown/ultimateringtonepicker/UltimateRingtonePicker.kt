@@ -9,103 +9,107 @@ import android.os.Bundle
 import android.os.Parcelable
 import androidx.annotation.AnyRes
 import kotlinx.android.parcel.Parcelize
-import xyz.aprildown.ultimateringtonepicker.UltimateRingtonePicker.Settings.Companion.DEVICE_RINGTONE_TYPE_ALBUM
-import xyz.aprildown.ultimateringtonepicker.UltimateRingtonePicker.Settings.Companion.DEVICE_RINGTONE_TYPE_ALL
-import xyz.aprildown.ultimateringtonepicker.UltimateRingtonePicker.Settings.Companion.DEVICE_RINGTONE_TYPE_ARTIST
-import xyz.aprildown.ultimateringtonepicker.UltimateRingtonePicker.Settings.Companion.DEVICE_RINGTONE_TYPE_FOLDER
-import xyz.aprildown.ultimateringtonepicker.UltimateRingtonePicker.Settings.Companion.SYSTEM_RINGTONE_TYPE_ALARM
-import xyz.aprildown.ultimateringtonepicker.UltimateRingtonePicker.Settings.Companion.SYSTEM_RINGTONE_TYPE_NOTIFICATION
-import xyz.aprildown.ultimateringtonepicker.UltimateRingtonePicker.Settings.Companion.SYSTEM_RINGTONE_TYPE_RINGTONE
-import xyz.aprildown.ultimateringtonepicker.UltimateRingtonePicker.Settings.Companion.allDeviceRingtoneTypes
-import xyz.aprildown.ultimateringtonepicker.UltimateRingtonePicker.Settings.Companion.allSystemRingtoneTypes
-import xyz.aprildown.ultimateringtonepicker.UltimateRingtonePicker.Settings.Companion.createAssetUri
-import xyz.aprildown.ultimateringtonepicker.UltimateRingtonePicker.Settings.Companion.createRawUri
 
 class UltimateRingtonePicker {
 
     @Parcelize
+    data class RingtoneEntry(
+        val uri: Uri,
+        val name: String
+    ) : Parcelable
+
+    interface RingtonePickerListener {
+        /**
+         * @param ringtones It may be empty or contain one or more entries.
+         *                  You should also check Uri.EMPTY if user can select the silent ringtone.
+         */
+        fun onRingtonePicked(ringtones: List<RingtoneEntry>)
+    }
+
+    @Parcelize
+    data class SystemRingtonePicker(
+        val customSection: CustomSection? = null,
+        val defaultSection: DefaultSection? = null,
+        /**
+         * Values from [RingtoneManager.TYPE_RINGTONE], [RingtoneManager.TYPE_NOTIFICATION] and
+         * [RingtoneManager.TYPE_ALARM].
+         */
+        val ringtoneTypes: List<Int> = emptyList()
+    ) : Parcelable {
+
+        @Parcelize
+        data class CustomSection(
+            /**
+             * By default, the library will ask for READ_EXTERNAL_STORAGE permission and show external
+             * ringtones, set this to true to use Storage Access Framework which doesn't require
+             * the permission.
+             */
+            val useSafSelect: Boolean = false,
+
+            /**
+             * Only used when [useSafSelect] is false.
+             */
+            val launchSafOnPermissionDenied: Boolean = true,
+            val launchSafOnPermissionPermanentlyDenied: Boolean = true
+        ) : Parcelable
+
+        @Parcelize
+        data class DefaultSection(
+            /**
+             * An extra silent ringtone entry.
+             */
+            val showSilent: Boolean = true,
+
+            /**
+             * An extra default ringtone entry.
+             */
+            val defaultUri: Uri? = null,
+            val defaultTitle: String? = null,
+
+            /**
+             * Some other ringtone entries.
+             *
+             * Use [createAssetRingtoneUri] to create Asset ringtone URIs.
+             * Use [createRawRingtoneUri] to create R.raw.XXX URIs
+             */
+            val additionalRingtones: List<RingtoneEntry> = emptyList()
+        ) : Parcelable
+    }
+
+    /**
+     * Used in [DeviceRingtonePicker]
+     */
+    enum class RingtoneCategoryType {
+        All, Artist, Album, Folder
+    }
+
+    @Parcelize
+    data class DeviceRingtonePicker(
+        val deviceRingtoneTypes: List<RingtoneCategoryType> = emptyList(),
+        val alwaysUseSaf: Boolean = false
+    ) : Parcelable
+
+    @Parcelize
     data class Settings(
-        /**
-         * If this area should be shown:
-         *
-         * Your sounds
-         *     Device Sound 1
-         *     Device Sound 2
-         *     Add new
-         */
-        var showCustomRingtone: Boolean = true,
-
-        /**
-         * An extra silent ringtone entry below Device sounds.
-         */
-        var showSilent: Boolean = true,
-
-        /**
-         * An extra default ringtone entry below Device sounds.
-         *
-         * When set to true, you must define [defaultUri] as well.
-         * [defaultTitle] is optional.
-         */
-        var showDefault: Boolean = false,
-        var defaultUri: Uri? = null,
-        var defaultTitle: String? = null,
-
-        /**
-         * Some other ringtone entries.
-         *
-         * Use [createAssetUri] to create Asset ringtone URIs.
-         * Use [createRawUri] to create R.raw.XXX URIs
-         */
-        var additionalRingtones: List<RingtonePickerEntry> = emptyList(),
-
-        var preSelectUris: List<Uri> = emptyList(),
-        var enableMultiSelect: Boolean = false,
+        val preSelectUris: List<Uri> = emptyList(),
+        val enableMultiSelect: Boolean = false,
 
         /**
          * Ringtone preview stream type.
          */
-        var streamType: Int = AudioManager.STREAM_MUSIC,
+        val streamType: Int = AudioManager.STREAM_MUSIC,
+
+        val systemRingtonePicker: SystemRingtonePicker? = null,
 
         /**
-         * One or more values from [SYSTEM_RINGTONE_TYPE_RINGTONE],
-         * [SYSTEM_RINGTONE_TYPE_NOTIFICATION] and [SYSTEM_RINGTONE_TYPE_ALARM].
-         * You can use [allSystemRingtoneTypes] to include them all.
+         * If [systemRingtonePicker] == null && [deviceRingtonePicker] != null, you need to
+         * handle READ_EXTERNAL_STORAGE permission before showing the picker.
          */
-        var systemRingtoneTypes: List<Int> = emptyList(),
-
-        /**
-         * By default, the picker will ask for READ_EXTERNAL_STORAGE permission and show external
-         * ringtones, set this to true to use Storage Access Framework which doesn't require
-         * the permission.
-         */
-        var useSafSelect: Boolean = false,
-
-        /**
-         * Show device ringtones without showing system ringtones first.
-         *
-         * When set to true, you should handle READ_EXTERNAL_STORAGE permission by yourself.
-         * When set to false(default), the permission will be handled for you.
-         */
-        var onlyShowDevice: Boolean = false,
-
-        /**
-         * One or more values from [DEVICE_RINGTONE_TYPE_ALL], [DEVICE_RINGTONE_TYPE_ARTIST],
-         * [DEVICE_RINGTONE_TYPE_ALBUM], [DEVICE_RINGTONE_TYPE_FOLDER]
-         * You can use [allDeviceRingtoneTypes] to include them all.
-         */
-        var deviceRingtoneTypes: List<Int> = emptyList()
+        val deviceRingtonePicker: DeviceRingtonePicker? = null
     ) : Parcelable {
 
         init {
-            require(!(showDefault && defaultUri == null)) {
-                "Provide a default URI when show default ringtone"
-            }
-            require(!(onlyShowDevice && deviceRingtoneTypes.isEmpty())) {
-                "Provide at least one device ringtone type when only show device ringtones"
-            }
-            if (!enableMultiSelect && preSelectUris.size > 1) {
-                preSelectUris = preSelectUris.take(1)
-            }
+            require(!(systemRingtonePicker == null && deviceRingtonePicker == null))
         }
 
         fun createFragment(): RingtonePickerFragment = RingtonePickerFragment().apply {
@@ -113,53 +117,25 @@ class UltimateRingtonePicker {
                 putParcelable(EXTRA_SETTINGS, this@Settings)
             }
         }
+    }
 
-        companion object {
-            const val SYSTEM_RINGTONE_TYPE_RINGTONE = RingtoneManager.TYPE_RINGTONE
-            const val SYSTEM_RINGTONE_TYPE_NOTIFICATION = RingtoneManager.TYPE_NOTIFICATION
-            const val SYSTEM_RINGTONE_TYPE_ALARM = RingtoneManager.TYPE_ALARM
+    companion object {
+        /**
+         * Help you build a asset URI.
+         */
+        @JvmStatic
+        fun createAssetRingtoneUri(fileName: String): Uri = Uri.parse("$ASSET_URI_PREFIX$fileName")
 
-            const val DEVICE_RINGTONE_TYPE_ALL = RINGTONE_TYPE_ALL
-            const val DEVICE_RINGTONE_TYPE_ARTIST = RINGTONE_TYPE_ARTIST
-            const val DEVICE_RINGTONE_TYPE_ALBUM = RINGTONE_TYPE_ALBUM
-            const val DEVICE_RINGTONE_TYPE_FOLDER = RINGTONE_TYPE_FOLDER
-
-            @JvmStatic
-            val allSystemRingtoneTypes: List<Int>
-                get() = listOf(
-                    SYSTEM_RINGTONE_TYPE_RINGTONE,
-                    SYSTEM_RINGTONE_TYPE_NOTIFICATION,
-                    SYSTEM_RINGTONE_TYPE_ALARM
-                )
-
-            @JvmStatic
-            val allDeviceRingtoneTypes: List<Int>
-                get() = listOf(
-                    DEVICE_RINGTONE_TYPE_ALL,
-                    DEVICE_RINGTONE_TYPE_ARTIST,
-                    DEVICE_RINGTONE_TYPE_ALBUM,
-                    DEVICE_RINGTONE_TYPE_FOLDER
-                )
-
-            internal const val ASSET_URI_PREFIX = "file:///android_asset/"
-
-            /**
-             * Help you build a asset URI.
-             */
-            @JvmStatic
-            fun createAssetUri(fileName: String): Uri = Uri.parse("$ASSET_URI_PREFIX$fileName")
-
-            /**
-             * Help you build a raw URI.
-             * @param resourceId identifies an application resource
-             * @return the Uri by which the application resource is accessed
-             */
-            @JvmStatic
-            fun createRawUri(context: Context, @AnyRes resourceId: Int): Uri = Uri.Builder()
-                .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
-                .authority(context.packageName)
-                .path(resourceId.toString())
-                .build()
-        }
+        /**
+         * Help you build a R.raw.* URI.
+         * @param resourceId identifies an application resource
+         * @return the Uri by which the application resource is accessed
+         */
+        @JvmStatic
+        fun createRawRingtoneUri(context: Context, @AnyRes resourceId: Int): Uri = Uri.Builder()
+            .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
+            .authority(context.packageName)
+            .path(resourceId.toString())
+            .build()
     }
 }

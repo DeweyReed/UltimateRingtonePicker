@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="urp_add_new_sound">Dodaj nowy</string>
+    <string name="urp_silent_ringtone_title">Cichy</string>
+    <string name="urp_unknown_ringtone_title">Nieznany</string>
+    <string name="urp_your_sounds">Twoje dźwięki</string>
+    <string name="urp_device_sounds">Dźwięki urządzenia</string>
+    <string name="urp_remove_sound">Usuń</string>
+    <string name="urp_default_ringtone_title">Domyślna</string>
+    <string name="urp_ringtone">Dzwonek</string>
+    <string name="urp_notification">Powiadomienie</string>
+    <string name="urp_alarm">Alarm</string>
+    <string name="urp_empty">Pusty</string>
+    <string name="urp_permission_external_rational">Aby wybrać niestandardowy dzwonek, potrzebne jest zezwolenie na przechowywanie zewnętrzne.</string>
+</resources>
