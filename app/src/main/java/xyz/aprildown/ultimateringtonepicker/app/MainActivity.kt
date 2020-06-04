@@ -160,6 +160,7 @@ class MainActivity : AppCompatActivity(), UltimateRingtonePicker.RingtonePickerL
                     preSelectUris = currentSelectedRingtones.map { it.uri },
                     enableMultiSelect = true,
                     systemRingtonePicker = UltimateRingtonePicker.SystemRingtonePicker(
+                        customSection = UltimateRingtonePicker.SystemRingtonePicker.CustomSection(),
                         defaultSection = UltimateRingtonePicker.SystemRingtonePicker.DefaultSection(
                             defaultUri = UltimateRingtonePicker.createRawRingtoneUri(
                                 this,
