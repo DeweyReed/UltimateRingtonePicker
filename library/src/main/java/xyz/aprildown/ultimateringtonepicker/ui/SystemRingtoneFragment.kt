@@ -18,7 +18,6 @@ import com.mikepenz.fastadapter.GenericItem
 import com.mikepenz.fastadapter.adapters.GenericItemAdapter
 import com.mikepenz.fastadapter.diff.FastAdapterDiffUtil
 import com.mikepenz.fastadapter.listeners.CustomEventHook
-import com.mikepenz.fastadapter.select.SelectExtension
 import com.mikepenz.fastadapter.select.getSelectExtension
 import pub.devrel.easypermissions.EasyPermissions
 import pub.devrel.easypermissions.PermissionRequest
@@ -112,12 +111,8 @@ internal class SystemRingtoneFragment : Fragment(R.layout.urp_recycler_view),
         })
 
         viewModel.systemRingtoneLoadedEvent.observe(viewLifecycleOwner, Observer {
-            if (it == true) {
-                loadVisibleRingtones(
-                    context,
-                    itemAdapter,
-                    selectExtension
-                )
+            if (it != null) {
+                loadVisibleRingtones(context, itemAdapter, it)
             }
         })
     }
@@ -205,10 +200,8 @@ internal class SystemRingtoneFragment : Fragment(R.layout.urp_recycler_view),
     private fun loadVisibleRingtones(
         context: Context,
         itemAdapter: GenericItemAdapter,
-        selectExtension: SelectExtension<GenericItem>
+        isFromDevicePicker: Boolean
     ) {
-        selectExtension.deleteAllSelectedItems()
-
         val items = createVisibleItems(context)
 
         val currentSelection = viewModel.currentSelectedUris
@@ -237,7 +230,8 @@ internal class SystemRingtoneFragment : Fragment(R.layout.urp_recycler_view),
             // We pick a ringtone from SAF and play it here.
             if (currentSelection.size == 1 &&
                 firstIndex != RecyclerView.NO_POSITION &&
-                !viewModel.isPlaying
+                viewModel.currentPlayingUri != currentSelection.first() &&
+                isFromDevicePicker
             ) {
                 firstItem?.let { targetItem ->
                     viewModel.startPlaying(targetItem.ringtone.uri)

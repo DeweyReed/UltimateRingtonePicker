@@ -94,7 +94,7 @@ internal class AsyncRingtonePlayer(
         postMessage(EVENT_STOP, null, false, 0)
     }
 
-    val isPlaying: Boolean get() = mPlaybackDelegate.currentPlayingUri != null
+    val currentPlayingUri: Uri? get() = mPlaybackDelegate.currentPlayingUri
 
     /**
      * Posts a message to the ringtone-thread handler.

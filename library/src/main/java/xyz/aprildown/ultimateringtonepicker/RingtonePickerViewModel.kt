@@ -39,8 +39,10 @@ internal class RingtonePickerViewModel(
 
     /**
      * Use this event to get [customRingtones] and [systemRingtones].
+     * Value: True if we pick ringtones from the device picker.
      */
-    val systemRingtoneLoadedEvent = MutableLiveData<Boolean>()
+    private val _systemRingtoneLoadedEvent = MutableLiveData<Boolean>()
+    val systemRingtoneLoadedEvent: LiveData<Boolean> = _systemRingtoneLoadedEvent
     private var firstLoad: Boolean = true
 
     val finalSelection = MutableLiveData<List<Ringtone>>()
@@ -119,11 +121,11 @@ internal class RingtonePickerViewModel(
                 }
             }
 
-            systemRingtoneLoadedEvent.postValue(true)
+            _systemRingtoneLoadedEvent.postValue(false)
         }
     }
 
-    val isPlaying: Boolean get() = mediaPlayer.isPlaying
+    val currentPlayingUri: Uri? get() = mediaPlayer.currentPlayingUri
 
     fun startPlaying(uri: Uri) {
         mediaPlayer.play(uri, true, settings.streamType)
@@ -155,7 +157,7 @@ internal class RingtonePickerViewModel(
         customRingtones.clear()
         customRingtones.addAll(customRingtoneModel.getCustomRingtones())
 
-        systemRingtoneLoadedEvent.value = true
+        _systemRingtoneLoadedEvent.value = selectedRingtones.isNotEmpty()
     }
 
     fun consumeFirstLoad(): Boolean {
