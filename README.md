@@ -24,26 +24,24 @@
 </div>
 </br>
 
-**3.0 API has been changed completely. Currently it's in the alpha. Everything may be changed.**
+**3.0 API has been changed completely. Currently, it's in the alpha. Everything may be changed.**
 
-**[Click here to use the deprecated 2.X](./README_OLD.md).**
+**[Click here to use 2.X](./README_OLD.md).**
 
 ## Features
 
 - Respects Scoped Storage(MediaStore is used)
 - Available as an Activity and a Dialog
-- Provides options to pick alarm sound, notification sound, ringtone sound and external ringtones.
+- Options to pick alarm sound, notification sound, ringtone sound, and external ringtones.
 - Ringtone preview
-- Provides interface to set a default entry
-- Provides interface to add custom ringtone entries
-- Sorts external ringtones with artists, albums and folders
-- Automatically remembers which external ringtones users picked
-- Multi Select
+- An interface to set a default entry
+- An interface to add custom ringtone entries
+- Sorted external ringtones with artists, albums and folders
+- Automatically remembers which external ringtones users have picked
+- Multi-select
 - Dark theme support out of box
-- Permission are handled internally
+- Permissions are handled internally
 - Storage Access Framework support
-
-This library targets Android 29 and uses `appcompat 1.1.0`.
 
 ## Screenshot
 
@@ -72,83 +70,115 @@ Step 2. Add the dependency
 
 ```Groovy
 dependencies {
-    implementation "com.github.DeweyReed:UltimateRingtonePicker:${version}"
+    implementation "xyz.aprildown:UltimateRingtonePicker:${version}"
 }
 ```
 
 ## Usage
 
-Here're some examples:
+[Demo APK](https://github.com/deweyreed/ultimateringtonepicker/releases) and [examples in the MainActivity](./app/src/main/java/xyz/aprildown/ultimateringtonepicker/app/MainActivity.kt).
 
-### System ringtones dialog(no permission required)
+### 1. Create a `UltimateRingtonePicker.Settings`
 
-```Kotlin
-RingtonePickerDialog.createInstance(
-    UltimateRingtonePicker.Settings(
-        showCustomRingtone = false,
-        systemRingtoneTypes = UltimateRingtonePicker.Settings.allSystemRingtoneTypes
-    ),
-    "Dialog Picker"
-).show(supportFragmentManager, null)
-```
-
-To receive the pick result, implement `RingtonePickerListener` in your activity or fragment.
-
-### System and device ringtones activity(Permission is handled internally)
-
-Add `RingtonePickerActivity` to your `AndroidManifest.xml`:
-
-```XML
-<activity
-    android:name="xyz.aprildown.ultimateringtonepicker.RingtonePickerActivity" />
-```
+Here're all options and their default values.
 
 ```Kotlin
-startActivityForResult(
-    RingtonePickerActivity.putInfoToLaunchIntent(
-        Intent(this, RingtonePickerActivity::class.java),
-            UltimateRingtonePicker.Settings(
-            showDefault = true,
-            defaultUri = UltimateRingtonePicker.Settings.createRawUri(this, R.raw.default_ringtone),
-            defaultTitle = "Default Ringtone",
-            additionalRingtones = listOf(
-                RingtonePickerEntry(
-                    UltimateRingtonePicker.Settings.createAssetUri("asset1.wav"),
-                    "Assets/asset1.mp3"
-                )
-            ),
-            systemRingtoneTypes = UltimateRingtonePicker.Settings.allSystemRingtoneTypes,
-            deviceRingtoneTypes = UltimateRingtonePicker.Settings.allDeviceRingtoneTypes
+val settings = UltimateRingtonePicker.Settings(
+    preSelectUris = emptyList(),
+    enableMultiSelect = false,
+    streamType = AudioManager.STREAM_MUSIC,
+    systemRingtonePicker = UltimateRingtonePicker.SystemRingtonePicker(
+        customSection = UltimateRingtonePicker.SystemRingtonePicker.CustomSection(
+            useSafSelect = false,
+            launchSafOnPermissionDenied = true,
+            launchSafOnPermissionPermanentlyDenied = true
         ),
-        "Activity Picker"
+        defaultSection = UltimateRingtonePicker.SystemRingtonePicker.DefaultSection(
+            showSilent = true,
+            defaultUri = null,
+            defaultTitle = null,
+            additionalRingtones = emptyList()
+        ),
+        ringtoneTypes = emptyList()
     ),
-    // Request Code
-    200
+    deviceRingtonePicker = UltimateRingtonePicker.DeviceRingtonePicker(
+        deviceRingtoneTypes = emptyList(),
+        alwaysUseSaf = false
+    )
 )
 ```
 
-Receive the pick result in your `onActivityResult`:
+### 2. Launch to picker
 
-```Kotlin
-override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-    // You must check requestCode here because RingtonePickerFragment may
-    // startActivityForResult internally and require super.onActivityResult here to be called.
-    if (requestCode == 200 && resultCode == Activity.RESULT_OK && data != null) {
-        val ringtones: List<RingtonePickerEntry> = RingtonePickerActivity.getPickerResult(data)
+- Launch the Activity picker
 
-    } else {
-        super.onActivityResult(requestCode, resultCode, data)
-    }
-}
-```
+    1. Add the Activity to the manifest.
 
-### More examples
+        `<activity
+            android:name="xyz.aprildown.ultimateringtonepicker.RingtonePickerActivity" />`
 
-You can find many examples in [MainActivity](./app/src/main/java/xyz/aprildown/ultimateringtonepicker/app/MainActivity.kt). Also make sure check [UltimateRingtonePicker](./library/src/main/java/xyz/aprildown/ultimateringtonepicker/UltimateRingtonePicker.kt) to see all parameters.
+    1. Start Activity
+
+        ```Kotlin
+        startActivityForResult(
+            RingtonePickerActivity.getIntent(
+                context = this,
+                settings = settings,
+                windowTitle = "Activity Picker"
+            ),
+            123
+        )
+        ```
+
+    1. Get the result
+
+        ```Kotlin
+        override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+            super.onActivityResult(requestCode, resultCode, data)
+            if (requestCode == 123 && resultCode == Activity.RESULT_OK && data != null) {
+                val ringtones = RingtonePickerActivity.getPickerResult(data)
+            }
+        }
+        ```
+
+- Launch the dialog picker
+
+    1. Show the dialog
+
+        ```Kotlin
+        RingtonePickerDialog.createInstance(
+            settings = settings,
+            dialogTitle = "Dialog!"
+        ).show(supportFragmentManager, null)
+        ```
+
+    1. Get the result
+
+        Implement `UltimateRingtonePicker.RingtonePickerListener` in your activity or fragment.
+
+        ```Kotlin
+        override fun onRingtonePicked(ringtones: List<UltimateRingtonePicker.RingtoneEntry>) {
+
+        }
+        ```
+
+    Alternatively, you can launch the dialog and get the result without implementing the interface, but the dialog will be dismissed in `onPause`:
+
+    ```Kotlin
+    RingtonePickerDialog.createEphemeralInstance(
+        settings = settings,
+        dialogTitle = "Dialog",
+        listener = object : UltimateRingtonePicker.RingtonePickerListener {
+            override fun onRingtonePicked(ringtones: List<UltimateRingtonePicker.RingtoneEntry>) {
+
+            }
+        }
+    ).show(supportFragmentManager, null)
+    ```
 
 ## BTW
 
-`UltimateRingtonePicker` supports activity pick `RingtonePickerActivity` and dialog pick `RingtonePickerDialog` out of box. Both of them are just wrappers of `RingtonePickerFragment`. Therefore, you can directly wrap `RingtonePickerFragment` into your activity/fragment to provide more customization!
+`UltimateRingtonePicker` supports activity pick `RingtonePickerActivity` and dialog pick `RingtonePickerDialog` out of the box. Both of them are just wrappers of `RingtonePickerFragment`. Therefore, you can directly wrap `RingtonePickerFragment` into your activity/fragment to provide more customization!
 
 ## License
 

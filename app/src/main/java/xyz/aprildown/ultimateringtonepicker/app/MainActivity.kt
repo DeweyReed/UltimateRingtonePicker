@@ -272,12 +272,9 @@ class MainActivity : AppCompatActivity(), UltimateRingtonePicker.RingtonePickerL
         )
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        // You must check requestCode here because RingtonePickerFragment may
-        // startActivityForResult internally and require super.onActivityResult here to be called.
+        super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_CODE_ACTIVITY && resultCode == Activity.RESULT_OK) {
             handleResult(RingtonePickerActivity.getPickerResult(data!!))
-        } else {
-            super.onActivityResult(requestCode, resultCode, data)
         }
     }
 
