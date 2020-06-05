@@ -43,6 +43,8 @@
 - Permissions are handled internally
 - Storage Access Framework support
 
+The library is inspired by [AOSP DeskClock RintonePickerActivity](https://android.googlesource.com/platform/packages/apps/DeskClock/+/refs/heads/master/src/com/android/deskclock/ringtone/RingtonePickerActivity.java).
+
 ## Screenshot
 
 ||||
