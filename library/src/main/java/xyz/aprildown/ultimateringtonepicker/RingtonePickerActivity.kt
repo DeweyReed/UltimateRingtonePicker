@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import xyz.aprildown.ultimateringtonepicker.databinding.UrpActivityRingtonePickerBinding
 import java.util.ArrayList
@@ -39,12 +38,6 @@ class RingtonePickerActivity : AppCompatActivity(), UltimateRingtonePicker.Ringt
         }
         binding.btnCancel.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
-        }
-
-        onBackPressedDispatcher.addCallback(this) {
-            if (!getRingtonePickerFragment().onBackClick()) {
-                finish()
-            }
         }
     }
 
