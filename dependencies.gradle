@@ -8,8 +8,8 @@ ext {
             min_sdk     : 19,
             target_sdk  : 29,
 
-            version_code: 302,
-            version_name: '3.0.0-alpha02',
+            version_code: 303,
+            version_name: '3.0.0-alpha03',
     ]
     libs = [
             // Kotlin
