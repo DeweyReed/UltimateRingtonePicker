@@ -12,4 +12,7 @@
     <string name="urp_alarm">アラーム</string>
     <string name="urp_empty">空の</string>
     <string name="urp_permission_external_rational">カスタム着信音を選択するには、外部ストレージのアクセス許可が必要です。</string>
+    <string name="urp_artist">アーティスト</string>
+    <string name="urp_album">アルバム</string>
+    <string name="urp_folder">フォルダ</string>
 </resources>

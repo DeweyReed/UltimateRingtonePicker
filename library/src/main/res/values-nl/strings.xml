@@ -12,4 +12,7 @@
     <string name="urp_alarm">Alarm</string>
     <string name="urp_empty">Leeg</string>
     <string name="urp_permission_external_rational">Externe opslagtoestemming is nodig om een aangepaste beltoon te kiezen.</string>
+    <string name="urp_artist">Kunstenaar</string>
+    <string name="urp_album">Album</string>
+    <string name="urp_folder">Map</string>
 </resources>

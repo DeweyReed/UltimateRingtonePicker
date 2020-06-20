@@ -12,4 +12,7 @@
     <string name="urp_alarm">Alarme</string>
     <string name="urp_empty">Vide</string>
     <string name="urp_permission_external_rational">Une autorisation de stockage externe est nécessaire pour choisir une sonnerie personnalisée.</string>
+    <string name="urp_artist">Artiste</string>
+    <string name="urp_album">Album</string>
+    <string name="urp_folder">Dossier</string>
 </resources>

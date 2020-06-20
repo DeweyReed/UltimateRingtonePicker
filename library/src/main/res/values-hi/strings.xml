@@ -12,4 +12,7 @@
     <string name="urp_alarm">अलार्म</string>
     <string name="urp_empty">खाली</string>
     <string name="urp_permission_external_rational">कस्टम रिंगटोन लेने के लिए एक्सटर्नल स्टोरेज परमिशन की जरूरत होती है।</string>
+    <string name="urp_artist">कलाकार</string>
+    <string name="urp_album">एल्बम</string>
+    <string name="urp_folder">फोल्डर</string>
 </resources>

@@ -12,4 +12,7 @@
     <string name="urp_alarm">鬧鐘</string>
     <string name="urp_empty">無內容</string>
     <string name="urp_permission_external_rational">需要讀取儲存的權限來選擇自定義鈴聲文件。</string>
+    <string name="urp_artist">藝術家</string>
+    <string name="urp_album">專輯</string>
+    <string name="urp_folder">文件夾</string>
 </resources>

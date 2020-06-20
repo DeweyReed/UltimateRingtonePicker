@@ -12,4 +12,7 @@
     <string name="urp_alarm">Alarm</string>
     <string name="urp_empty">Pusty</string>
     <string name="urp_permission_external_rational">Aby wybrać niestandardowy dzwonek, potrzebne jest zezwolenie na przechowywanie zewnętrzne.</string>
+    <string name="urp_artist">Artista</string>
+    <string name="urp_album">Álbum</string>
+    <string name="urp_folder">Folder</string>
 </resources>

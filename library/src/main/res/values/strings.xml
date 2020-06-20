@@ -12,4 +12,7 @@
     <string name="urp_alarm">Alarm</string>
     <string name="urp_empty">Empty</string>
     <string name="urp_permission_external_rational">External Storage Permission is needed to pick custom ringtone.</string>
+    <string name="urp_artist">Artist</string>
+    <string name="urp_album">Album</string>
+    <string name="urp_folder">Folder</string>
 </resources>

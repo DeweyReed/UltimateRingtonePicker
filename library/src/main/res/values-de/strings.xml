@@ -12,4 +12,7 @@
     <string name="urp_alarm">Alarm</string>
     <string name="urp_empty">Leeren</string>
     <string name="urp_permission_external_rational">Für die Auswahl eines benutzerdefinierten Klingeltons ist eine externe Speicherberechtigung erforderlich.</string>
+    <string name="urp_artist">Künstlerin</string>
+    <string name="urp_album">Album</string>
+    <string name="urp_folder">Ordner</string>
 </resources>

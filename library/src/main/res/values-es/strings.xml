@@ -12,4 +12,7 @@
     <string name="urp_alarm">Alarma</string>
     <string name="urp_empty">Vacío</string>
     <string name="urp_permission_external_rational">Se necesita un permiso de almacenamiento externo para elegir un tono de llamada personalizado.</string>
+    <string name="urp_artist">Artista</string>
+    <string name="urp_album">Álbum</string>
+    <string name="urp_folder">Carpeta</string>
 </resources>

@@ -113,7 +113,7 @@ internal class DeviceRingtoneFragment :
 }
 
 private class CategoryAdapter(
-    fragment: Fragment,
+    private val fragment: Fragment,
     private val deviceRingtoneTypes: List<UltimateRingtonePicker.RingtoneCategoryType>
 ) : FragmentStatePagerAdapter(
     fragment.childFragmentManager,
@@ -149,10 +149,10 @@ private class CategoryAdapter(
     }
 
     override fun getPageTitle(position: Int): CharSequence? = when (position) {
-        0 -> "ALL"
-        1 -> "ARTIST"
-        2 -> "ALBUM"
-        3 -> "FOLDER"
+        0 -> fragment.getString(R.string.urp_ringtone)
+        1 -> fragment.getString(R.string.urp_artist)
+        2 -> fragment.getString(R.string.urp_album)
+        3 -> fragment.getString(R.string.urp_folder)
         else -> null
     }
 }
