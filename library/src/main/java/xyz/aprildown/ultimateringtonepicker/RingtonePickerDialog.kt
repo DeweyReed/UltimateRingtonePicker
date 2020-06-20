@@ -39,13 +39,15 @@ class RingtonePickerDialog : DialogFragment(), UltimateRingtonePicker.RingtonePi
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        if (directListener == null) {
+        val arguments = requireArguments()
+
+        if (arguments.getBoolean(EXTRA_EPHEMERAL) && directListener == null) {
             dismiss()
         }
 
         if (savedInstanceState == null) {
             val fragment =
-                requireArguments().getParcelable<UltimateRingtonePicker.Settings>(EXTRA_SETTINGS)!!
+                arguments.getParcelable<UltimateRingtonePicker.Settings>(EXTRA_SETTINGS)!!
                     .createFragment()
             childFragmentManager.beginTransaction()
                 .add(R.id.urpFrameDialog, fragment, TAG_RINGTONE_PICKER)
@@ -78,6 +80,7 @@ class RingtonePickerDialog : DialogFragment(), UltimateRingtonePicker.RingtonePi
 
     companion object {
         private const val EXTRA_TITLE = "title"
+        private const val EXTRA_EPHEMERAL = "ephemeral"
 
         @JvmStatic
         fun createInstance(
@@ -102,6 +105,7 @@ class RingtonePickerDialog : DialogFragment(), UltimateRingtonePicker.RingtonePi
             arguments = Bundle().apply {
                 putParcelable(EXTRA_SETTINGS, settings)
                 putCharSequence(EXTRA_TITLE, dialogTitle)
+                putBoolean(EXTRA_EPHEMERAL, true)
             }
             directListener = listener
         }
