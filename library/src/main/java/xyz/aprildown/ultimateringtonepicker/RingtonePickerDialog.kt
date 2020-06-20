@@ -38,6 +38,11 @@ class RingtonePickerDialog : DialogFragment(), UltimateRingtonePicker.RingtonePi
     ): View? = inflater.inflate(R.layout.urp_dialog, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+        if (directListener == null) {
+            dismiss()
+        }
+
         if (savedInstanceState == null) {
             val fragment =
                 requireArguments().getParcelable<UltimateRingtonePicker.Settings>(EXTRA_SETTINGS)!!
@@ -53,13 +58,6 @@ class RingtonePickerDialog : DialogFragment(), UltimateRingtonePicker.RingtonePi
         }
         view.findViewById<View>(R.id.urpBtnDialogSelect).setOnClickListener {
             getRingtonePickerFragment().onSelectClick()
-        }
-    }
-
-    override fun onPause() {
-        super.onPause()
-        if (directListener != null) {
-            dismiss()
         }
     }
 
