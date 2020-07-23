@@ -34,13 +34,7 @@ def isNonStable = { String version ->
 }
 
 dependencyUpdates {
-    resolutionStrategy {
-        componentSelection {
-            all {
-                if (isNonStable(it.candidate.version) && !isNonStable(it.currentVersion)) {
-                    reject('Release candidate')
-                }
-            }
-        }
+    rejectVersionIf {
+        (isNonStable(it.candidate.version) && !isNonStable(it.currentVersion))
     }
 }

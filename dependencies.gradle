@@ -1,8 +1,8 @@
 ext {
     versions = [
-            agp         : '3.6.3',
+            agp         : '3.6.4',
             kotlin      : '1.3.72',
-            versions    : '0.28.0',
+            versions    : '0.29.0',
 
             compile_sdk : 29,
             min_sdk     : 19,
@@ -15,8 +15,8 @@ ext {
             // Kotlin
             kotlin_stdlib_jdk7          : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${versions.kotlin}",
             // Kotlin Coroutines
-            kotlin_coroutines_core      : 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.7',
-            kotlin_coroutines_android   : 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.7',
+            kotlin_coroutines_core      : 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.8',
+            kotlin_coroutines_android   : 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.8',
 
             appcompat                   : 'androidx.appcompat:appcompat:1.1.0',
             recyclerview                : 'androidx.recyclerview:recyclerview:1.1.0',
@@ -27,10 +27,10 @@ ext {
             lifecycle_viewmodel         : 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0',
 
             // Navigation
-            androidx_navigation_fragment: 'androidx.navigation:navigation-fragment-ktx:2.2.2',
-            androidx_navigation_ui      : 'androidx.navigation:navigation-ui-ktx:2.2.2',
+            androidx_navigation_fragment: 'androidx.navigation:navigation-fragment-ktx:2.3.0',
+            androidx_navigation_ui      : 'androidx.navigation:navigation-ui-ktx:2.3.0',
 
-            leak_cannary                : 'com.squareup.leakcanary:leakcanary-android:2.3',
+            leak_cannary                : 'com.squareup.leakcanary:leakcanary-android:2.4',
 
             fastadapter                 : 'com.mikepenz:fastadapter:5.0.2',
             fastadapter_binding         : 'com.mikepenz:fastadapter-extensions-binding:5.0.2',
