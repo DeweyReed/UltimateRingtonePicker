@@ -1,5 +1,6 @@
 package xyz.aprildown.ultimateringtonepicker
 
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.Animatable
@@ -7,6 +8,7 @@ import android.net.Uri
 import android.os.Build
 import android.view.View
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 
@@ -45,15 +47,20 @@ internal fun Fragment.requireRingtonePickerListener(): UltimateRingtonePicker.Ri
         parentFragment is UltimateRingtonePicker.RingtonePickerListener -> parentFragment as UltimateRingtonePicker.RingtonePickerListener
         context is UltimateRingtonePicker.RingtonePickerListener -> context as UltimateRingtonePicker.RingtonePickerListener
         activity is UltimateRingtonePicker.RingtonePickerListener -> activity as UltimateRingtonePicker.RingtonePickerListener
-    else -> throw IllegalStateException("Cannot find RingtonePickerListener")
-}
+        else -> throw IllegalStateException("Cannot find RingtonePickerListener")
+    }
 
 internal fun Fragment.launchSaf() {
-    startActivityForResult(
-        Intent(Intent.ACTION_OPEN_DOCUMENT)
-            .addCategory(Intent.CATEGORY_OPENABLE)
-            .setType("audio/*")
-            .addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION),
-        0
-    )
+    try {
+        startActivityForResult(
+            Intent(Intent.ACTION_OPEN_DOCUMENT)
+                .addCategory(Intent.CATEGORY_OPENABLE)
+                .setType("audio/*")
+                .addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION),
+            0
+        )
+    } catch (e: ActivityNotFoundException) {
+        e.printStackTrace()
+        Toast.makeText(requireContext(), e.message.toString(), Toast.LENGTH_LONG).show()
+    }
 }
