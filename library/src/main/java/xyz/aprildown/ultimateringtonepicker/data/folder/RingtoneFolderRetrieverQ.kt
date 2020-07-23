@@ -18,9 +18,6 @@ internal class RingtoneFolderRetrieverQ(private val context: Context) : Ringtone
         var count: Int = 0
     )
 
-    /**
-     * TODO: There must be something which can be improved but all SQLs I tried fail.
-     */
     override fun getRingtoneFolders(): List<Category> {
         val folders = mutableListOf<MutableFolder>()
         // This is hack. Is there any better way?
@@ -37,11 +34,15 @@ internal class RingtoneFolderRetrieverQ(private val context: Context) : Ringtone
             it.moveToPosition(-1)
             while (it.moveToNext()) {
                 val bucketId =
-                    it.getLong(it.getColumnIndexOrThrow(MediaStore.Files.FileColumns.BUCKET_ID))
+                    it.getLong(it.getColumnIndexOrThrow(MediaStore.Audio.Media.BUCKET_ID))
                 val currentFolder = folders.find { folder -> folder.folderId == bucketId }
                 if (currentFolder == null) {
-                    val bucketName =
-                        it.getString(it.getColumnIndexOrThrow(MediaStore.Files.FileColumns.BUCKET_DISPLAY_NAME))
+                    val bucketName = try {
+                        it.getString(it.getColumnIndexOrThrow(MediaStore.Audio.Media.BUCKET_DISPLAY_NAME))
+                    } catch (e: Exception) {
+                        // The bucketName may be null or doesn't exist.
+                        continue
+                    }
                     folders.add(MutableFolder(bucketId, bucketName, count = 1))
                 } else {
                     currentFolder.count += 1
