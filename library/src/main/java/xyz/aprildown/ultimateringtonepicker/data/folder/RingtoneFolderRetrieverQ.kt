@@ -33,19 +33,23 @@ internal class RingtoneFolderRetrieverQ(private val context: Context) : Ringtone
         )?.use {
             it.moveToPosition(-1)
             while (it.moveToNext()) {
-                val bucketId =
-                    it.getLong(it.getColumnIndexOrThrow(MediaStore.Audio.Media.BUCKET_ID))
-                val currentFolder = folders.find { folder -> folder.folderId == bucketId }
-                if (currentFolder == null) {
-                    val bucketName = try {
-                        it.getString(it.getColumnIndexOrThrow(MediaStore.Audio.Media.BUCKET_DISPLAY_NAME))
-                    } catch (e: Exception) {
-                        // The bucketName may be null or doesn't exist.
-                        continue
+                try {
+                    val bucketId =
+                        it.getLong(it.getColumnIndexOrThrow(MediaStore.Audio.Media.BUCKET_ID))
+                    val currentFolder = folders.find { folder -> folder.folderId == bucketId }
+                    if (currentFolder == null) {
+                        val bucketName = try {
+                            it.getString(it.getColumnIndexOrThrow(MediaStore.Audio.Media.BUCKET_DISPLAY_NAME))
+                        } catch (e: Exception) {
+                            // The bucketName may be null or doesn't exist.
+                            continue
+                        }
+                        folders.add(MutableFolder(bucketId, bucketName, count = 1))
+                    } else {
+                        currentFolder.count += 1
                     }
-                    folders.add(MutableFolder(bucketId, bucketName, count = 1))
-                } else {
-                    currentFolder.count += 1
+                } catch (e: Exception) {
+                    e.printStackTrace()
                 }
             }
         }
@@ -73,12 +77,16 @@ internal class RingtoneFolderRetrieverQ(private val context: Context) : Ringtone
         )?.use {
             it.moveToPosition(-1)
             while (it.moveToNext()) {
-                val uri = ContentUris.withAppendedId(
-                    MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                    it.getLong(it.getColumnIndexOrThrow(MediaStore.Audio.Media._ID))
-                )
-                val title = it.getString(it.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE))
-                data.add(Ringtone(uri, title))
+                try {
+                    val uri = ContentUris.withAppendedId(
+                        MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                        it.getLong(it.getColumnIndexOrThrow(MediaStore.Audio.Media._ID))
+                    )
+                    val title = it.getString(it.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE))
+                    data.add(Ringtone(uri, title))
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
             }
         }
         return data

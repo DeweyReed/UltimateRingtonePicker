@@ -28,9 +28,17 @@ internal class RingtoneFolderRetrieverPreQ(private val context: Context) : Ringt
         )?.use {
             it.moveToPosition(-1)
             while (it.moveToNext()) {
-                val parentId =
-                    it.getLong(it.getColumnIndexOrThrow(MediaStore.Files.FileColumns.PARENT))
-                val numOfSongs = it.getInt(it.getColumnIndexOrThrow("dataCount"))
+                val parentId: Long
+                val numOfSongs: Int
+                try {
+                    parentId =
+                        it.getLong(it.getColumnIndexOrThrow(MediaStore.Files.FileColumns.PARENT))
+                    numOfSongs =
+                        it.getInt(it.getColumnIndexOrThrow("dataCount"))
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    continue
+                }
                 context.contentResolver.query(
                     ContentUris.withAppendedId(
                         MediaStore.Files.getContentUri("external"),
@@ -43,18 +51,22 @@ internal class RingtoneFolderRetrieverPreQ(private val context: Context) : Ringt
                 )?.use { parentCursor ->
                     parentCursor.moveToPosition(-1)
                     while (parentCursor.moveToNext()) {
-                        val parentTitle = parentCursor.getString(
-                            parentCursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.TITLE)
-                        )
-                        if (parentTitle != null) {
-                            data.add(
-                                Category(
-                                    type = UltimateRingtonePicker.RingtoneCategoryType.Folder,
-                                    id = parentId,
-                                    name = parentTitle,
-                                    numberOfSongs = numOfSongs
-                                )
+                        try {
+                            val parentTitle = parentCursor.getString(
+                                parentCursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.TITLE)
                             )
+                            if (parentTitle != null) {
+                                data.add(
+                                    Category(
+                                        type = UltimateRingtonePicker.RingtoneCategoryType.Folder,
+                                        id = parentId,
+                                        name = parentTitle,
+                                        numberOfSongs = numOfSongs
+                                    )
+                                )
+                            }
+                        } catch (e: Exception) {
+                            e.printStackTrace()
                         }
                     }
                 }
@@ -83,12 +95,16 @@ internal class RingtoneFolderRetrieverPreQ(private val context: Context) : Ringt
         )?.use {
             it.moveToPosition(-1)
             while (it.moveToNext()) {
-                val uri = ContentUris.withAppendedId(
-                    MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                    it.getLong(it.getColumnIndexOrThrow(MediaStore.Audio.Media._ID))
-                )
-                val title = it.getString(it.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE))
-                data.add(Ringtone(uri, title))
+                try {
+                    val uri = ContentUris.withAppendedId(
+                        MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                        it.getLong(it.getColumnIndexOrThrow(MediaStore.Audio.Media._ID))
+                    )
+                    val title = it.getString(it.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE))
+                    data.add(Ringtone(uri, title))
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
             }
         }
         return data

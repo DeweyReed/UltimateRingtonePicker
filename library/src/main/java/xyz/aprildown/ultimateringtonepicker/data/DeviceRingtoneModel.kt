@@ -32,17 +32,21 @@ internal class DeviceRingtoneModel(private val context: Context) {
         )?.use {
             it.moveToPosition(-1)
             while (it.moveToNext()) {
-                val uri = ContentUris.withAppendedId(
-                    MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                    it.getLong(it.getColumnIndexOrThrow(MediaStore.Audio.AudioColumns._ID))
-                )
-                val title =
-                    it.getString(it.getColumnIndexOrThrow(MediaStore.Audio.AudioColumns.TITLE))
-                val artistId =
-                    it.getLong(it.getColumnIndexOrThrow(MediaStore.Audio.AudioColumns.ARTIST_ID))
-                val albumId =
-                    it.getLong(it.getColumnIndexOrThrow(MediaStore.Audio.AudioColumns.ALBUM_ID))
-                data.add(Ringtone(uri, title, artistId, albumId))
+                try {
+                    val uri = ContentUris.withAppendedId(
+                        MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                        it.getLong(it.getColumnIndexOrThrow(MediaStore.Audio.AudioColumns._ID))
+                    )
+                    val title =
+                        it.getString(it.getColumnIndexOrThrow(MediaStore.Audio.AudioColumns.TITLE))
+                    val artistId =
+                        it.getLong(it.getColumnIndexOrThrow(MediaStore.Audio.AudioColumns.ARTIST_ID))
+                    val albumId =
+                        it.getLong(it.getColumnIndexOrThrow(MediaStore.Audio.AudioColumns.ALBUM_ID))
+                    data.add(Ringtone(uri, title, artistId, albumId))
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
             }
         }
         return data
@@ -63,18 +67,23 @@ internal class DeviceRingtoneModel(private val context: Context) {
         )?.use {
             it.moveToPosition(-1)
             while (it.moveToNext()) {
-                val id = it.getLong(it.getColumnIndexOrThrow(MediaStore.Audio.Artists._ID))
-                val name = it.getString(it.getColumnIndexOrThrow(MediaStore.Audio.Artists.ARTIST))
-                val numOfTracks =
-                    it.getInt(it.getColumnIndexOrThrow(MediaStore.Audio.Artists.NUMBER_OF_TRACKS))
-                data.add(
-                    Category(
-                        type = UltimateRingtonePicker.RingtoneCategoryType.Artist,
-                        id = id,
-                        name = name,
-                        numberOfSongs = numOfTracks
+                try {
+                    val id = it.getLong(it.getColumnIndexOrThrow(MediaStore.Audio.Artists._ID))
+                    val name =
+                        it.getString(it.getColumnIndexOrThrow(MediaStore.Audio.Artists.ARTIST))
+                    val numOfTracks =
+                        it.getInt(it.getColumnIndexOrThrow(MediaStore.Audio.Artists.NUMBER_OF_TRACKS))
+                    data.add(
+                        Category(
+                            type = UltimateRingtonePicker.RingtoneCategoryType.Artist,
+                            id = id,
+                            name = name,
+                            numberOfSongs = numOfTracks
+                        )
                     )
-                )
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
             }
         }
         return data
@@ -95,18 +104,22 @@ internal class DeviceRingtoneModel(private val context: Context) {
         )?.use {
             it.moveToPosition(-1)
             while (it.moveToNext()) {
-                val id = it.getLong(it.getColumnIndexOrThrow(MediaStore.Audio.Albums._ID))
-                val name = it.getString(it.getColumnIndexOrThrow(MediaStore.Audio.Albums.ALBUM))
-                val numOfSongs =
-                    it.getInt(it.getColumnIndexOrThrow(MediaStore.Audio.Albums.NUMBER_OF_SONGS))
-                data.add(
-                    Category(
-                        type = UltimateRingtonePicker.RingtoneCategoryType.Album,
-                        id = id,
-                        name = name,
-                        numberOfSongs = numOfSongs
+                try {
+                    val id = it.getLong(it.getColumnIndexOrThrow(MediaStore.Audio.Albums._ID))
+                    val name = it.getString(it.getColumnIndexOrThrow(MediaStore.Audio.Albums.ALBUM))
+                    val numOfSongs =
+                        it.getInt(it.getColumnIndexOrThrow(MediaStore.Audio.Albums.NUMBER_OF_SONGS))
+                    data.add(
+                        Category(
+                            type = UltimateRingtonePicker.RingtoneCategoryType.Album,
+                            id = id,
+                            name = name,
+                            numberOfSongs = numOfSongs
+                        )
                     )
-                )
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
             }
         }
         return data
