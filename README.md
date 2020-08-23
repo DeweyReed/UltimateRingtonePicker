@@ -72,7 +72,7 @@ Step 2. Add the dependency
 
 ```Groovy
 dependencies {
-    implementation 'xyz.aprildown:UltimateRingtonePicker:3.0.0-beta01'
+    implementation 'xyz.aprildown:UltimateRingtonePicker:3.0.0-beta02'
 }
 ```
 
