@@ -56,7 +56,12 @@ internal fun Fragment.launchSaf() {
             Intent(Intent.ACTION_OPEN_DOCUMENT)
                 .addCategory(Intent.CATEGORY_OPENABLE)
                 .setType("audio/*")
-                .addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION),
+                .addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION)
+                /**
+                 * The docs for SAF is quite vague. I add [Intent.FLAG_GRANT_READ_URI_PERMISSION]
+                 * flag following [Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION]'s doc.
+                 */
+                .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION),
             0
         )
     } catch (e: ActivityNotFoundException) {
