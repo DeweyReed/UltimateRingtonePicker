@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.GenericItem
 import com.mikepenz.fastadapter.adapters.GenericItemAdapter
-import com.mikepenz.fastadapter.diff.FastAdapterDiffUtil
 import com.mikepenz.fastadapter.listeners.CustomEventHook
 import com.mikepenz.fastadapter.select.getSelectExtension
 import pub.devrel.easypermissions.EasyPermissions
@@ -215,7 +214,7 @@ internal class SystemRingtoneFragment : Fragment(R.layout.urp_recycler_view),
             }
         }
 
-        FastAdapterDiffUtil[itemAdapter] = items
+        itemAdapter.set(items)
 
         // We only want to scroll to the first selected item
         // when we open the picker for the first time.
