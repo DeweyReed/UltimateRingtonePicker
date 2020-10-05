@@ -24,10 +24,6 @@
 </div>
 </br>
 
-**3.0 API has been changed completely. Currently, it's in the beta. It's fixing bugs.**
-
-**[Click here to use 2.X](./README_OLD.md).**
-
 ## Features
 
 - Respects Scoped Storage(MediaStore is used)
@@ -72,7 +68,7 @@ Step 2. Add the dependency
 
 ```Groovy
 dependencies {
-    implementation 'xyz.aprildown:UltimateRingtonePicker:3.0.0-beta02'
+    implementation 'xyz.aprildown:UltimateRingtonePicker:3.0.0'
 }
 ```
 
