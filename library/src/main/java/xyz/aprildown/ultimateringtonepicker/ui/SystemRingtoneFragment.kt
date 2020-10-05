@@ -9,7 +9,6 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.View
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.RecyclerView
@@ -111,7 +110,7 @@ internal class SystemRingtoneFragment : Fragment(R.layout.urp_recycler_view),
             }
         })
 
-        viewModel.systemRingtoneLoadedEvent.observe(viewLifecycleOwner, Observer {
+        viewModel.systemRingtoneLoadedEvent.observe(viewLifecycleOwner, {
             loadVisibleRingtones(context, itemAdapter)
         })
     }

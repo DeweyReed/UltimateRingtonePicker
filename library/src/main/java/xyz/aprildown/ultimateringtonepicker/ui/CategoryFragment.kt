@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -62,7 +61,7 @@ internal class CategoryFragment : Fragment() {
 
         viewModel.getCategoryLiveData(categoryType)?.observe(
             viewLifecycleOwner,
-            Observer { categories ->
+            { categories ->
                 if (categories.isNotEmpty()) {
                     itemAdapter.setNewList(categories.map { category ->
                         VisibleCategory(

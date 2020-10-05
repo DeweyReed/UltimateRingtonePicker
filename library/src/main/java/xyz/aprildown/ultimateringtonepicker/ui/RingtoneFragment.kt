@@ -3,7 +3,6 @@ package xyz.aprildown.ultimateringtonepicker.ui
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.RecyclerView
@@ -33,7 +32,7 @@ internal class RingtoneFragment : Fragment(R.layout.urp_recycler_view), EventHan
         viewModel.getRingtoneLiveData(
             categoryType = arguments.getSerializable(EXTRA_CATEGORY_TYPE) as UltimateRingtonePicker.RingtoneCategoryType,
             categoryId = arguments.getLong(EXTRA_CATEGORY_ID)
-        ).observe(viewLifecycleOwner, Observer { ringtones ->
+        ).observe(viewLifecycleOwner, { ringtones ->
             if (ringtones.isNotEmpty()) {
                 itemAdapter.setNewList(ringtones.map { ringtone ->
                     VisibleRingtone(
