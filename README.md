@@ -76,37 +76,35 @@ dependencies {
 
 [Demo APK](https://github.com/deweyreed/ultimateringtonepicker/releases) and [examples in the MainActivity](./app/src/main/java/xyz/aprildown/ultimateringtonepicker/app/MainActivity.kt).
 
-### 1. Create a `UltimateRingtonePicker.Settings`
+### 0. Add Permission
 
-Here're all options and their default values.
+Add `<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />` to your Manifest if you are not going to use Storage Access Framework.
+
+### 1. Create an `UltimateRingtonePicker.Settings`
 
 ```Kotlin
 val settings = UltimateRingtonePicker.Settings(
-    preSelectUris = emptyList(),
-    enableMultiSelect = false,
-    streamType = AudioManager.STREAM_MUSIC,
     systemRingtonePicker = UltimateRingtonePicker.SystemRingtonePicker(
-        customSection = UltimateRingtonePicker.SystemRingtonePicker.CustomSection(
-            useSafSelect = false,
-            launchSafOnPermissionDenied = true,
-            launchSafOnPermissionPermanentlyDenied = true
-        ),
-        defaultSection = UltimateRingtonePicker.SystemRingtonePicker.DefaultSection(
-            showSilent = true,
-            defaultUri = null,
-            defaultTitle = null,
-            additionalRingtones = emptyList()
-        ),
-        ringtoneTypes = emptyList()
+        customSection = UltimateRingtonePicker.SystemRingtonePicker.CustomSection(),
+        defaultSection = UltimateRingtonePicker.SystemRingtonePicker.DefaultSection(),
+        ringtoneTypes = listOf(
+            RingtoneManager.TYPE_RINGTONE,
+            RingtoneManager.TYPE_NOTIFICATION,
+            RingtoneManager.TYPE_ALARM
+        )
     ),
     deviceRingtonePicker = UltimateRingtonePicker.DeviceRingtonePicker(
-        deviceRingtoneTypes = emptyList(),
-        alwaysUseSaf = false
+        deviceRingtoneTypes = listOf(
+            UltimateRingtonePicker.RingtoneCategoryType.All,
+            UltimateRingtonePicker.RingtoneCategoryType.Artist,
+            UltimateRingtonePicker.RingtoneCategoryType.Album,
+            UltimateRingtonePicker.RingtoneCategoryType.Folder
+        )
     )
 )
 ```
 
-### 2. Launch to picker
+### 2. Launch the picker
 
 - Launch the Activity picker
 
