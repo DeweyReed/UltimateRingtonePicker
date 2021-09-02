@@ -18,7 +18,6 @@ import android.os.Handler
 import android.os.HandlerThread
 import android.os.Looper
 import android.os.Message
-import android.telephony.TelephonyManager
 import androidx.annotation.RequiresApi
 import xyz.aprildown.ultimateringtonepicker.ASSET_URI_PREFIX
 import xyz.aprildown.ultimateringtonepicker.isLOrLater
@@ -40,23 +39,12 @@ internal class AsyncRingtonePlayer(
 ) {
 
     companion object {
-        // Volume suggested by media team for in-call alarms.
-        private const val IN_CALL_VOLUME = 0.125f
-
         // Message codes used with the ringtone thread.
         private const val EVENT_PLAY = 1
         private const val EVENT_STOP = 2
         private const val RINGTONE_URI_KEY = "RINGTONE_URI_KEY"
         private const val LOOP = "LOOP"
         private const val STREAM_TYPE = "STREAM_TYPE"
-
-        /**
-         * @return `true` iff the device is currently in a telephone call
-         */
-        private fun isInTelephoneCall(context: Context): Boolean {
-            val tm = context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
-            return tm.callState != TelephonyManager.CALL_STATE_IDLE
-        }
     }
 
     /** Handler running on the ringtone thread.  */
@@ -170,8 +158,7 @@ internal class AsyncRingtonePlayer(
                 mAudioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
             }
 
-            val inTelephoneCall = isInTelephoneCall(context)
-            var alarmNoise: Uri? = if (inTelephoneCall) null else ringtoneUri
+            var alarmNoise: Uri? = ringtoneUri
             // Fall back to the system default alarm if the database does not have an alarm stored.
             if (alarmNoise == null) {
                 alarmNoise = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
@@ -207,7 +194,7 @@ internal class AsyncRingtonePlayer(
                 }
 
 
-                startPlayback(inTelephoneCall)
+                startPlayback()
             } catch (t: Throwable) {
                 currentPlayingUri = null
                 // The alarmNoise may be on the sd card which could be busy right now.
@@ -224,12 +211,11 @@ internal class AsyncRingtonePlayer(
          * Prepare the MediaPlayer for playback if the alarm stream is not muted, then start the
          * playback.
          *
-         * @param inTelephoneCall `true` if there is currently an active telephone call
          * @return `true` if a crescendo has started and future volume adjustments are
          * required to advance the crescendo effect
          */
         @Throws(IOException::class)
-        private fun startPlayback(inTelephoneCall: Boolean) {
+        private fun startPlayback() {
             // Do not play alarms if stream volume is 0 (typically because ringer mode is silent).
             if (mAudioManager?.getStreamVolume(mStreamType) == 0) {
                 return
@@ -241,12 +227,6 @@ internal class AsyncRingtonePlayer(
             } else {
                 @Suppress("DEPRECATION")
                 mMediaPlayer?.setAudioStreamType(mStreamType)
-            }
-
-            // Check if we are in a call. If we are, use the in-call alarm resource at a low volume
-            // to not disrupt the call.
-            if (inTelephoneCall) {
-                mMediaPlayer?.setVolume(IN_CALL_VOLUME, IN_CALL_VOLUME)
             }
 
             mMediaPlayer?.run {
