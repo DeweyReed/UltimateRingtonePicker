@@ -5,42 +5,40 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
-import androidx.appcompat.app.AppCompatDialog
 import androidx.fragment.app.DialogFragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import xyz.aprildown.ultimateringtonepicker.databinding.UrpDialogBinding
 
 class RingtonePickerDialog : DialogFragment(), UltimateRingtonePicker.RingtonePickerListener {
 
     private var directListener: UltimateRingtonePicker.RingtonePickerListener? = null
+    private lateinit var binding: UrpDialogBinding
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return object : AppCompatDialog(requireContext()) {
-            init {
-                val title = arguments?.getCharSequence(EXTRA_TITLE)
-                if (title.isNullOrBlank()) {
-                    supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
-                } else {
-                    setTitle(title)
-                }
-            }
+        binding = UrpDialogBinding.inflate(layoutInflater)
+        val builder = MaterialAlertDialogBuilder(requireContext())
 
-            override fun onBackPressed() {
-                // World miracle: requireActivity().onBackPressedDispatcher doesn't work here.
-                handleBack()
+        val title = arguments?.getCharSequence(EXTRA_TITLE)
+
+        builder.apply {
+            setView(binding.root)
+            if (!title.isNullOrBlank()) {
+                setTitle(title)
             }
+            setNegativeButton(android.R.string.cancel) { _, _ -> handleBack() }
+            setPositiveButton(android.R.string.ok) { _, _ -> getRingtonePickerFragment().onSelectClick() }
         }
+        return builder.create()
     }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? = inflater.inflate(R.layout.urp_dialog, container, false)
+    ): View = binding.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
         val arguments = requireArguments()
-
         if (arguments.getBoolean(EXTRA_EPHEMERAL) && directListener == null) {
             dismiss()
         }
@@ -53,13 +51,6 @@ class RingtonePickerDialog : DialogFragment(), UltimateRingtonePicker.RingtonePi
                 .add(R.id.urpFrameDialog, fragment, TAG_RINGTONE_PICKER)
                 .setPrimaryNavigationFragment(fragment)
                 .commit()
-        }
-
-        view.findViewById<View>(R.id.urpBtnDialogCancel).setOnClickListener {
-            handleBack()
-        }
-        view.findViewById<View>(R.id.urpBtnDialogSelect).setOnClickListener {
-            getRingtonePickerFragment().onSelectClick()
         }
     }
 

@@ -16,7 +16,7 @@ android {
 
     resourcePrefix 'urp_'
     buildFeatures {
-        viewBinding = true
+        viewBinding true
     }
 
     compileOptions {

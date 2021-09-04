@@ -240,6 +240,7 @@ class MainActivity : AppCompatActivity(), UltimateRingtonePicker.RingtonePickerL
     private fun createStandardSettings(): UltimateRingtonePicker.Settings =
         UltimateRingtonePicker.Settings(
             preSelectUris = currentSelectedRingtones.map { it.uri },
+            loop = false,
             systemRingtonePicker = UltimateRingtonePicker.SystemRingtonePicker(
                 customSection = UltimateRingtonePicker.SystemRingtonePicker.CustomSection(),
                 defaultSection = UltimateRingtonePicker.SystemRingtonePicker.DefaultSection(

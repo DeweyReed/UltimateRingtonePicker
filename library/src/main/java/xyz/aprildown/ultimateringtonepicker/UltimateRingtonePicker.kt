@@ -93,6 +93,7 @@ class UltimateRingtonePicker {
     data class Settings(
         val preSelectUris: List<Uri> = emptyList(),
         val enableMultiSelect: Boolean = false,
+        val loop: Boolean = false,
 
         /**
          * Ringtone preview stream type.
