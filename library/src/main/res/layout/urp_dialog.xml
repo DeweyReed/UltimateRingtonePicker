@@ -9,6 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:layout_marginStart="12dp"
         tools:ignore="UselessParent">
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/urpFrameDialog"
