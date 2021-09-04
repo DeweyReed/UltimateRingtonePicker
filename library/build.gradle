@@ -3,6 +3,7 @@ plugins {
 
     id('kotlin-android')
     id('kotlin-parcelize')
+    id('maven-publish')
 }
 
 android {
@@ -42,4 +43,14 @@ dependencies {
     implementation libs.fastadapter_binding
 
     implementation libs.easy_permission
+}
+
+project.afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+            }
+        }
+    }
 }
