@@ -6,6 +6,7 @@ import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import xyz.aprildown.ultimateringtonepicker.databinding.UrpDialogBinding
@@ -26,19 +27,27 @@ class RingtonePickerDialog : DialogFragment(), UltimateRingtonePicker.RingtonePi
             if (!title.isNullOrBlank()) {
                 setTitle(title)
             }
-            setNegativeButton(android.R.string.cancel) { _, _ -> handleBack() }
-            setPositiveButton(android.R.string.ok) { _, _ -> getRingtonePickerFragment().onSelectClick() }
+            setNegativeButton(android.R.string.cancel, null)
+            setPositiveButton(android.R.string.ok, null)
         }
-        return builder.create().also { dialog ->
-            dialog.setOnKeyListener { _, keyCode, keyEvent ->
-                if (keyCode == KeyEvent.KEYCODE_BACK && keyEvent.action == KeyEvent.ACTION_UP) {
-                    handleBack()
-                    true
-                } else {
-                    false
-                }
+        val dialog = builder.create()
+        dialog.setOnShowListener {
+            dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setOnClickListener {
+                handleBack()
+            }
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+                getRingtonePickerFragment().onSelectClick()
             }
         }
+        dialog.setOnKeyListener { _, keyCode, keyEvent ->
+            if (keyCode == KeyEvent.KEYCODE_BACK && keyEvent.action == KeyEvent.ACTION_UP) {
+                handleBack()
+                true
+            } else {
+                false
+            }
+        }
+        return dialog
     }
 
     override fun onCreateView(
