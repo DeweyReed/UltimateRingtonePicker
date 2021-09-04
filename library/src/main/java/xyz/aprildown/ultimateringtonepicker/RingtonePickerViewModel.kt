@@ -178,32 +178,36 @@ internal class RingtonePickerViewModel(
         // Take the long-term permission to read (playback) the audio at the uri.
         contentResolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
 
-        contentResolver.query(uri, null, null, null, null)?.use { cursor ->
+        try {
+            contentResolver.query(uri, null, null, null, null)?.use { cursor ->
 
-            if (!cursor.moveToFirst()) return@use
+                if (!cursor.moveToFirst()) return@use
 
-            var title: String? = null
+                var title: String? = null
 
-            // If the file was a media file, return its title.
-            val titleIndex = cursor.getColumnIndex(MediaStore.Audio.Media.TITLE)
-            if (titleIndex != -1) {
-                title = cursor.getString(titleIndex)
-            } else {
-                // If the file was a simple openable, return its display name.
-                val displayNameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
-                if (displayNameIndex != -1) {
-                    var displayName = cursor.getString(displayNameIndex)
-                    val dotIndex = displayName.lastIndexOf(".")
-                    if (dotIndex > 0) {
-                        displayName = displayName.substring(0, dotIndex)
+                // If the file was a media file, return its title.
+                val titleIndex = cursor.getColumnIndex(MediaStore.Audio.Media.TITLE)
+                if (titleIndex != -1) {
+                    title = cursor.getString(titleIndex)
+                } else {
+                    // If the file was a simple openable, return its display name.
+                    val displayNameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+                    if (displayNameIndex != -1) {
+                        var displayName = cursor.getString(displayNameIndex)
+                        val dotIndex = displayName.lastIndexOf(".")
+                        if (dotIndex > 0) {
+                            displayName = displayName.substring(0, dotIndex)
+                        }
+                        title = displayName
                     }
-                    title = displayName
+                }
+
+                if (title != null) {
+                    return Ringtone(uri, title)
                 }
             }
-
-            if (title != null) {
-                return Ringtone(uri, title)
-            }
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
         return null
     }
