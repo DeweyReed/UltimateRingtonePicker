@@ -96,6 +96,8 @@ internal class SystemRingtoneFragment : Fragment(R.layout.urp_recycler_view),
                                                     ) {
                                                         currentItem.isSelected = true
                                                         fastAdapter.notifyItemChanged(position)
+
+                                                        viewModel.currentSelectedUris.add(defaultUri)
                                                     }
                                                 }
                                             }

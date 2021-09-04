@@ -134,12 +134,11 @@ internal class RingtonePickerViewModel(
         mediaPlayer.stop()
     }
 
-    private fun addCustomRingtone(title: String, uri: Uri) {
-        customRingtoneModel.addCustomRingtone(uri, title)
-    }
-
     fun deleteCustomRingtone(uri: Uri) {
         customRingtoneModel.removeCustomRingtone(uri)
+
+        customRingtones.clear()
+        customRingtones.addAll(customRingtoneModel.getCustomRingtones())
     }
 
     fun onDeviceSelection(selectedRingtones: List<Ringtone>) {
@@ -150,7 +149,7 @@ internal class RingtonePickerViewModel(
         currentSelectedUris.addAll(selectedRingtones.map { it.uri })
 
         selectedRingtones.forEach {
-            addCustomRingtone(it.title, it.uri)
+            customRingtoneModel.addCustomRingtone(it.uri, it.title)
         }
         // In this way we can keep ringtone order. They're cached anyway.
         customRingtones.clear()
