@@ -22,6 +22,7 @@ import pub.devrel.easypermissions.PermissionRequest
 import xyz.aprildown.ultimateringtonepicker.R
 import xyz.aprildown.ultimateringtonepicker.RINGTONE_URI_SILENT
 import xyz.aprildown.ultimateringtonepicker.RingtonePickerViewModel
+import xyz.aprildown.ultimateringtonepicker.createDefaultNavOptions
 import xyz.aprildown.ultimateringtonepicker.data.Ringtone
 import xyz.aprildown.ultimateringtonepicker.databinding.UrpRecyclerViewBinding
 import xyz.aprildown.ultimateringtonepicker.launchSaf
@@ -184,7 +185,7 @@ internal class SystemRingtoneFragment : Fragment(R.layout.urp_recycler_view),
     }
 
     private fun launchDevicePick() {
-        findNavController().navigate(R.id.urp_dest_device)
+        findNavController().navigate(R.id.urp_dest_device, null, createDefaultNavOptions())
     }
 
     /**

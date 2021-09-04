@@ -13,6 +13,7 @@ import xyz.aprildown.ultimateringtonepicker.EXTRA_CATEGORY_TYPE
 import xyz.aprildown.ultimateringtonepicker.R
 import xyz.aprildown.ultimateringtonepicker.RingtonePickerViewModel
 import xyz.aprildown.ultimateringtonepicker.UltimateRingtonePicker
+import xyz.aprildown.ultimateringtonepicker.createDefaultNavOptions
 import xyz.aprildown.ultimateringtonepicker.databinding.UrpRecyclerViewBinding
 
 internal class CategoryFragment : Fragment(R.layout.urp_recycler_view) {
@@ -36,7 +37,8 @@ internal class CategoryFragment : Fragment(R.layout.urp_recycler_view) {
                         Bundle().apply {
                             putSerializable(EXTRA_CATEGORY_TYPE, categoryType)
                             putLong(EXTRA_CATEGORY_ID, item.category.id)
-                        }
+                        },
+                        createDefaultNavOptions()
                     )
                     true
                 }

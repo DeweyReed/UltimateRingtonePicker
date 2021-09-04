@@ -11,6 +11,8 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavOptions
+import androidx.navigation.navOptions
 
 internal val RINGTONE_URI_SILENT: Uri = Uri.EMPTY
 internal val RINGTONE_URI_NULL: Uri = Uri.EMPTY
@@ -67,5 +69,16 @@ internal fun Fragment.launchSaf() {
     } catch (e: ActivityNotFoundException) {
         e.printStackTrace()
         Toast.makeText(requireContext(), e.message.toString(), Toast.LENGTH_LONG).show()
+    }
+}
+
+internal fun createDefaultNavOptions(): NavOptions {
+    return navOptions {
+        anim {
+            enter = R.animator.nav_default_enter_anim
+            exit = R.animator.nav_default_exit_anim
+            popEnter = R.animator.nav_default_pop_enter_anim
+            popExit = R.animator.nav_default_pop_exit_anim
+        }
     }
 }
