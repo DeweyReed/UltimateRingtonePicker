@@ -2,6 +2,7 @@ package xyz.aprildown.ultimateringtonepicker
 
 import android.app.Dialog
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,7 +29,16 @@ class RingtonePickerDialog : DialogFragment(), UltimateRingtonePicker.RingtonePi
             setNegativeButton(android.R.string.cancel) { _, _ -> handleBack() }
             setPositiveButton(android.R.string.ok) { _, _ -> getRingtonePickerFragment().onSelectClick() }
         }
-        return builder.create()
+        return builder.create().also { dialog ->
+            dialog.setOnKeyListener { _, keyCode, keyEvent ->
+                if (keyCode == KeyEvent.KEYCODE_BACK && keyEvent.action == KeyEvent.ACTION_UP) {
+                    handleBack()
+                    true
+                } else {
+                    false
+                }
+            }
+        }
     }
 
     override fun onCreateView(
