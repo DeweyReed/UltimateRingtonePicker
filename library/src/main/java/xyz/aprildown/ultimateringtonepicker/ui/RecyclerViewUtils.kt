@@ -8,6 +8,7 @@ import com.mikepenz.fastadapter.GenericItem
 import com.mikepenz.fastadapter.ISelectionListener
 import com.mikepenz.fastadapter.select.SelectExtension
 import com.mikepenz.fastadapter.select.getSelectExtension
+import xyz.aprildown.ultimateringtonepicker.R
 import xyz.aprildown.ultimateringtonepicker.RINGTONE_URI_SILENT
 import xyz.aprildown.ultimateringtonepicker.RingtonePickerViewModel
 
@@ -55,11 +56,11 @@ internal fun FastAdapter<GenericItem>.setUpSelectableRingtoneExtension(
     }
 }
 
-internal val Fragment.rootRecyclerView: RecyclerView? get() = view as? RecyclerView
+internal val Fragment.ringtoneRecyclerView: RecyclerView? get() = view?.findViewById(R.id.urpRecyclerView)
 
 @Suppress("UNCHECKED_CAST")
-internal val Fragment.rootFastAdapter: GenericFastAdapter?
-    get() = rootRecyclerView?.adapter as? GenericFastAdapter
+internal val Fragment.ringtoneFastAdapter: GenericFastAdapter?
+    get() = ringtoneRecyclerView?.adapter as? GenericFastAdapter
 
 internal fun <Item : GenericItem> FastAdapter<Item>.forEachIndexed(f: (item: Item, position: Int) -> Unit) {
     for (index in 0 until itemCount) {

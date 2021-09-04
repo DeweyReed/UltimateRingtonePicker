@@ -23,6 +23,7 @@ import xyz.aprildown.ultimateringtonepicker.R
 import xyz.aprildown.ultimateringtonepicker.RINGTONE_URI_SILENT
 import xyz.aprildown.ultimateringtonepicker.RingtonePickerViewModel
 import xyz.aprildown.ultimateringtonepicker.data.Ringtone
+import xyz.aprildown.ultimateringtonepicker.databinding.UrpRecyclerViewBinding
 import xyz.aprildown.ultimateringtonepicker.launchSaf
 
 internal class SystemRingtoneFragment : Fragment(R.layout.urp_recycler_view),
@@ -34,7 +35,7 @@ internal class SystemRingtoneFragment : Fragment(R.layout.urp_recycler_view),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val context = view.context
-        val list = view as RecyclerView
+        val binding = UrpRecyclerViewBinding.bind(view)
 
         val itemAdapter = GenericItemAdapter()
         val fastAdapter = FastAdapter.with(itemAdapter)
@@ -62,12 +63,12 @@ internal class SystemRingtoneFragment : Fragment(R.layout.urp_recycler_view),
             }
         }
 
-        list.adapter = fastAdapter
+        binding.urpRecyclerView.adapter = fastAdapter
 
-        registerForContextMenu(list)
+        registerForContextMenu(binding.urpRecyclerView)
 
         fastAdapter.addEventHook(object : CustomEventHook<VisibleRingtone>() {
-            override fun onBind(viewHolder: RecyclerView.ViewHolder): View? {
+            override fun onBind(viewHolder: RecyclerView.ViewHolder): View {
                 return viewHolder.itemView
             }
 
@@ -101,7 +102,7 @@ internal class SystemRingtoneFragment : Fragment(R.layout.urp_recycler_view),
                                     }
                                 }
 
-                                itemAdapter.remove(viewHolder.adapterPosition)
+                                itemAdapter.remove(viewHolder.bindingAdapterPosition)
                                 true
                             }
                     }
@@ -109,14 +110,15 @@ internal class SystemRingtoneFragment : Fragment(R.layout.urp_recycler_view),
             }
         })
 
-        viewModel.systemRingtoneLoadedEvent.observe(viewLifecycleOwner, {
+        viewModel.systemRingtoneLoadedEvent.observe(viewLifecycleOwner) {
+            binding.urpProgress.hide()
             loadVisibleRingtones(context, itemAdapter)
-        })
+        }
     }
 
     override fun onSelect() {
         viewModel.stopPlaying()
-        val selectedItems = rootFastAdapter?.getSelectExtension()?.selectedItems
+        val selectedItems = ringtoneFastAdapter?.getSelectExtension()?.selectedItems
         if (selectedItems != null) {
             viewModel.onFinalSelection(
                 selectedItems.mapNotNull {
@@ -221,7 +223,7 @@ internal class SystemRingtoneFragment : Fragment(R.layout.urp_recycler_view),
         if (viewModel.consumeFirstLoad()) {
             if (firstIndex != RecyclerView.NO_POSITION) {
                 // To reveal items above.
-                rootRecyclerView?.scrollToPosition((firstIndex - 1).coerceAtLeast(0))
+                ringtoneRecyclerView?.scrollToPosition((firstIndex - 1).coerceAtLeast(0))
             }
         } else {
             // We pick a ringtone from SAF and play it here.
@@ -234,7 +236,7 @@ internal class SystemRingtoneFragment : Fragment(R.layout.urp_recycler_view),
                 firstItem?.let { targetItem ->
                     viewModel.startPlaying(targetItem.ringtone.uri)
                     targetItem.isPlaying = true
-                    rootFastAdapter?.notifyItemChanged(firstIndex)
+                    ringtoneFastAdapter?.notifyItemChanged(firstIndex)
                 }
             }
         }

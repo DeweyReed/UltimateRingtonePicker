@@ -5,7 +5,6 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
-import androidx.recyclerview.widget.RecyclerView
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.adapters.GenericItemAdapter
 import com.mikepenz.fastadapter.select.getSelectExtension
@@ -14,25 +13,27 @@ import xyz.aprildown.ultimateringtonepicker.EXTRA_CATEGORY_TYPE
 import xyz.aprildown.ultimateringtonepicker.R
 import xyz.aprildown.ultimateringtonepicker.RingtonePickerViewModel
 import xyz.aprildown.ultimateringtonepicker.UltimateRingtonePicker
+import xyz.aprildown.ultimateringtonepicker.databinding.UrpRecyclerViewBinding
 
 internal class RingtoneFragment : Fragment(R.layout.urp_recycler_view), EventHandler {
 
     private val viewModel by navGraphViewModels<RingtonePickerViewModel>(R.id.urp_nav_graph)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val recyclerView = view as RecyclerView
+        val binding = UrpRecyclerViewBinding.bind(view)
 
         val itemAdapter = GenericItemAdapter()
         val fastAdapter = FastAdapter.with(itemAdapter)
         fastAdapter.setUpSelectableRingtoneExtension(viewModel)
 
-        recyclerView.adapter = fastAdapter
+        binding.urpRecyclerView.adapter = fastAdapter
 
         val arguments = requireArguments()
         viewModel.getRingtoneLiveData(
             categoryType = arguments.getSerializable(EXTRA_CATEGORY_TYPE) as UltimateRingtonePicker.RingtoneCategoryType,
             categoryId = arguments.getLong(EXTRA_CATEGORY_ID)
-        ).observe(viewLifecycleOwner, { ringtones ->
+        ).observe(viewLifecycleOwner) { ringtones ->
+            binding.urpProgress.hide()
             if (ringtones.isNotEmpty()) {
                 itemAdapter.setNewList(ringtones.map { ringtone ->
                     VisibleRingtone(
@@ -45,7 +46,7 @@ internal class RingtoneFragment : Fragment(R.layout.urp_recycler_view), EventHan
             } else {
                 itemAdapter.setNewList(listOf(VisibleEmptyView()))
             }
-        })
+        }
     }
 
     override fun onResume() {
@@ -55,12 +56,12 @@ internal class RingtoneFragment : Fragment(R.layout.urp_recycler_view), EventHan
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        rootFastAdapter?.getSelectExtension()?.saveInstanceState(outState, KEY_SELECTION)
+        ringtoneFastAdapter?.getSelectExtension()?.saveInstanceState(outState, KEY_SELECTION)
     }
 
     override fun onSelect() {
         val ringtones =
-            rootFastAdapter?.getSelectExtension()?.selectedItems?.mapNotNull { (it as? VisibleRingtone)?.ringtone }
+            ringtoneFastAdapter?.getSelectExtension()?.selectedItems?.mapNotNull { (it as? VisibleRingtone)?.ringtone }
         if (ringtones?.isNotEmpty() == true) {
             if (viewModel.settings.systemRingtonePicker == null) {
                 viewModel.stopPlaying()
