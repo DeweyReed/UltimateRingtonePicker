@@ -5,12 +5,13 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
-import androidx.viewpager.widget.ViewPager
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.tabs.TabLayoutMediator
 import xyz.aprildown.ultimateringtonepicker.EXTRA_CATEGORY_TYPE
 import xyz.aprildown.ultimateringtonepicker.R
 import xyz.aprildown.ultimateringtonepicker.RingtonePickerViewModel
@@ -54,17 +55,27 @@ internal class DeviceRingtoneFragment :
             viewModel.settings.deviceRingtonePicker?.deviceRingtoneTypes ?: emptyList()
 
         binding.urpDeviceViewPager.adapter = CategoryAdapter(this, deviceRingtonesTypes)
-        binding.urpDeviceViewPager.addOnPageChangeListener(object :
-            ViewPager.SimpleOnPageChangeListener() {
-            override fun onPageSelected(position: Int) {
-                viewModel.stopPlaying()
+        binding.urpDeviceViewPager.registerOnPageChangeCallback(
+            object : ViewPager2.OnPageChangeCallback() {
+                override fun onPageSelected(position: Int) {
+                    viewModel.stopPlaying()
+                }
             }
-        })
+        )
 
         if (deviceRingtonesTypes.size == 1) {
             binding.urpDeviceTabLayout.gone()
         }
-        binding.urpDeviceTabLayout.setupWithViewPager(binding.urpDeviceViewPager)
+
+        TabLayoutMediator(binding.urpDeviceTabLayout, binding.urpDeviceViewPager) { tab, position ->
+            tab.text = when (position) {
+                0 -> getString(R.string.urp_ringtone)
+                1 -> getString(R.string.urp_artist)
+                2 -> getString(R.string.urp_album)
+                3 -> getString(R.string.urp_folder)
+                else -> null
+            }
+        }.attach()
     }
 
     /**
@@ -113,16 +124,16 @@ internal class DeviceRingtoneFragment :
 }
 
 private class CategoryAdapter(
-    private val fragment: Fragment,
+    fragment: Fragment,
     private val deviceRingtoneTypes: List<UltimateRingtonePicker.RingtoneCategoryType>
-) : FragmentStatePagerAdapter(
+) : FragmentStateAdapter(
     fragment.childFragmentManager,
-    BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT
+    fragment.viewLifecycleOwner.lifecycle
 ) {
 
-    override fun getCount(): Int = deviceRingtoneTypes.size
+    override fun getItemCount(): Int = deviceRingtoneTypes.size
 
-    override fun getItem(position: Int): Fragment {
+    override fun createFragment(position: Int): Fragment {
         return when (val type = deviceRingtoneTypes[position]) {
             UltimateRingtonePicker.RingtoneCategoryType.All -> RingtoneFragment().apply {
                 arguments = Bundle().apply {
@@ -146,13 +157,5 @@ private class CategoryAdapter(
             }
             else -> throw IllegalArgumentException("Too bing position: $position")
         }
-    }
-
-    override fun getPageTitle(position: Int): CharSequence? = when (position) {
-        0 -> fragment.getString(R.string.urp_ringtone)
-        1 -> fragment.getString(R.string.urp_artist)
-        2 -> fragment.getString(R.string.urp_album)
-        3 -> fragment.getString(R.string.urp_folder)
-        else -> null
     }
 }
