@@ -7,7 +7,7 @@
 <div align="center">
   <strong>Pick ringtone, notification, alarm sound and ringtone files from external storage with an activity or a dialog</strong>
 </div>
-</br>
+<br>
 <div align="center">
     <a href="https://android-arsenal.com/details/1/7141">
         <img src="https://img.shields.io/badge/Android%20Arsenal-UltimateMusicPicker-green.svg?style=flat"/>
@@ -22,7 +22,7 @@
         <img src="https://img.shields.io/badge/API-14%2B-brightgreen.svg?style=flat" border="0" alt="API">
     </a>
 </div>
-</br>
+<br>
 
 ## Features
 
@@ -39,7 +39,7 @@
 - Permissions are handled internally
 - Storage Access Framework support
 
-The library is inspired by [AOSP DeskClock RintonePickerActivity](https://android.googlesource.com/platform/packages/apps/DeskClock/+/refs/heads/master/src/com/android/deskclock/ringtone/RingtonePickerActivity.java).
+The library is inspired by [AOSP DeskClock RingtonePickerActivity](https://android.googlesource.com/platform/packages/apps/DeskClock/+/refs/heads/master/src/com/android/deskclock/ringtone/RingtonePickerActivity.kt).
 
 ## Screenshot
 
@@ -56,7 +56,6 @@ Add it in your root build.gradle at the end of repositories:
 ```Groovy
 allprojects {
     repositories {
-        ...
         maven { url 'https://jitpack.io' }
     }
 }
