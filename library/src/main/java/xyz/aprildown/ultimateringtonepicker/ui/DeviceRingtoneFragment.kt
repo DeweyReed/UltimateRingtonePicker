@@ -11,12 +11,12 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import androidx.viewpager.widget.ViewPager
-import com.google.android.material.tabs.TabLayout
 import xyz.aprildown.ultimateringtonepicker.EXTRA_CATEGORY_TYPE
 import xyz.aprildown.ultimateringtonepicker.R
 import xyz.aprildown.ultimateringtonepicker.RingtonePickerViewModel
 import xyz.aprildown.ultimateringtonepicker.UltimateRingtonePicker
 import xyz.aprildown.ultimateringtonepicker.data.Ringtone
+import xyz.aprildown.ultimateringtonepicker.databinding.UrpFragmentDeviceRingtoneBinding
 import xyz.aprildown.ultimateringtonepicker.gone
 import xyz.aprildown.ultimateringtonepicker.launchSaf
 
@@ -48,23 +48,23 @@ internal class DeviceRingtoneFragment :
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val tabLayout = view.findViewById<TabLayout>(R.id.urpDeviceTabLayout)
-        val viewPager = view.findViewById<ViewPager>(R.id.urpDeviceViewPager)
+        val binding = UrpFragmentDeviceRingtoneBinding.bind(view)
 
         val deviceRingtonesTypes =
             viewModel.settings.deviceRingtonePicker?.deviceRingtoneTypes ?: emptyList()
 
-        viewPager.adapter = CategoryAdapter(this, deviceRingtonesTypes)
-        viewPager.addOnPageChangeListener(object : ViewPager.SimpleOnPageChangeListener() {
+        binding.urpDeviceViewPager.adapter = CategoryAdapter(this, deviceRingtonesTypes)
+        binding.urpDeviceViewPager.addOnPageChangeListener(object :
+            ViewPager.SimpleOnPageChangeListener() {
             override fun onPageSelected(position: Int) {
                 viewModel.stopPlaying()
             }
         })
 
         if (deviceRingtonesTypes.size == 1) {
-            tabLayout.gone()
+            binding.urpDeviceTabLayout.gone()
         }
-        tabLayout.setupWithViewPager(viewPager)
+        binding.urpDeviceTabLayout.setupWithViewPager(binding.urpDeviceViewPager)
     }
 
     /**
