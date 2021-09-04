@@ -1,7 +1,9 @@
-apply plugin: 'com.android.library'
+plugins {
+    id('com.android.library')
 
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
+    id('kotlin-android')
+    id('kotlin-parcelize')
+}
 
 android {
     compileSdkVersion versions.compile_sdk
@@ -18,18 +20,6 @@ android {
     buildFeatures {
         viewBinding true
     }
-
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_1_8.toString()
-    }
-}
-
-androidExtensions {
-    features = ["parcelize"]
 }
 
 dependencies {

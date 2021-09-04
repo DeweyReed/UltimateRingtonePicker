@@ -8,7 +8,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
 import androidx.annotation.AnyRes
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 class UltimateRingtonePicker {
 
