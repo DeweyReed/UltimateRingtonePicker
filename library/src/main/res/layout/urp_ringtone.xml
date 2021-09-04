@@ -65,7 +65,7 @@
                     android:layout_weight="1"
                     android:paddingStart="16dp"
                     android:paddingEnd="16dp"
-                    android:textColor="?attr/colorOnSurface"
+                    android:textColor="?android:textColorPrimary"
                     android:textSize="16sp"
                     tools:text="@string/urp_default_ringtone_title" />
 
