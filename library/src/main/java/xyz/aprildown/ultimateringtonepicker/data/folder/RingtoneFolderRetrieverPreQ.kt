@@ -69,7 +69,6 @@ internal class RingtoneFolderRetrieverPreQ(private val context: Context) : Ringt
                         }
                     } catch (e: Exception) {
                         e.printStackTrace()
-                        continue
                     }
                 }
             }
