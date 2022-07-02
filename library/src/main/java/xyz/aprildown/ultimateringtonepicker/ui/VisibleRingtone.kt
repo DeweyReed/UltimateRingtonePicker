@@ -34,9 +34,9 @@ internal class VisibleRingtone(
     override fun bindView(binding: UrpRingtoneBinding, payloads: List<Any>) {
         super.bindView(binding, payloads)
         binding.run {
-                    val text =  ringtone.title + "  Total Duration: " +
-                            ringtone.duration
+                    val text =  ringtone.title
                     urpTextRingtoneName.text = text
+            urpTextRingtoneDuration.text = ringtone.duration
             urpImageSelected.isVisible = isSelected
             urpImageRingtone.setImageResource(
                 when {

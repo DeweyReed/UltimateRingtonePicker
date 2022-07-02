@@ -58,16 +58,41 @@
                     android:scaleType="center"
                     app:tint="?colorControlNormal" />
 
-                <TextView
-                    android:id="@+id/urpTextRingtoneName"
+                <LinearLayout
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:textColor="?android:textColorPrimary"
-                    android:textSize="16sp"
-                    tools:text="@string/urp_default_ringtone_title" />
+                    android:orientation="vertical"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:id="@+id/urpTextRingtoneName"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:textColor="?android:textColorPrimary"
+                        android:textSize="16sp"
+                        android:maxLines="2"
+                        android:ellipsize="marquee"
+                        tools:text="Ager tum shat ho" />
+
+                    <TextView
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:id="@+id/urpTextRingtoneDuration"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:layout_marginTop="2dp"
+                        android:textStyle="normal"
+                        android:textColor="?android:textColorPrimary"
+                        android:textSize="12sp"
+                        android:maxLines="2"
+                        android:ellipsize="marquee"
+                        tools:text="00:5:23" />
+
+
+                </LinearLayout>
+
 
             </LinearLayout>
 
