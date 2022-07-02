@@ -68,7 +68,8 @@ internal class CustomRingtoneModel(private val context: Context) {
              * If it canBeQueried, we have READ_EXTERNAL_STORAGE.
              * If it hasPermissions, it's from SAF.
              */
-            isValid = it.canBeQueried || it.hasPermissions
+            isValid = it.canBeQueried || it.hasPermissions,
+                duration = ""
         )
     }
 
