@@ -52,16 +52,16 @@ class RingtonePickerFragment : NavHostFragment() {
             }
         }
 
-        viewModel.finalSelection.observe(viewLifecycleOwner, { ringtones ->
+        viewModel.finalSelection.observe(viewLifecycleOwner) { ringtones ->
             if (ringtones != null) {
                 pickListener.onRingtonePicked(
-                    ringtones.filter { it.isValid }
-                        .map {
-                            UltimateRingtonePicker.RingtoneEntry(uri = it.uri, name = it.title)
-                        }
+                        ringtones.filter { it.isValid }
+                                .map {
+                                    UltimateRingtonePicker.RingtoneEntry(uri = it.uri, name = it.title)
+                                }
                 )
             }
-        })
+        }
     }
 
     private fun getTopFragment(): Fragment? {

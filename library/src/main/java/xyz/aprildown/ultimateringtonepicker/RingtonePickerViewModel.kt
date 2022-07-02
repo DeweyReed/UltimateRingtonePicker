@@ -2,7 +2,9 @@ package xyz.aprildown.ultimateringtonepicker
 
 import android.app.Application
 import android.content.ContentResolver
+import android.content.Context
 import android.content.Intent
+import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.provider.MediaStore
 import android.provider.OpenableColumns
@@ -21,6 +23,7 @@ import xyz.aprildown.ultimateringtonepicker.data.DeviceRingtoneModel
 import xyz.aprildown.ultimateringtonepicker.data.Ringtone
 import xyz.aprildown.ultimateringtonepicker.data.SystemRingtoneModel
 import xyz.aprildown.ultimateringtonepicker.music.AsyncRingtonePlayer
+import java.util.*
 
 internal class RingtonePickerViewModel(
     application: Application,
@@ -112,9 +115,15 @@ internal class RingtonePickerViewModel(
                 withContext(Dispatchers.IO) {
                     systemRingtoneModel.preloadRingtoneTitles(ringtoneTypes)
                     ringtoneTypes.forEach { ringtoneType ->
+                        //get the duration
                         systemRingtones[ringtoneType] =
                             systemRingtoneModel.getRingtones(ringtoneType).map {
-                                Ringtone(it, systemRingtoneModel.getRingtoneTitle(it))
+                                val duration = duration(getDurationOfMediaFle(
+                                        it, application
+                                ))
+                                Ringtone(it, systemRingtoneModel.getRingtoneTitle(it),
+                                        duration
+                                        )
                             }
                     }
                 }
@@ -128,6 +137,24 @@ internal class RingtonePickerViewModel(
 
     fun startPlaying(uri: Uri) {
         mediaPlayer.play(uri, settings.loop, settings.streamType)
+    }
+
+    private fun duration(length: Int): String {
+        var format: String = java.lang.String.format(Locale.US,
+                "%02d:%02d:%02d", length / 3600, length % 3600 / 60, length % 60)
+        if (format.length >= 7 && format.startsWith("00:0"))
+            format = format.replace("00:0", "")
+        if (format.length >= 7 && format.startsWith("00:"))
+            format = format.replace("00:", "")
+        return format
+    }
+
+    private fun getDurationOfMediaFle(path: Uri, context: Context): Int {
+        val mmr = MediaMetadataRetriever()
+        mmr.setDataSource(context, path)
+        val durationStr = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)
+        mmr.release()
+        return durationStr!!.toInt() / 1000
     }
 
     fun stopPlaying() {
@@ -202,7 +229,7 @@ internal class RingtonePickerViewModel(
                 }
 
                 if (title != null) {
-                    return Ringtone(uri, title)
+                    return Ringtone(uri, title, "5:30")
                 }
             }
         } catch (e: Exception) {

@@ -279,7 +279,8 @@ internal class SystemRingtoneFragment : Fragment(R.layout.urp_recycler_view),
                     VisibleRingtone(
                         ringtone = Ringtone(
                             RINGTONE_URI_SILENT,
-                            context.getString(R.string.urp_silent_ringtone_title)
+                            context.getString(R.string.urp_silent_ringtone_title),
+                                "5:34"
                         ),
                         ringtoneType = VisibleRingtone.RINGTONE_TYPE_SILENT
                     )
@@ -292,7 +293,8 @@ internal class SystemRingtoneFragment : Fragment(R.layout.urp_recycler_view),
                         ringtone = Ringtone(
                             defaultUri,
                             defaultSection.defaultTitle
-                                ?: context.getString(R.string.urp_default_ringtone_title)
+                                ?: context.getString(R.string.urp_default_ringtone_title),
+                                "5:34"
                         ),
                         ringtoneType = VisibleRingtone.RINGTONE_TYPE_SYSTEM
                     )
@@ -302,7 +304,7 @@ internal class SystemRingtoneFragment : Fragment(R.layout.urp_recycler_view),
             defaultSection.additionalRingtones.forEach {
                 items.add(
                     VisibleRingtone(
-                        ringtone = Ringtone(it.uri, it.name),
+                        ringtone = Ringtone(it.uri, it.name,"5:34"),
                         ringtoneType = VisibleRingtone.RINGTONE_TYPE_SYSTEM
                     )
                 )

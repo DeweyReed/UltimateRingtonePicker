@@ -34,17 +34,9 @@ internal class VisibleRingtone(
     override fun bindView(binding: UrpRingtoneBinding, payloads: List<Any>) {
         super.bindView(binding, payloads)
         binding.run {
-            if(ringtone.uri.path?.isNotEmpty()!!){
-                try {
-                    val text =  (ringtone.title + "  Total Duration: " +
-                            getSecondsFormatted(getDurationOfMediaFle(ringtone.uri, contex!!).toLong()))
+                    val text =  ringtone.title + "  Total Duration: " +
+                            ringtone.duration
                     urpTextRingtoneName.text = text
-                }catch (e: NullPointerException){
-
-                }
-
-
-            }
             urpImageSelected.isVisible = isSelected
             urpImageRingtone.setImageResource(
                 when {
@@ -55,8 +47,6 @@ internal class VisibleRingtone(
                     else -> R.drawable.urp_ringtone_normal
                 }
             )
-
-
             // Only works on R.drawable.urp_ringtone_active
             urpImageRingtone.startDrawableAnimation()
         }
@@ -68,13 +58,7 @@ internal class VisibleRingtone(
         return dateFormat.format(Date(TimeUnit.SECONDS.toMillis(seconds)))
     }
 
-    private fun getDurationOfMediaFle(path: Uri, context: Context): Int {
-        val mmr = MediaMetadataRetriever()
-        mmr.setDataSource(context, path)
-        val durationStr = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)
-        mmr.release()
-        return durationStr!!.toInt() / 1000
-    }
+
 
     override fun createBinding(inflater: LayoutInflater, parent: ViewGroup?): UrpRingtoneBinding {
         this.contex = parent?.context

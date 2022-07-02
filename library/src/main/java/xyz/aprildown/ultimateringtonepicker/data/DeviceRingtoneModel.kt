@@ -2,9 +2,12 @@ package xyz.aprildown.ultimateringtonepicker.data
 
 import android.content.ContentUris
 import android.content.Context
+import android.media.MediaMetadataRetriever
+import android.net.Uri
 import android.provider.MediaStore
 import xyz.aprildown.ultimateringtonepicker.UltimateRingtonePicker
 import xyz.aprildown.ultimateringtonepicker.data.folder.RingtoneFolderRetrieverCompat
+import java.util.*
 
 internal class DeviceRingtoneModel(private val context: Context) {
 
@@ -44,7 +47,8 @@ internal class DeviceRingtoneModel(private val context: Context) {
                             cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.AudioColumns.ARTIST_ID))
                         val albumId =
                             cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.AudioColumns.ALBUM_ID))
-                        data.add(Ringtone(uri, title, artistId, albumId))
+                        val duration = duration(getDurationOfMediaFle(uri, context))
+                        data.add(Ringtone(uri, title,duration, artistId, albumId))
                     } catch (e: Exception) {
                         e.printStackTrace()
                     }
@@ -54,6 +58,24 @@ internal class DeviceRingtoneModel(private val context: Context) {
             e.printStackTrace()
         }
         return data
+    }
+
+    private fun duration(length: Int): String {
+        var format: String = java.lang.String.format(Locale.US,
+                "%02d:%02d:%02d", length / 3600, length % 3600 / 60, length % 60)
+        if (format.length >= 7 && format.startsWith("00:0"))
+            format = format.replace("00:0", "")
+        if (format.length >= 7 && format.startsWith("00:"))
+            format = format.replace("00:", "")
+        return format
+    }
+
+    private fun getDurationOfMediaFle(path: Uri, context: Context): Int {
+        val mmr = MediaMetadataRetriever()
+        mmr.setDataSource(context, path)
+        val durationStr = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)
+        mmr.release()
+        return durationStr!!.toInt() / 1000
     }
 
     private fun getArtists(): List<Category> {
