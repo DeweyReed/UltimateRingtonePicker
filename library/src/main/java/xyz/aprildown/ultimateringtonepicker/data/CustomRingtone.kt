@@ -33,7 +33,12 @@ internal data class CustomRingtone(
     /**
      * The title describing the file at the given uri; typically the file name.
      */
-    val title: String
+    val title: String,
+
+    /**
+     * This duration saves the length of the media file
+     */
+    val duration: String
 ) {
     /**
      * {@code true} iff the application has permission to read the content of {@code mUri uri}.

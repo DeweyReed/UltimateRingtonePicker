@@ -31,7 +31,7 @@ internal class CustomRingtoneDAO(private val prefs: SharedPreferences) {
      * @param title the title of the audio content at the given {@code uri}
      * @return the newly added custom ringtone
      */
-    fun addCustomRingtone(uri: Uri, title: String): CustomRingtone {
+    fun addCustomRingtone(uri: Uri, title: String, duration:String): CustomRingtone {
         val id = prefs.getLong(NEXT_RINGTONE_ID, 0)
         val ids = getRingtoneIds()
         ids.add(id.toString())
@@ -39,11 +39,12 @@ internal class CustomRingtoneDAO(private val prefs: SharedPreferences) {
         prefs.edit()
             .putString(RINGTONE_URI + id, uri.toString())
             .putString(RINGTONE_TITLE + id, title)
+                .putString(RINGTONE_LENGTH + id, duration)
             .putLong(NEXT_RINGTONE_ID, id + 1)
             .putStringSet(RINGTONE_IDS, ids)
             .apply()
 
-        return CustomRingtone(id, uri, title)
+        return CustomRingtone(id, uri, title, duration)
     }
 
     /**
@@ -56,6 +57,7 @@ internal class CustomRingtoneDAO(private val prefs: SharedPreferences) {
         val editor = prefs.edit()
         editor.remove(RINGTONE_URI + id)
         editor.remove(RINGTONE_TITLE + id)
+        editor.remove(RINGTONE_LENGTH + id)
         if (ids.isEmpty()) {
             editor.remove(RINGTONE_IDS)
             editor.remove(NEXT_RINGTONE_ID)
@@ -76,7 +78,8 @@ internal class CustomRingtoneDAO(private val prefs: SharedPreferences) {
             val idLong = id.toLongOrNull() ?: continue
             val uri = Uri.parse(prefs.getString(RINGTONE_URI + id, null) ?: continue)
             val title = prefs.getString(RINGTONE_TITLE + id, null) ?: continue
-            ringtones.add(CustomRingtone(idLong, uri, title))
+            val duration = prefs.getString(RINGTONE_LENGTH + id, null) ?: continue
+            ringtones.add(CustomRingtone(idLong, uri, title, duration))
         }
 
         return ringtones
@@ -106,5 +109,7 @@ internal class CustomRingtoneDAO(private val prefs: SharedPreferences) {
          * Prefix for a key to a preference that stores the title associated with the ringtone id.
          */
         private const val RINGTONE_TITLE = "music_title_"
+
+        private const val RINGTONE_LENGTH = "music_length"
     }
 }

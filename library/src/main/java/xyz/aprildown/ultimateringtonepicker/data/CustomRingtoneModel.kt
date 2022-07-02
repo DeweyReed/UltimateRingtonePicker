@@ -33,14 +33,14 @@ internal class CustomRingtoneModel(private val context: Context) {
     /**
      * User selects a custom ringtone and we store it in both shared preference and cache
      */
-    fun addCustomRingtone(uri: Uri, title: String): CustomRingtone {
+    fun addCustomRingtone(uri: Uri, title: String, duration:String): CustomRingtone {
         // If the uri is already present in an existing ringtone, do nothing.
         val existing = getCustomRingtone(uri)
         if (existing != null) {
             return existing
         }
 
-        val ringtone = customRingtoneDAO.addCustomRingtone(uri, title)
+        val ringtone = customRingtoneDAO.addCustomRingtone(uri, title, duration)
         ringtoneCache.add(ringtone)
 
         return ringtone
@@ -69,7 +69,7 @@ internal class CustomRingtoneModel(private val context: Context) {
              * If it hasPermissions, it's from SAF.
              */
             isValid = it.canBeQueried || it.hasPermissions,
-                duration = ""
+                duration = it.duration
         )
     }
 

@@ -248,9 +248,7 @@ internal class SystemRingtoneFragment : Fragment(R.layout.urp_recycler_view),
     private fun createVisibleItems(context: Context): List<GenericItem> {
         val items = mutableListOf<GenericItem>()
         val settings = viewModel.settings
-
         val systemRingtonePicker = settings.systemRingtonePicker
-
         if (systemRingtonePicker?.customSection != null) {
             items.add(VisibleSection(context.getString(R.string.urp_your_sounds)))
             viewModel.customRingtones.forEach {
@@ -294,23 +292,31 @@ internal class SystemRingtoneFragment : Fragment(R.layout.urp_recycler_view),
                             defaultUri,
                             defaultSection.defaultTitle
                                 ?: context.getString(R.string.urp_default_ringtone_title),
-                                "5:34"
+                                ""
                         ),
                         ringtoneType = VisibleRingtone.RINGTONE_TYPE_SYSTEM
                     )
                 )
             }
 
+
+            /**
+             * We may need to code the duration here too
+             */
             defaultSection.additionalRingtones.forEach {
                 items.add(
                     VisibleRingtone(
-                        ringtone = Ringtone(it.uri, it.name,"5:34"),
+                        ringtone = Ringtone(it.uri, it.name,"309-SRF"),
                         ringtoneType = VisibleRingtone.RINGTONE_TYPE_SYSTEM
                     )
                 )
             }
         }
 
+
+        /**
+         * We may need to code the duration here too
+         */
         viewModel.systemRingtones.forEach {
             val (type, ringtones) = it
             items.add(

@@ -176,7 +176,7 @@ internal class RingtonePickerViewModel(
         currentSelectedUris.addAll(selectedRingtones.map { it.uri })
 
         selectedRingtones.forEach {
-            customRingtoneModel.addCustomRingtone(it.uri, it.title)
+            customRingtoneModel.addCustomRingtone(it.uri, it.title, it.duration)
         }
         // In this way we can keep ringtone order. They're cached anyway.
         customRingtones.clear()
@@ -229,7 +229,7 @@ internal class RingtonePickerViewModel(
                 }
 
                 if (title != null) {
-                    return Ringtone(uri, title, "5:30")
+                    return Ringtone(uri, title, "232-RP-VM")
                 }
             }
         } catch (e: Exception) {

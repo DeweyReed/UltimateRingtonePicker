@@ -47,18 +47,13 @@ internal class VisibleRingtone(
                     else -> R.drawable.urp_ringtone_normal
                 }
             )
+            if(ringtoneType == RINGTONE_TYPE_CUSTOM){
+                Log.e("MK_R", ringtone.duration)
+            }
             // Only works on R.drawable.urp_ringtone_active
             urpImageRingtone.startDrawableAnimation()
         }
     }
-
-    @SuppressLint("SimpleDateFormat")
-    private fun getSecondsFormatted(seconds:Long) : String{
-        val dateFormat  = SimpleDateFormat("mm:ss")
-        return dateFormat.format(Date(TimeUnit.SECONDS.toMillis(seconds)))
-    }
-
-
 
     override fun createBinding(inflater: LayoutInflater, parent: ViewGroup?): UrpRingtoneBinding {
         this.contex = parent?.context
