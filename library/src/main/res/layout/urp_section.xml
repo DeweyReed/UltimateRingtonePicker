@@ -10,6 +10,6 @@
     android:paddingEnd="15dp"
     android:paddingBottom="16dp"
     android:textAlignment="viewStart"
-    android:textColor="?colorAccent"
+    android:textColor="@color/urp_default_text"
     android:textSize="15sp"
     tools:text="Fancy header" />

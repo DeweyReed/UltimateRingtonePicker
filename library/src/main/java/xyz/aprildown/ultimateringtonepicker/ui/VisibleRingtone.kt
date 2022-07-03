@@ -2,14 +2,19 @@ package xyz.aprildown.ultimateringtonepicker.ui
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.res.ColorStateList
 import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.core.widget.ImageViewCompat
 import com.mikepenz.fastadapter.binding.AbstractBindingItem
 import xyz.aprildown.ultimateringtonepicker.R
+import xyz.aprildown.ultimateringtonepicker.RingtonePickerActivity
+import xyz.aprildown.ultimateringtonepicker.SharedPrefUtils
 import xyz.aprildown.ultimateringtonepicker.data.Ringtone
 import xyz.aprildown.ultimateringtonepicker.databinding.UrpRingtoneBinding
 import xyz.aprildown.ultimateringtonepicker.startDrawableAnimation
@@ -26,6 +31,7 @@ internal class VisibleRingtone(
 
     var isPlaying: Boolean = false
     var contex: Context? = null
+
 
     override val type: Int = R.id.urp_item_ringtone
     override var identifier: Long = ringtone.hashCode().toLong()
@@ -54,7 +60,23 @@ internal class VisibleRingtone(
 
     override fun createBinding(inflater: LayoutInflater, parent: ViewGroup?): UrpRingtoneBinding {
         this.contex = parent?.context
-        return UrpRingtoneBinding.inflate(inflater, parent, false)
+        SharedPrefUtils.init(contex!!)
+        val bindingView = UrpRingtoneBinding.inflate(inflater, parent, false)
+        /**
+         * Handle dark mode
+         */
+        if(!SharedPrefUtils.readBoolean(RingtonePickerActivity.IS_DARK_MODE)){
+           ImageViewCompat.setImageTintList(bindingView.urpImageRingtone, ColorStateList.valueOf(
+                   ContextCompat.getColor(contex!!, R.color.urp_image_tint)
+           ))
+            ImageViewCompat.setImageTintList(bindingView.urpImageSelected, ColorStateList.valueOf(
+                    ContextCompat.getColor(contex!!, R.color.urp_image_tint)
+            ))
+        }else{
+            bindingView.urpImageRingtone.clearColorFilter()
+            bindingView.urpImageSelected.clearColorFilter()
+        }
+        return bindingView
     }
 
     companion object {

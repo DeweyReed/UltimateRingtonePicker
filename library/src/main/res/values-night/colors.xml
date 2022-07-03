@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="urp_selected_ringtone_background">#14FFFFFF</color>
+    <color name="urp_selected_ringtone_background">#14000000</color>
+    <color name="urp_default_text">#FFFFFF</color>
+    <color name="urp_background_screen">#121212</color>
+    <color name="urp_card_view_color">#262833</color>
+    <color name="urp_image_tint">#424242</color>
 </resources>

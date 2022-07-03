@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="urp_add_new_sound">Add new</string>
+    <string name="urp_silent_ringtone_title">Silent</string>
+    <string name="urp_unknown_ringtone_title">Unknown</string>
+    <string name="urp_your_sounds">Your sounds</string>
+    <string name="urp_device_sounds">Device sounds</string>
+    <string name="urp_remove_sound">Remove</string>
+    <string name="urp_default_ringtone_title">Default</string>
+    <string name="urp_ringtone">Ringtone</string>
+    <string name="urp_notification">Notification</string>
+    <string name="urp_alarm">Alarm</string>
+    <string name="urp_empty">Empty</string>
+    <string name="urp_permission_external_rational">External Storage Permission is needed to pick custom ringtone.</string>
+    <string name="urp_artist">Artist</string>
+    <string name="urp_album">Album</string>
+    <string name="urp_folder">Folder</string>
+</resources>

@@ -3,13 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/urp_background_screen"
     android:orientation="vertical">
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/urpDeviceTabLayout"
         android:layout_width="match_parent"
+        app:tabBackground="@color/urp_card_view_color"
         android:layout_height="wrap_content"
-        app:tabMode="auto" />
+        app:tabMode="fixed"
+        app:tabTextColor="@color/urp_default_text"
+        />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/urpDeviceViewPager"

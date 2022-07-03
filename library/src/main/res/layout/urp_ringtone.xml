@@ -29,6 +29,7 @@
         android:orientation="horizontal"
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
+        android:background="@color/urp_card_view_color"
         tools:ignore="UselessParent">
 
         <Space
@@ -56,7 +57,7 @@
                     android:layout_height="40dp"
                     android:importantForAccessibility="no"
                     android:scaleType="center"
-                    app:tint="?colorControlNormal" />
+                    />
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -70,7 +71,7 @@
                         android:id="@+id/urpTextRingtoneName"
                         android:paddingStart="16dp"
                         android:paddingEnd="16dp"
-                        android:textColor="?android:textColorPrimary"
+                        android:textColor="@color/urp_default_text"
                         android:textSize="16sp"
                         android:maxLines="2"
                         android:ellipsize="marquee"
@@ -84,7 +85,7 @@
                         android:paddingEnd="16dp"
                         android:layout_marginTop="2dp"
                         android:textStyle="normal"
-                        android:textColor="?android:textColorPrimary"
+                        android:textColor="@color/urp_default_text"
                         android:textSize="12sp"
                         android:maxLines="2"
                         android:ellipsize="marquee"
@@ -106,7 +107,6 @@
                 android:scaleType="center"
                 android:visibility="gone"
                 app:srcCompat="@drawable/urp_ringtone_selected"
-                app:tint="?colorControlNormal"
                 tools:visibility="visible" />
 
         </RelativeLayout>

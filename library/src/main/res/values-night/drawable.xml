@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="urp_ringtone_active" type="drawable">@drawable/urp_ringtone_active_static</item>
+</resources>

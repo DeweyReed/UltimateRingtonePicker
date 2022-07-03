@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="urp_item_section" type="id" />
+    <item name="urp_item_add_custom" type="id" />
+    <item name="urp_item_ringtone" type="id" />
+    <item name="urp_item_two_lines" type="id" />
+</resources>

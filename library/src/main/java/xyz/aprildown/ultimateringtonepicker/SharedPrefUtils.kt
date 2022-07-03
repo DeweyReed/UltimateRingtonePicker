@@ -2,13 +2,15 @@ package xyz.aprildown.ultimateringtonepicker
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.preference.PreferenceManager
+import xyz.aprildown.ultimateringtonepicker.safeContext
+
 
 /**
  * This is a class that contains utils for the [SharedPreferences]
  * @author Al Mujahid Khan
  * */
 object SharedPrefUtils {
+
     private var preferences: SharedPreferences? = null
 
     /**
@@ -17,7 +19,9 @@ object SharedPrefUtils {
      * */
     fun init(context: Context) {
         if (preferences == null) {
-            preferences = PreferenceManager.getDefaultSharedPreferences(context)
+            preferences = context.safeContext().getSharedPreferences(
+                    "music_picker_prefs", Context.MODE_PRIVATE
+            )
         }
     }
 

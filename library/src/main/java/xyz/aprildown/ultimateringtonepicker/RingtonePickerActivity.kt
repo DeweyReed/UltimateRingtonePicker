@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import xyz.aprildown.ultimateringtonepicker.databinding.UrpActivityRingtonePickerBinding
 import java.util.ArrayList
 
@@ -40,7 +41,24 @@ class RingtonePickerActivity : AppCompatActivity(), UltimateRingtonePicker.Ringt
             onBackPressedDispatcher.onBackPressed()
         }
 
+        /**
+         * Save if the dark mode is on or not
+         */
+        SharedPrefUtils.init(this)
+        SharedPrefUtils.write(IS_DARK_MODE, intent.getBooleanExtra(IS_DARK_MODE, false))
+        changeTheme()
+    }
 
+    private fun changeTheme() {
+        if (!SharedPrefUtils.contains(IS_DARK_MODE)) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        } else {
+            if (SharedPrefUtils.readBoolean(IS_DARK_MODE)) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            }
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -64,7 +82,7 @@ class RingtonePickerActivity : AppCompatActivity(), UltimateRingtonePicker.Ringt
 
         private const val EXTRA_TITLE = "title"
         private const val EXTRA_RESULT = "result"
-        private const val IS_DARK_MODE = "is_dark_mode"
+        const val IS_DARK_MODE = "is_dark_mode"
 
         @JvmStatic
         fun getIntent(
