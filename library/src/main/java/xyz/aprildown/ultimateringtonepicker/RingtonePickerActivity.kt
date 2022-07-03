@@ -39,6 +39,8 @@ class RingtonePickerActivity : AppCompatActivity(), UltimateRingtonePicker.Ringt
         binding.btnCancel.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
+
+
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -62,16 +64,30 @@ class RingtonePickerActivity : AppCompatActivity(), UltimateRingtonePicker.Ringt
 
         private const val EXTRA_TITLE = "title"
         private const val EXTRA_RESULT = "result"
+        private const val IS_DARK_MODE = "is_dark_mode"
 
         @JvmStatic
         fun getIntent(
+                isDarkMode: Boolean,
             context: Context,
             settings: UltimateRingtonePicker.Settings,
             windowTitle: CharSequence
         ): Intent = Intent(context, RingtonePickerActivity::class.java).apply {
             putExtra(EXTRA_SETTINGS, settings)
             putExtra(EXTRA_TITLE, windowTitle)
+            putExtra(IS_DARK_MODE, isDarkMode)
         }
+
+        @JvmStatic
+        fun getIntent(
+                context: Context,
+                settings: UltimateRingtonePicker.Settings,
+                windowTitle: CharSequence
+        ): Intent = Intent(context, RingtonePickerActivity::class.java).apply {
+            putExtra(EXTRA_SETTINGS, settings)
+            putExtra(EXTRA_TITLE, windowTitle)
+        }
+
 
         @JvmStatic
         fun getPickerResult(intent: Intent): List<UltimateRingtonePicker.RingtoneEntry> {

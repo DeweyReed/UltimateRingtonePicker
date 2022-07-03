@@ -47,9 +47,6 @@ internal class VisibleRingtone(
                     else -> R.drawable.urp_ringtone_normal
                 }
             )
-            if(ringtoneType == RINGTONE_TYPE_CUSTOM){
-                Log.e("MK_R", ringtone.duration)
-            }
             // Only works on R.drawable.urp_ringtone_active
             urpImageRingtone.startDrawableAnimation()
         }

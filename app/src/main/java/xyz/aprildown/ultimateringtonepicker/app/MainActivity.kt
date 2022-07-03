@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity(), UltimateRingtonePicker.RingtonePickerL
 
     fun openStandardActivity(view: View) {
         startActivityForResult(
-            RingtonePickerActivity.getIntent(
+            RingtonePickerActivity.getIntent(true,
                 context = this,
                 settings = createStandardSettings(),
                 windowTitle = "Picker Picker"
