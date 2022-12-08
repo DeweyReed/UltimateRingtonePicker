@@ -9,6 +9,7 @@ import android.os.Build
 import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
 import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -57,9 +58,9 @@ internal fun Fragment.requireRingtonePickerListener(): UltimateRingtonePicker.Ri
         else -> throw IllegalStateException("Cannot find RingtonePickerListener")
     }
 
-internal fun Fragment.launchSaf() {
+internal fun ActivityResultLauncher<Intent>.launchSaf(context: Context) {
     try {
-        startActivityForResult(
+        launch(
             Intent(Intent.ACTION_OPEN_DOCUMENT)
                 .addCategory(Intent.CATEGORY_OPENABLE)
                 .setType("audio/*")
@@ -68,12 +69,11 @@ internal fun Fragment.launchSaf() {
                  * The docs for SAF is quite vague. I add [Intent.FLAG_GRANT_READ_URI_PERMISSION]
                  * flag following [Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION]'s doc.
                  */
-                .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION),
-            0
+                .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         )
     } catch (e: ActivityNotFoundException) {
         e.printStackTrace()
-        Toast.makeText(requireContext(), e.message.toString(), Toast.LENGTH_LONG).show()
+        Toast.makeText(context, e.message.toString(), Toast.LENGTH_LONG).show()
     }
 }
 

@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
@@ -26,11 +27,16 @@ internal class DeviceRingtoneFragment :
 
     private val viewModel by navGraphViewModels<RingtonePickerViewModel>(R.id.urp_nav_graph)
 
+    private val safLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            onSafResult(resultCode = it.resultCode, data = it.data)
+        }
+
     init {
         lifecycleScope.launchWhenResumed {
             // viewModel may not be available in onCreate.
             if (viewModel.settings.deviceRingtonePicker?.alwaysUseSaf == true) {
-                launchSaf()
+                safLauncher.launchSaf(requireContext())
             } else {
                 viewModel.allDeviceRingtones.observe(
                     this@DeviceRingtoneFragment,
@@ -39,7 +45,7 @@ internal class DeviceRingtoneFragment :
                             if (t == null) return
                             viewModel.allDeviceRingtones.removeObserver(this)
                             if (t.isEmpty()) {
-                                launchSaf()
+                                safLauncher.launchSaf(requireContext())
                             }
                         }
                     }
@@ -81,7 +87,7 @@ internal class DeviceRingtoneFragment :
     /**
      * MediaStore returns nothing or we request it, launch SAF.
      */
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    private fun onSafResult(resultCode: Int, data: Intent?) {
         val hasSystemPicker = viewModel.settings.systemRingtonePicker != null
 
         fun onNothingSelected() {
@@ -155,7 +161,6 @@ private class CategoryAdapter(
                     putSerializable(EXTRA_CATEGORY_TYPE, type)
                 }
             }
-            else -> throw IllegalArgumentException("Too bing position: $position")
         }
     }
 }

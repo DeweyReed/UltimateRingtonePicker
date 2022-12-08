@@ -8,8 +8,10 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.provider.Settings
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import pub.devrel.easypermissions.AfterPermissionGranted
 import pub.devrel.easypermissions.EasyPermissions
@@ -24,6 +26,13 @@ class MainActivity : AppCompatActivity(), UltimateRingtonePicker.RingtonePickerL
 
     private var currentSelectedRingtones = listOf<UltimateRingtonePicker.RingtoneEntry>()
 
+    private val ringtoneLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if (it.resultCode == Activity.RESULT_OK && it.data != null) {
+                handleResult(RingtonePickerActivity.getPickerResult(checkNotNull(it.data)))
+            }
+        }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -37,13 +46,12 @@ class MainActivity : AppCompatActivity(), UltimateRingtonePicker.RingtonePickerL
     }
 
     fun openStandardActivity(view: View) {
-        startActivityForResult(
+        ringtoneLauncher.launch(
             RingtonePickerActivity.getIntent(
                 context = this,
                 settings = createStandardSettings(),
                 windowTitle = "Picker Picker"
-            ),
-            REQUEST_CODE_ACTIVITY
+            )
         )
     }
 
@@ -118,7 +126,7 @@ class MainActivity : AppCompatActivity(), UltimateRingtonePicker.RingtonePickerL
     }
 
     fun useAdditionalRingtones(view: View) {
-        startActivityForResult(
+        ringtoneLauncher.launch(
             RingtonePickerActivity.getIntent(
                 context = this,
                 settings = UltimateRingtonePicker.Settings(
@@ -152,13 +160,12 @@ class MainActivity : AppCompatActivity(), UltimateRingtonePicker.RingtonePickerL
 
                 ),
                 windowTitle = "Additional"
-            ),
-            REQUEST_CODE_ACTIVITY
+            )
         )
     }
 
     fun enableMultiSelect(view: View) {
-        startActivityForResult(
+        ringtoneLauncher.launch(
             RingtonePickerActivity.getIntent(
                 context = this,
                 settings = UltimateRingtonePicker.Settings(
@@ -188,8 +195,7 @@ class MainActivity : AppCompatActivity(), UltimateRingtonePicker.RingtonePickerL
                     )
                 ),
                 windowTitle = "Multi Select"
-            ),
-            REQUEST_CODE_ACTIVITY
+            )
         )
     }
 
@@ -213,7 +219,7 @@ class MainActivity : AppCompatActivity(), UltimateRingtonePicker.RingtonePickerL
     }
 
     fun onlySafPick(view: View) {
-        startActivityForResult(
+        ringtoneLauncher.launch(
             RingtonePickerActivity.getIntent(
                 context = this,
                 settings = UltimateRingtonePicker.Settings(
@@ -222,8 +228,7 @@ class MainActivity : AppCompatActivity(), UltimateRingtonePicker.RingtonePickerL
                     )
                 ),
                 windowTitle = "SAF!"
-            ),
-            REQUEST_CODE_ACTIVITY
+            )
         )
     }
 
@@ -234,7 +239,7 @@ class MainActivity : AppCompatActivity(), UltimateRingtonePicker.RingtonePickerL
             object : UltimateRingtonePicker.RingtonePickerListener {
                 override fun onRingtonePicked(ringtones: List<UltimateRingtonePicker.RingtoneEntry>) {
                     toast("Ephemeral!")
-                    Handler().postDelayed({
+                    Handler(Looper.getMainLooper()).postDelayed({
                         handleResult(ringtones)
                     }, 1000)
                 }
@@ -278,13 +283,6 @@ class MainActivity : AppCompatActivity(), UltimateRingtonePicker.RingtonePickerL
             )
         )
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_CODE_ACTIVITY && resultCode == Activity.RESULT_OK) {
-            handleResult(RingtonePickerActivity.getPickerResult(data!!))
-        }
-    }
-
     override fun onRingtonePicked(ringtones: List<UltimateRingtonePicker.RingtoneEntry>) {
         handleResult(ringtones)
     }
@@ -294,5 +292,3 @@ class MainActivity : AppCompatActivity(), UltimateRingtonePicker.RingtonePickerL
         toast(ringtones.joinToString(separator = "\n") { it.name })
     }
 }
-
-private const val REQUEST_CODE_ACTIVITY = 315

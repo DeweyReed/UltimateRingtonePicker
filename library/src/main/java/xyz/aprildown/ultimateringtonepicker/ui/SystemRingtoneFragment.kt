@@ -9,6 +9,7 @@ import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
@@ -34,6 +35,11 @@ internal class SystemRingtoneFragment : Fragment(R.layout.urp_recycler_view),
 
     private val viewModel by navGraphViewModels<RingtonePickerViewModel>(R.id.urp_nav_graph)
     private var isRingtoneFromSaf = false
+
+    private val safLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            onSafResult(resultCode = it.resultCode, data = it.data)
+        }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val context = view.context
@@ -142,7 +148,7 @@ internal class SystemRingtoneFragment : Fragment(R.layout.urp_recycler_view),
     private fun pickCustom() {
         viewModel.stopPlaying()
         if (viewModel.settings.systemRingtonePicker?.customSection?.useSafSelect == true) {
-            launchSaf()
+            safLauncher.launchSaf(requireContext())
         } else {
             val permission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 Manifest.permission.READ_MEDIA_AUDIO
@@ -180,11 +186,11 @@ internal class SystemRingtoneFragment : Fragment(R.layout.urp_recycler_view),
             viewModel.settings.systemRingtonePicker?.customSection ?: return
         when {
             customSection.launchSafOnPermissionDenied -> {
-                launchSaf()
+                safLauncher.launchSaf(requireContext())
             }
             EasyPermissions.permissionPermanentlyDenied(this, perms[0]) &&
                 customSection.launchSafOnPermissionPermanentlyDenied -> {
-                launchSaf()
+                safLauncher.launchSaf(requireContext())
             }
         }
     }
@@ -196,7 +202,7 @@ internal class SystemRingtoneFragment : Fragment(R.layout.urp_recycler_view),
     /**
      * Receive [Intent.ACTION_OPEN_DOCUMENT] result.
      */
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    private fun onSafResult(resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK && data != null) {
             viewModel.onSafSelect(requireContext().contentResolver, data)?.let {
                 isRingtoneFromSaf = true
