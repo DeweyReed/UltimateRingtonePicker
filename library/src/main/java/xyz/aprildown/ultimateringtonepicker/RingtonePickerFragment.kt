@@ -6,6 +6,7 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.navGraphViewModels
 import xyz.aprildown.ultimateringtonepicker.ui.EventHandler
@@ -32,17 +33,22 @@ class RingtonePickerFragment : NavHostFragment() {
         val settings = arguments?.getParcelable(EXTRA_SETTINGS) ?: UltimateRingtonePicker.Settings()
 
         navController.graph = navController.navInflater.inflate(R.navigation.urp_nav_graph).apply {
-            startDestination = if (settings.systemRingtonePicker == null) {
-                R.id.urp_dest_device
-            } else {
-                R.id.urp_dest_system
-            }
+            setStartDestination(
+                if (settings.systemRingtonePicker == null) {
+                    R.id.urp_dest_device
+                } else {
+                    R.id.urp_dest_system
+                }
+            )
         }
 
         val viewModel by navGraphViewModels<RingtonePickerViewModel>(R.id.urp_nav_graph) {
             object : ViewModelProvider.Factory {
                 @Suppress("UNCHECKED_CAST")
-                override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+                override fun <T : ViewModel> create(
+                    modelClass: Class<T>,
+                    extras: CreationExtras
+                ): T {
                     return when (modelClass) {
                         RingtonePickerViewModel::class.java ->
                             RingtonePickerViewModel(requireActivity().application, settings) as T
@@ -52,7 +58,7 @@ class RingtonePickerFragment : NavHostFragment() {
             }
         }
 
-        viewModel.finalSelection.observe(viewLifecycleOwner, { ringtones ->
+        viewModel.finalSelection.observe(viewLifecycleOwner) { ringtones ->
             if (ringtones != null) {
                 pickListener.onRingtonePicked(
                     ringtones.filter { it.isValid }
@@ -61,7 +67,7 @@ class RingtonePickerFragment : NavHostFragment() {
                         }
                 )
             }
-        })
+        }
     }
 
     private fun getTopFragment(): Fragment? {

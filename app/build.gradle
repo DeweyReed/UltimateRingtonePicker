@@ -5,6 +5,8 @@ plugins {
 }
 
 android {
+    namespace 'xyz.aprildown.ultimateringtonepicker.app'
+
     compileSdkVersion versions.compile_sdk
 
     defaultConfig {
@@ -26,10 +28,7 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':library')
-
-    implementation libs.kotlin_stdlib_jdk7
 
     debugImplementation libs.leak_cannary
 

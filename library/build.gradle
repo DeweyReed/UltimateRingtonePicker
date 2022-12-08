@@ -7,13 +7,13 @@ plugins {
 }
 
 android {
+    namespace 'xyz.aprildown.ultimateringtonepicker'
+
     compileSdkVersion versions.compile_sdk
 
     defaultConfig {
         minSdkVersion versions.min_sdk
         targetSdkVersion versions.target_sdk
-        versionCode versions.version_code
-        versionName versions.version_name
         vectorDrawables.useSupportLibrary true
     }
 
@@ -24,7 +24,6 @@ android {
 }
 
 dependencies {
-    implementation libs.kotlin_stdlib_jdk7
     implementation libs.kotlin_coroutines_core
     implementation libs.kotlin_coroutines_android
 

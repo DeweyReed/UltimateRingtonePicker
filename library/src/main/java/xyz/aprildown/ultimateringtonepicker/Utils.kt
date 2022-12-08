@@ -9,10 +9,12 @@ import android.os.Build
 import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavOptions
 import androidx.navigation.navOptions
+import androidx.navigation.ui.R as RNavigation
 
 internal val RINGTONE_URI_SILENT: Uri = Uri.EMPTY
 internal val RINGTONE_URI_NULL: Uri = Uri.EMPTY
@@ -30,10 +32,13 @@ internal fun Context.safeContext(): Context =
         ContextCompat.createDeviceProtectedStorageContext(it) ?: it
     } ?: this
 
+@ChecksSdkIntAtLeast(api = Build.VERSION_CODES.LOLLIPOP)
 internal fun isLOrLater(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
 
+@ChecksSdkIntAtLeast(api = Build.VERSION_CODES.O)
 internal fun isOOrLater(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
 
+@ChecksSdkIntAtLeast(api = Build.VERSION_CODES.Q)
 internal fun isQOrLater(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
 
 internal fun ImageView.startDrawableAnimation() {
@@ -75,10 +80,10 @@ internal fun Fragment.launchSaf() {
 internal fun createDefaultNavOptions(): NavOptions {
     return navOptions {
         anim {
-            enter = R.animator.nav_default_enter_anim
-            exit = R.animator.nav_default_exit_anim
-            popEnter = R.animator.nav_default_pop_enter_anim
-            popExit = R.animator.nav_default_pop_exit_anim
+            enter = RNavigation.animator.nav_default_enter_anim
+            exit = RNavigation.animator.nav_default_exit_anim
+            popEnter = RNavigation.animator.nav_default_pop_enter_anim
+            popExit = RNavigation.animator.nav_default_pop_exit_anim
         }
     }
 }
