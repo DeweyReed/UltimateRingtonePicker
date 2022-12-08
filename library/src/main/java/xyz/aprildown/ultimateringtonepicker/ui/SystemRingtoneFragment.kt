@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.media.RingtoneManager
+import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.View
@@ -143,7 +144,11 @@ internal class SystemRingtoneFragment : Fragment(R.layout.urp_recycler_view),
         if (viewModel.settings.systemRingtonePicker?.customSection?.useSafSelect == true) {
             launchSaf()
         } else {
-            val permission = Manifest.permission.READ_EXTERNAL_STORAGE
+            val permission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                Manifest.permission.READ_MEDIA_AUDIO
+            } else {
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            }
             if (EasyPermissions.hasPermissions(requireContext(), permission)) {
                 launchDevicePick()
             } else {

@@ -39,13 +39,14 @@
 - Permissions are handled internally
 - Storage Access Framework support
 
-The library is inspired by [AOSP DeskClock RingtonePickerActivity](https://android.googlesource.com/platform/packages/apps/DeskClock/+/refs/heads/master/src/com/android/deskclock/ringtone/RingtonePickerActivity.kt).
+The library is inspired
+by [AOSP DeskClock RingtonePickerActivity](https://android.googlesource.com/platform/packages/apps/DeskClock/+/refs/heads/master/src/com/android/deskclock/ringtone/RingtonePickerActivity.kt)
+.
 
 ## Screenshot
 
-||||
-|:-:|:-:|:-:|
-|![Activity](./art/activity.webp)|![Dialog](./art/dialog.webp)|![Dark](./art/dark.webp)|
+|||| |:-:|:-:|:-:| |![Activity](./art/activity.webp)|![Dialog](./art/dialog.webp)
+|![Dark](./art/dark.webp)|
 
 ## Gradle Dependency
 
@@ -73,11 +74,15 @@ dependencies {
 
 ## Usage
 
-[Demo APK](https://github.com/deweyreed/ultimateringtonepicker/releases) and [examples in the MainActivity](./app/src/main/java/xyz/aprildown/ultimateringtonepicker/app/MainActivity.kt).
+[Demo APK](https://github.com/deweyreed/ultimateringtonepicker/releases)
+and [examples in the MainActivity](./app/src/main/java/xyz/aprildown/ultimateringtonepicker/app/MainActivity.kt)
+.
 
 ### 0. Add Permission
 
-Add `<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />` to your Manifest if you are not going to use Storage Access Framework.
+Add `<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />`
+or `<uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />` when targeting Android
+13 to your Manifest if you are not going to use Storage Access Framework.
 
 ### 1. Create an `UltimateRingtonePicker.Settings`
 
@@ -109,8 +114,7 @@ val settings = UltimateRingtonePicker.Settings(
 
     1. Add the Activity to the manifest.
 
-        `<activity
-            android:name="xyz.aprildown.ultimateringtonepicker.RingtonePickerActivity" />`
+       `<activity android:name="xyz.aprildown.ultimateringtonepicker.RingtonePickerActivity" />`
 
     1. Start Activity
 
@@ -149,7 +153,7 @@ val settings = UltimateRingtonePicker.Settings(
 
     1. Get the result
 
-        Implement `UltimateRingtonePicker.RingtonePickerListener` in your activity or fragment.
+       Implement `UltimateRingtonePicker.RingtonePickerListener` in your activity or fragment.
 
         ```Kotlin
         override fun onRingtonePicked(ringtones: List<UltimateRingtonePicker.RingtoneEntry>) {
@@ -157,7 +161,8 @@ val settings = UltimateRingtonePicker.Settings(
         }
         ```
 
-    Alternatively, you can launch the dialog and get the result without implementing the interface, but the dialog will be dismissed in `onPause`:
+  Alternatively, you can launch the dialog and get the result without implementing the interface,
+  but the dialog will be dismissed in `onPause`:
 
     ```Kotlin
     RingtonePickerDialog.createEphemeralInstance(
@@ -173,7 +178,10 @@ val settings = UltimateRingtonePicker.Settings(
 
 ## BTW
 
-`UltimateRingtonePicker` supports activity pick `RingtonePickerActivity` and dialog pick `RingtonePickerDialog` out of the box. Both of them are just wrappers of `RingtonePickerFragment`. Therefore, you can directly wrap `RingtonePickerFragment` into your activity/fragment to provide more customization!
+`UltimateRingtonePicker` supports activity pick `RingtonePickerActivity` and dialog
+pick `RingtonePickerDialog` out of the box. Both of them are just wrappers
+of `RingtonePickerFragment`. Therefore, you can directly wrap `RingtonePickerFragment` into your
+activity/fragment to provide more customization!
 
 ## License
 

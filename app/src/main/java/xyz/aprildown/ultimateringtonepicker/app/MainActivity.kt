@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Intent
 import android.media.RingtoneManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.provider.Settings
@@ -70,7 +71,11 @@ class MainActivity : AppCompatActivity(), UltimateRingtonePicker.RingtonePickerL
     }
 
     fun showOnlyDeviceRingtones(view: View) {
-        val permission = Manifest.permission.READ_EXTERNAL_STORAGE
+        val permission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            Manifest.permission.READ_MEDIA_AUDIO
+        } else {
+            Manifest.permission.READ_EXTERNAL_STORAGE
+        }
         if (EasyPermissions.hasPermissions(this, permission)) {
             pickDeviceRingtones()
         } else {
