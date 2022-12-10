@@ -64,7 +64,7 @@ class RingtonePickerDialog : DialogFragment(), UltimateRingtonePicker.RingtonePi
 
         if (savedInstanceState == null) {
             val fragment =
-                arguments.getParcelable<UltimateRingtonePicker.Settings>(EXTRA_SETTINGS)!!
+                arguments.getParcelableCompat<UltimateRingtonePicker.Settings>(EXTRA_SETTINGS)!!
                     .createFragment()
             childFragmentManager.beginTransaction()
                 .add(R.id.urpFrameDialog, fragment, TAG_RINGTONE_PICKER)

@@ -20,6 +20,7 @@ import android.os.Looper
 import android.os.Message
 import androidx.annotation.RequiresApi
 import xyz.aprildown.ultimateringtonepicker.ASSET_URI_PREFIX
+import xyz.aprildown.ultimateringtonepicker.getParcelableCompat
 import xyz.aprildown.ultimateringtonepicker.isLOrLater
 import xyz.aprildown.ultimateringtonepicker.isOOrLater
 import java.io.IOException
@@ -54,7 +55,7 @@ internal class AsyncRingtonePlayer(
                 when (msg.what) {
                     EVENT_PLAY -> {
                         val data = msg.data
-                        val uri = data.getParcelable<Uri?>(RINGTONE_URI_KEY)
+                        val uri = data.getParcelableCompat<Uri>(RINGTONE_URI_KEY)
                         if (uri != mPlaybackDelegate.currentPlayingUri) {
                             mPlaybackDelegate.stop(mContext)
                             mPlaybackDelegate.play(

@@ -30,7 +30,8 @@ class RingtonePickerFragment : NavHostFragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val settings = arguments?.getParcelable(EXTRA_SETTINGS) ?: UltimateRingtonePicker.Settings()
+        val settings =
+            arguments?.getParcelableCompat(EXTRA_SETTINGS) ?: UltimateRingtonePicker.Settings()
 
         navController.graph = navController.navInflater.inflate(R.navigation.urp_nav_graph).apply {
             setStartDestination(

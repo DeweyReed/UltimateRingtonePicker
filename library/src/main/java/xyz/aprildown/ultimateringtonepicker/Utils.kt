@@ -6,6 +6,8 @@ import android.content.Intent
 import android.graphics.drawable.Animatable
 import android.net.Uri
 import android.os.Build
+import android.os.Bundle
+import android.os.Parcelable
 import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
@@ -85,5 +87,32 @@ internal fun createDefaultNavOptions(): NavOptions {
             popEnter = RNavigation.animator.nav_default_pop_enter_anim
             popExit = RNavigation.animator.nav_default_pop_exit_anim
         }
+    }
+}
+
+inline fun <reified T : Parcelable> Intent.getParcelableExtraCompat(key: String): T? {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        getParcelableExtra(key, T::class.java)
+    } else {
+        @Suppress("DEPRECATION")
+        getParcelableExtra(key)
+    }
+}
+
+inline fun <reified T : Parcelable> Intent.getParcelableArrayExtraCompat(key: String): Array<T> {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        getParcelableArrayExtra(key, T::class.java) ?: emptyArray()
+    } else {
+        @Suppress("DEPRECATION")
+        getParcelableArrayExtra(key)?.filterIsInstance<T>()?.toTypedArray() ?: emptyArray()
+    }
+}
+
+inline fun <reified T : Parcelable> Bundle.getParcelableCompat(key: String): T? {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        getParcelable(key, T::class.java)
+    } else {
+        @Suppress("DEPRECATION")
+        getParcelable(key)
     }
 }

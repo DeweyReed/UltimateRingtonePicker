@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity(), UltimateRingtonePicker.RingtonePickerL
     private val ringtoneLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             if (it.resultCode == Activity.RESULT_OK && it.data != null) {
-                handleResult(RingtonePickerActivity.getPickerResult(checkNotNull(it.data)))
+                handleResult(RingtonePickerActivity.getPickerResult(it.data))
             }
         }
 
