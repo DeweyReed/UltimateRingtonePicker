@@ -111,31 +111,29 @@ val settings = UltimateRingtonePicker.Settings(
 
     1. Add the Activity to the manifest.
 
-        `<activity
-            android:name="xyz.aprildown.ultimateringtonepicker.RingtonePickerActivity" />`
+       `<activity android:name="xyz.aprildown.ultimateringtonepicker.RingtonePickerActivity" />`
+
+    1. Register Activity Result callback
+
+        ```Kotlin
+        rivate val ringtoneLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                if (it.resultCode == Activity.RESULT_OK && it.data != null) {
+                    val ringtones = RingtonePickerActivity.getPickerResult(data)
+                }
+            }
+        ```
 
     1. Start Activity
 
         ```Kotlin
-        startActivityForResult(
+        ringtoneLauncher.launch(
             RingtonePickerActivity.getIntent(
                 context = this,
                 settings = settings,
                 windowTitle = "Activity Picker"
-            ),
-            123
+            )
         )
-        ```
-
-    1. Get the result
-
-        ```Kotlin
-        override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-            super.onActivityResult(requestCode, resultCode, data)
-            if (requestCode == 123 && resultCode == Activity.RESULT_OK && data != null) {
-                val ringtones = RingtonePickerActivity.getPickerResult(data)
-            }
-        }
         ```
 
 - Launch the dialog picker
