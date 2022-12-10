@@ -23,7 +23,7 @@ internal class RingtoneFolderRetrieverQ(private val context: Context) : Ringtone
         val folders = mutableListOf<MutableFolder>()
         try {
             context.contentResolver.query(
-                MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                MediaStore.Audio.Media.getContentUri(MediaStore.VOLUME_EXTERNAL),
                 arrayOf(
                     MediaStore.Audio.Media.BUCKET_ID,
                     MediaStore.Audio.Media.BUCKET_DISPLAY_NAME
@@ -71,7 +71,7 @@ internal class RingtoneFolderRetrieverQ(private val context: Context) : Ringtone
         val data = mutableListOf<Ringtone>()
         try {
             context.contentResolver.query(
-                MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                MediaStore.Audio.Media.getContentUri(MediaStore.VOLUME_EXTERNAL),
                 arrayOf(
                     MediaStore.Audio.Media._ID,
                     MediaStore.Audio.Media.TITLE

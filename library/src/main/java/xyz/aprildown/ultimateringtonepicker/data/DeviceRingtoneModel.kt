@@ -5,6 +5,7 @@ import android.content.Context
 import android.provider.MediaStore
 import xyz.aprildown.ultimateringtonepicker.UltimateRingtonePicker
 import xyz.aprildown.ultimateringtonepicker.data.folder.RingtoneFolderRetrieverCompat
+import xyz.aprildown.ultimateringtonepicker.isQOrLater
 
 internal class DeviceRingtoneModel(private val context: Context) {
 
@@ -12,7 +13,11 @@ internal class DeviceRingtoneModel(private val context: Context) {
         val data = mutableListOf<Ringtone>()
         try {
             context.contentResolver.query(
-                MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                if (isQOrLater()) {
+                    MediaStore.Audio.Media.getContentUri(MediaStore.VOLUME_EXTERNAL)
+                } else {
+                    MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
+                },
                 arrayOf(
                     MediaStore.Audio.AudioColumns._ID,
                     MediaStore.Audio.AudioColumns.TITLE,
@@ -60,7 +65,11 @@ internal class DeviceRingtoneModel(private val context: Context) {
         val data = mutableListOf<Category>()
         try {
             context.contentResolver.query(
-                MediaStore.Audio.Artists.EXTERNAL_CONTENT_URI,
+                if (isQOrLater()) {
+                    MediaStore.Audio.Artists.getContentUri(MediaStore.VOLUME_EXTERNAL)
+                } else {
+                    MediaStore.Audio.Artists.EXTERNAL_CONTENT_URI
+                },
                 arrayOf(
                     MediaStore.Audio.Artists._ID,
                     MediaStore.Audio.Artists.ARTIST,
@@ -102,7 +111,11 @@ internal class DeviceRingtoneModel(private val context: Context) {
         val data = mutableListOf<Category>()
         try {
             context.contentResolver.query(
-                MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI,
+                if (isQOrLater()) {
+                    MediaStore.Audio.Albums.getContentUri(MediaStore.VOLUME_EXTERNAL)
+                } else {
+                    MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI
+                },
                 arrayOf(
                     MediaStore.Audio.Albums._ID,
                     MediaStore.Audio.Albums.ALBUM,
