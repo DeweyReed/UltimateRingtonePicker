@@ -9,6 +9,10 @@ plugins {
 android {
     namespace 'xyz.aprildown.ultimateringtonepicker'
 
+    compileOptions {
+        kotlinOptions.freeCompilerArgs += ['-module-name', "xyz.aprildown.ultimateringtonepicker.library"]
+    }
+
     compileSdkVersion versions.compile_sdk
 
     defaultConfig {
