@@ -24,6 +24,7 @@ android {
     resourcePrefix 'urp_'
     buildFeatures {
         viewBinding true
+        buildConfig false
     }
 
     publishing {
