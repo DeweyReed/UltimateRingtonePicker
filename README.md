@@ -12,11 +12,11 @@
     <a href="https://android-arsenal.com/details/1/7141">
         <img src="https://img.shields.io/badge/Android%20Arsenal-UltimateMusicPicker-green.svg?style=flat"/>
     </a>
-    <a href="https://travis-ci.org/DeweyReed/UltimateRingtonePicker">
-        <img src="https://travis-ci.org/DeweyReed/UltimateRingtonePicker.svg?branch=master"/>
+    <a href="https://github.com/DeweyReed/UltimateRingtonePicker/actions/workflows/android.yml">
+        <img src="https://github.com/DeweyReed/UltimateRingtonePicker/actions/workflows/android.yml/badge.svg"/>
     </a>
-    <a href="https://jitpack.io/#xyz.aprildown/UltimateRingtonePicker">
-        <img src="https://jitpack.io/v/xyz.aprildown/UltimateRingtonePicker.svg"/>
+    <a href="https://jitpack.io/#com.github.DeweyReed/UltimateRingtonePicker">
+        <img src="https://jitpack.io/v/com.github.DeweyReed/UltimateRingtonePicker.svg"/>
     </a>
     <a href="https://android-arsenal.com/api?level=14">
         <img src="https://img.shields.io/badge/API-14%2B-brightgreen.svg?style=flat" border="0" alt="API">
@@ -63,11 +63,11 @@ allprojects {
 
 Step 2. Add the dependency
 
-[![The Newest Version](https://jitpack.io/v/xyz.aprildown/UltimateRingtonePicker.svg)](https://jitpack.io/#xyz.aprildown/UltimateRingtonePicker)
+[![The Newest Version](https://jitpack.io/v/com.github.DeweyReed/UltimateRingtonePicker.svg)](https://jitpack.io/#com.github.DeweyReed/UltimateRingtonePicker)
 
 ```Groovy
 dependencies {
-    implementation 'xyz.aprildown:UltimateRingtonePicker:3.1.0'
+    implementation 'com.github.DeweyReed:UltimateRingtonePicker:3.2.0'
 }
 ```
 
