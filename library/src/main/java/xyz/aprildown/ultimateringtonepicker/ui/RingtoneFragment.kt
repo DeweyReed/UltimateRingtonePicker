@@ -12,8 +12,8 @@ import xyz.aprildown.ultimateringtonepicker.EXTRA_CATEGORY_ID
 import xyz.aprildown.ultimateringtonepicker.EXTRA_CATEGORY_TYPE
 import xyz.aprildown.ultimateringtonepicker.R
 import xyz.aprildown.ultimateringtonepicker.RingtonePickerViewModel
-import xyz.aprildown.ultimateringtonepicker.UltimateRingtonePicker
 import xyz.aprildown.ultimateringtonepicker.databinding.UrpRecyclerViewBinding
+import xyz.aprildown.ultimateringtonepicker.getSerializableCompat
 
 internal class RingtoneFragment : Fragment(R.layout.urp_recycler_view), EventHandler {
 
@@ -30,7 +30,7 @@ internal class RingtoneFragment : Fragment(R.layout.urp_recycler_view), EventHan
 
         val arguments = requireArguments()
         viewModel.getRingtoneLiveData(
-            categoryType = arguments.getSerializable(EXTRA_CATEGORY_TYPE) as UltimateRingtonePicker.RingtoneCategoryType,
+            categoryType = arguments.getSerializableCompat(EXTRA_CATEGORY_TYPE),
             categoryId = arguments.getLong(EXTRA_CATEGORY_ID)
         ).observe(viewLifecycleOwner) { ringtones ->
             binding.urpProgress.hide()

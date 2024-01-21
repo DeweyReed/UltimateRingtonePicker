@@ -15,6 +15,7 @@ import xyz.aprildown.ultimateringtonepicker.RingtonePickerViewModel
 import xyz.aprildown.ultimateringtonepicker.UltimateRingtonePicker
 import xyz.aprildown.ultimateringtonepicker.createDefaultNavOptions
 import xyz.aprildown.ultimateringtonepicker.databinding.UrpRecyclerViewBinding
+import xyz.aprildown.ultimateringtonepicker.getSerializableCompat
 
 internal class CategoryFragment : Fragment(R.layout.urp_recycler_view) {
 
@@ -24,8 +25,8 @@ internal class CategoryFragment : Fragment(R.layout.urp_recycler_view) {
         val context = view.context
         val binding = UrpRecyclerViewBinding.bind(view)
 
-        val categoryType =
-            requireArguments().getSerializable(EXTRA_CATEGORY_TYPE) as UltimateRingtonePicker.RingtoneCategoryType
+        val categoryType = requireArguments()
+            .getSerializableCompat<UltimateRingtonePicker.RingtoneCategoryType>(EXTRA_CATEGORY_TYPE)
 
         val itemAdapter = GenericItemAdapter()
         val fastAdapter = FastAdapter.with(itemAdapter)
