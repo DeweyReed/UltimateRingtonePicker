@@ -21,6 +21,14 @@ android {
         vectorDrawables.useSupportLibrary true
     }
 
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_17.toString()
+    }
+
     resourcePrefix 'urp_'
     buildFeatures {
         viewBinding true
@@ -38,8 +46,9 @@ dependencies {
     implementation libs.kotlin_coroutines_core
     implementation libs.kotlin_coroutines_android
 
-    implementation libs.appcompat
-    implementation libs.recyclerview
+    implementation libs.androidx_appcompat
+    implementation libs.androidx_core
+    implementation libs.androidx_recyclerview
 
     implementation libs.material
 

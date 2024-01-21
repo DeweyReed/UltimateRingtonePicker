@@ -10,7 +10,7 @@ import androidx.collection.ArrayMap
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
+import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -227,7 +227,7 @@ internal class RingtonePickerViewModel(
                 }
             }
         } else {
-            Transformations.map(deviceRingtones) { allRingtones ->
+            deviceRingtones.map { allRingtones ->
                 when (categoryType) {
                     UltimateRingtonePicker.RingtoneCategoryType.All -> allRingtones
                     UltimateRingtonePicker.RingtoneCategoryType.Artist ->

@@ -41,10 +41,9 @@ internal class DeviceRingtoneFragment :
                 viewModel.allDeviceRingtones.observe(
                     this@DeviceRingtoneFragment,
                     object : Observer<List<Ringtone>> {
-                        override fun onChanged(t: List<Ringtone>?) {
-                            if (t == null) return
+                        override fun onChanged(value: List<Ringtone>) {
                             viewModel.allDeviceRingtones.removeObserver(this)
-                            if (t.isEmpty()) {
+                            if (value.isEmpty()) {
                                 safLauncher.launchSaf(requireContext())
                             }
                         }
