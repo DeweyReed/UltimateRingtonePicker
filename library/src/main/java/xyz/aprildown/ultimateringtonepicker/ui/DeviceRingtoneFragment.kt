@@ -6,8 +6,9 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import androidx.viewpager2.adapter.FragmentStateAdapter
@@ -33,24 +34,30 @@ internal class DeviceRingtoneFragment :
         }
 
     init {
-        lifecycleScope.launchWhenResumed {
-            // viewModel may not be available in onCreate.
-            if (viewModel.settings.deviceRingtonePicker?.alwaysUseSaf == true) {
-                safLauncher.launchSaf(requireContext())
-            } else {
-                viewModel.allDeviceRingtones.observe(
-                    this@DeviceRingtoneFragment,
-                    object : Observer<List<Ringtone>> {
-                        override fun onChanged(value: List<Ringtone>) {
-                            viewModel.allDeviceRingtones.removeObserver(this)
-                            if (value.isEmpty()) {
-                                safLauncher.launchSaf(requireContext())
+        lifecycle.addObserver(
+            object : DefaultLifecycleObserver {
+                override fun onResume(owner: LifecycleOwner) {
+                    super.onResume(owner)
+                    lifecycle.removeObserver(this)
+
+                    if (viewModel.settings.deviceRingtonePicker?.alwaysUseSaf == true) {
+                        safLauncher.launchSaf(requireContext())
+                    } else {
+                        viewModel.allDeviceRingtones.observe(
+                            this@DeviceRingtoneFragment,
+                            object : Observer<List<Ringtone>> {
+                                override fun onChanged(value: List<Ringtone>) {
+                                    viewModel.allDeviceRingtones.removeObserver(this)
+                                    if (value.isEmpty()) {
+                                        safLauncher.launchSaf(requireContext())
+                                    }
+                                }
                             }
-                        }
+                        )
                     }
-                )
+                }
             }
-        }
+        )
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
