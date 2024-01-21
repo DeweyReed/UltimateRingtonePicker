@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
+import androidx.core.os.BundleCompat
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import xyz.aprildown.ultimateringtonepicker.databinding.UrpDialogBinding
@@ -63,9 +64,16 @@ class RingtonePickerDialog : DialogFragment(), UltimateRingtonePicker.RingtonePi
         }
 
         if (savedInstanceState == null) {
-            val fragment =
-                arguments.getParcelableCompat<UltimateRingtonePicker.Settings>(EXTRA_SETTINGS)!!
-                    .createFragment()
+            val settings = BundleCompat.getParcelable(
+                arguments,
+                EXTRA_SETTINGS,
+                UltimateRingtonePicker.Settings::class.java
+            )
+            if (settings == null) {
+                dismiss()
+                return
+            }
+            val fragment = settings.createFragment()
             childFragmentManager.beginTransaction()
                 .add(R.id.urpFrameDialog, fragment, TAG_RINGTONE_PICKER)
                 .setPrimaryNavigationFragment(fragment)

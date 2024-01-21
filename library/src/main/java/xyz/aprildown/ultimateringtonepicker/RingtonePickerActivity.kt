@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.IntentCompat
 import xyz.aprildown.ultimateringtonepicker.databinding.UrpActivityRingtonePickerBinding
 
 /**
@@ -23,9 +24,16 @@ class RingtonePickerActivity : AppCompatActivity(), UltimateRingtonePicker.Ringt
         }
 
         if (savedInstanceState == null) {
-            val fragment =
-                intent.getParcelableExtraCompat<UltimateRingtonePicker.Settings>(EXTRA_SETTINGS)!!
-                    .createFragment()
+            val settings = IntentCompat.getParcelableExtra(
+                intent,
+                EXTRA_SETTINGS,
+                UltimateRingtonePicker.Settings::class.java
+            )
+            if (settings == null) {
+                finish()
+                return
+            }
+            val fragment = settings.createFragment()
             supportFragmentManager.beginTransaction()
                 .replace(R.id.layoutRingtonePicker, fragment, TAG_RINGTONE_PICKER)
                 .setPrimaryNavigationFragment(fragment)
@@ -75,9 +83,11 @@ class RingtonePickerActivity : AppCompatActivity(), UltimateRingtonePicker.Ringt
         @JvmStatic
         fun getPickerResult(intent: Intent?): List<UltimateRingtonePicker.RingtoneEntry> {
             if (intent == null) return emptyList()
-            return intent
-                .getParcelableArrayExtraCompat<UltimateRingtonePicker.RingtoneEntry>(EXTRA_RESULT)
-                .toList()
+            return IntentCompat.getParcelableArrayExtra(
+                intent,
+                EXTRA_RESULT,
+                UltimateRingtonePicker.RingtoneEntry::class.java
+            )?.filterIsInstance<UltimateRingtonePicker.RingtoneEntry>() ?: emptyList()
         }
     }
 }
