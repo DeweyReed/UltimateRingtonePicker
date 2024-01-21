@@ -33,9 +33,6 @@ internal fun Context.safeContext(): Context =
         ContextCompat.createDeviceProtectedStorageContext(it) ?: it
     } ?: this
 
-@ChecksSdkIntAtLeast(api = Build.VERSION_CODES.LOLLIPOP)
-internal fun isLOrLater(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
-
 @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.O)
 internal fun isOOrLater(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
 

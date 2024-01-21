@@ -21,7 +21,6 @@ import android.os.Message
 import androidx.annotation.RequiresApi
 import androidx.core.os.BundleCompat
 import xyz.aprildown.ultimateringtonepicker.ASSET_URI_PREFIX
-import xyz.aprildown.ultimateringtonepicker.isLOrLater
 import xyz.aprildown.ultimateringtonepicker.isOOrLater
 import java.io.IOException
 
@@ -150,11 +149,9 @@ internal class AsyncRingtonePlayer(
             checkAsyncRingtonePlayerThread()
             mLoop = loop
             mStreamType = streamType
-            if (isLOrLater()) {
-                audioAttributes = AudioAttributes.Builder()
-                    .setLegacyStreamType(mStreamType)
-                    .build()
-            }
+            audioAttributes = AudioAttributes.Builder()
+                .setLegacyStreamType(mStreamType)
+                .build()
 
             if (mAudioManager == null) {
                 mAudioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
@@ -224,12 +221,7 @@ internal class AsyncRingtonePlayer(
             }
 
             // Indicate the ringtone should be played via the alarm stream.
-            if (isLOrLater()) {
-                mMediaPlayer?.setAudioAttributes(audioAttributes)
-            } else {
-                @Suppress("DEPRECATION")
-                mMediaPlayer?.setAudioStreamType(mStreamType)
-            }
+            mMediaPlayer?.setAudioAttributes(audioAttributes)
 
             mMediaPlayer?.run {
                 isLooping = mLoop
