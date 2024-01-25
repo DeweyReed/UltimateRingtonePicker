@@ -8,8 +8,8 @@ ext {
             min_sdk     : 21,
             target_sdk  : 34,
 
-            version_code: 320,
-            version_name: '3.2.0',
+            version_code: 330,
+            version_name: '3.3.0',
     ]
     libs = [
             // Kotlin Coroutines
