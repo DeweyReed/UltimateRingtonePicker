@@ -146,26 +146,15 @@ private class CategoryAdapter(
     override fun getItemCount(): Int = deviceRingtoneTypes.size
 
     override fun createFragment(position: Int): Fragment {
-        return when (val type = deviceRingtoneTypes[position]) {
-            UltimateRingtonePicker.RingtoneCategoryType.All -> RingtoneFragment().apply {
-                arguments = Bundle().apply {
-                    putSerializable(EXTRA_CATEGORY_TYPE, type)
-                }
-            }
-            UltimateRingtonePicker.RingtoneCategoryType.Artist -> CategoryFragment().apply {
-                arguments = Bundle().apply {
-                    putSerializable(EXTRA_CATEGORY_TYPE, type)
-                }
-            }
-            UltimateRingtonePicker.RingtoneCategoryType.Album -> CategoryFragment().apply {
-                arguments = Bundle().apply {
-                    putSerializable(EXTRA_CATEGORY_TYPE, type)
-                }
-            }
-            UltimateRingtonePicker.RingtoneCategoryType.Folder -> CategoryFragment().apply {
-                arguments = Bundle().apply {
-                    putSerializable(EXTRA_CATEGORY_TYPE, type)
-                }
+        val type = deviceRingtoneTypes[position]
+        return when (type) {
+            UltimateRingtonePicker.RingtoneCategoryType.All -> RingtoneFragment()
+            UltimateRingtonePicker.RingtoneCategoryType.Artist -> CategoryFragment()
+            UltimateRingtonePicker.RingtoneCategoryType.Album -> CategoryFragment()
+            UltimateRingtonePicker.RingtoneCategoryType.Folder -> CategoryFragment()
+        }.apply {
+            arguments = Bundle().apply {
+                putInt(EXTRA_CATEGORY_TYPE, type.ordinal)
             }
         }
     }

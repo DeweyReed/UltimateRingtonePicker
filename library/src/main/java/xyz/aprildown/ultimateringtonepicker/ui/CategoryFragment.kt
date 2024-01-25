@@ -15,7 +15,6 @@ import xyz.aprildown.ultimateringtonepicker.RingtonePickerViewModel
 import xyz.aprildown.ultimateringtonepicker.UltimateRingtonePicker
 import xyz.aprildown.ultimateringtonepicker.createDefaultNavOptions
 import xyz.aprildown.ultimateringtonepicker.databinding.UrpRecyclerViewBinding
-import xyz.aprildown.ultimateringtonepicker.getSerializableCompat
 
 internal class CategoryFragment : Fragment(R.layout.urp_recycler_view) {
 
@@ -25,8 +24,10 @@ internal class CategoryFragment : Fragment(R.layout.urp_recycler_view) {
         val context = view.context
         val binding = UrpRecyclerViewBinding.bind(view)
 
-        val categoryType = requireArguments()
-            .getSerializableCompat<UltimateRingtonePicker.RingtoneCategoryType>(EXTRA_CATEGORY_TYPE)
+        val categoryType =
+            requireArguments().getInt(EXTRA_CATEGORY_TYPE, -1).let { type ->
+                UltimateRingtonePicker.RingtoneCategoryType.entries.first { it.ordinal == type }
+            }
 
         val itemAdapter = GenericItemAdapter()
         val fastAdapter = FastAdapter.with(itemAdapter)
@@ -36,7 +37,7 @@ internal class CategoryFragment : Fragment(R.layout.urp_recycler_view) {
                     findNavController().navigate(
                         R.id.urp_dest_ringtone_list,
                         Bundle().apply {
-                            putSerializable(EXTRA_CATEGORY_TYPE, categoryType)
+                            putInt(EXTRA_CATEGORY_TYPE, categoryType.ordinal)
                             putLong(EXTRA_CATEGORY_ID, item.category.id)
                         },
                         createDefaultNavOptions()

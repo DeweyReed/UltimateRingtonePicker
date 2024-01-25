@@ -6,7 +6,6 @@ import android.content.Intent
 import android.graphics.drawable.Animatable
 import android.net.Uri
 import android.os.Build
-import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
@@ -16,7 +15,6 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavOptions
 import androidx.navigation.navOptions
-import java.io.Serializable
 import androidx.navigation.ui.R as RNavigation
 
 internal val RINGTONE_URI_SILENT: Uri = Uri.EMPTY
@@ -84,14 +82,5 @@ internal fun createDefaultNavOptions(): NavOptions {
             popEnter = RNavigation.animator.nav_default_pop_enter_anim
             popExit = RNavigation.animator.nav_default_pop_exit_anim
         }
-    }
-}
-
-internal inline fun <reified T : Serializable> Bundle.getSerializableCompat(key: String): T {
-    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        getSerializable(key, T::class.java) as T
-    } else {
-        @Suppress("DEPRECATION")
-        getSerializable(key) as T
     }
 }
